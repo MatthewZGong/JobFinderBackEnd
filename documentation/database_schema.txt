@@ -16,7 +16,13 @@ Job Postings
 	Link: string
 	Job description: string
 	Location
+	status(open,closed)
+	Sponsor or not
 Delete Request:
+	Object_ID
+	Target_job_ID: string
+	Reason: string
+Update Request:
 	Object_ID
 	Target_job_ID: string
 	Reason: string
