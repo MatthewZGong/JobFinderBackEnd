@@ -1,1 +1,16 @@
-App that displays the most recent jobs postings. We would have a web scrapper that would scrap for all open jobs and store them in a database. We would then create a server that would allow clients(probably a website) to pull the recent job posting. 
+1. App that displays the most recent jobs postings:
+We would design a web scrapper that would scrap for all open jobs and store them in a database.
+Then create a server that would allow clients(probably a website) to pull the recent job posting. 
+This will probably be only for software engineering jobs 
+
+2. A better auto grader
+Basically creating a website like leetcode or like Anubis
+This idea comes from being a TA and talking to other TAs. 
+We would have a website that allowed students to upload code to the website for a certain problem 
+Then we would run an auto grader on it.
+Would have a data base would store questions, students code, students scores etc
+
+3. Making a card game 
+Mostly because I want to get experience setting up a server like this, but any card game would work
+I was thinking poker because its sounds fun, but idk if thats allowed because of gambling. 
+
