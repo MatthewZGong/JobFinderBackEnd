@@ -1,0 +1,26 @@
+Database schema 
+User Info
+	Object_ID
+	User type : bool/string
+	User Name : string
+	Password : string
+	Preferences
+		type of jobs 
+		Location of jobs
+		etc.
+Job Postings 
+	Object_ID
+	Company: string
+	Name: string
+	Date Posted: date time? 
+	Link: string
+	Job description: string
+	Location
+Delete Request:
+	Object_ID
+	Target_job_ID: string
+	Reason: string
+Admin User:
+	Object_ID
+	Username
+	Password
