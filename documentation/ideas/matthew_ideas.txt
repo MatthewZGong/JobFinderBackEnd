@@ -1,0 +1,1 @@
+App that displays the most recent jobs postings. We would have a web scrapper that would scrap for all open jobs and store them in a database. We would then create a server that would allow clients(probably a website) to pull the recent job posting. 
