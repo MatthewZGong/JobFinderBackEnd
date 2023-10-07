@@ -1,0 +1,4 @@
+ 1.An airline ticket system. The customers can use this web to buy ticket, cancel ticket, and search flight. The airline staff can use this web to search flight, 
+ change status of flight. It satisfy CRUD operation in the database.
+ 2.online shopping system. The customers can buy different products by ordering. They can grade the products and make some comments. 
+ The sellers can update product information and add new product.
