@@ -5,10 +5,11 @@ API Endpoints:
 3. Update Preferences
 4. Update User Information
 5. Update Available Jobs
-6. Keyword Search the Database
-7. Take most recent X from database 
-8. Delete Bad Jobs
-9. Delete All entries past certain date
+6. Read Keyword Search the Database
+7. Read most recent X (number) jobs from database 
+8. Admins Delete Bad Jobs
+9. Admins Delete All entries past certain date
 10. Create User Reports
-11. Have Admins able to update user reports
-12. Delete Account
+11. Admins Read User Reports
+12. Delete User Account
+13. Admins Update Job
