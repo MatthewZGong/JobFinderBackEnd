@@ -1,0 +1,8 @@
+1. A goal management game. Users can bet with other users whether or not they can accomplish a goal. 
+If they succeed they win, otherwise they lose. They can do this with multiple users. Plenty of uses for CRUD here.
+
+2. A Meal Management system. You can track your food, find recipes posted by others that fit certain criteria etc.
+This would be pretty straightforward to do and most of the work I imagine will be on the database side.
+
+3. An idle game could be fun to make. Could make it so its possible to interact with other users and more currency 
+is generated the longer you wait since you last logged in.
