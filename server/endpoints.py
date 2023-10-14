@@ -3,8 +3,9 @@ This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
 
-from flask import Flask
+from flask import Flask, request
 from flask_restx import Resource, Api
+
 # import db.db as db
 
 app = Flask(__name__)
@@ -86,13 +87,12 @@ class UpdateUserInfo(Resource):
     """
     This endpoint allows updating a user's information.
     """
-    def put(self, user_id):
-        """
-        Updates the specified user's information based on input.
-        For the sake of the skeleton, it does nothing and just returns success.
-        """
+    def put(self):
+        user_id = request.json.get("user_id")
+        # data = request.json.get("data")
 
-        return {"status": "success", "message": "User info updated"}, 200
+        return {"status": "success",
+                "message": f"User {user_id} info updated"}, 200
 
 
 @api.route(f'/{UPDATE_AVAILABLE_JOBS}')
@@ -109,7 +109,7 @@ class UpdateAvailableJobs(Resource):
         return {"status": "success", "message": "Jobs updated"}, 200
 
 
-@api.route(f'/{KEYWORD_SEARCH}')
+@api.route(f'/{KEYWORD_SEARCH}/<string:keyword>')
 class KeywordSearchDatabase(Resource):
     """
     This endpoint performs a keyword search on the database.
