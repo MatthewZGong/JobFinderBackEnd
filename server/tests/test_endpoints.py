@@ -62,4 +62,25 @@ def test_get_user_reports():
 def test_send_user_report():
     assert True
 
+def test_create_account(data):
+    # passed in data for creating an account include:
+    # username, password, email
+    
+    # check each variable aligned with the requirments, provide user_id if successfully create account 
+    if data["username"]:
+
+    if data["email"]:
+
+    if data["password"]:
+
+    #create account and provide user_id
+    assert True
+
+def test_login_to_account():
+    # go to db and check if username/email matches password
+    assert True
+
+def test_update_preferences():
+    assert True
+
 
