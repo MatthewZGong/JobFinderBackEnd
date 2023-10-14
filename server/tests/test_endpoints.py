@@ -67,11 +67,11 @@ def test_create_account(data):
     # username, password, email
     
     # check each variable aligned with the requirments, provide user_id if successfully create account 
-    if data["username"]:
+    # if data["username"]:
 
-    if data["email"]:
+    # if data["email"]:
 
-    if data["password"]:
+    # if data["password"]:
 
     #create account and provide user_id
     assert True
