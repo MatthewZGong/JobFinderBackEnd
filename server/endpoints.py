@@ -14,9 +14,17 @@ api = Api(app)
 MAIN_MENU = 'MainMenu'
 MAIN_MENU_NM = "Welcome to Text Game!"
 USERS = 'users'
+
+"""
+ENDPOINTSs
+"""
 UPDATE_USER_INFO = 'UpdateUserInfo'
 UPDATE_AVAILABLE_JOBS = 'UpdateAvailableJobs'
 KEYWORD_SEARCH = 'Keyword_Search'
+USER_REPORT = "userreport"
+GET_USER_REPORTS = "get-user-reports"
+DELETE_ACCOUNT = "delete-account"
+UPDATE_JOB_POSTING = "update-job-posting"
 
 
 @api.route('/hello')
@@ -80,6 +88,47 @@ class Users(Resource):
         This method returns all users.
         """
         return 'Current Users:\nSai\nAbhishek\nKristian\n'
+    
+
+@api.route(f'/{USER_REPORT}')
+class UserReport(Resource):
+    """
+    This class supports user to send in reports about job postings
+    """
+    def post(self):
+        return {"status": "success", "message": "User report successfully submitted"}, 200
+
+@api.route(f'/Admin/{GET_USER_REPORTS}')
+class GetUserReports(Resource):
+    """
+    This class allows admin accounts to get User Reports
+    """
+    def get(self):
+        """
+        returns all user reports 
+        """
+        return {"User Reports": []}
+
+@api.route(f'/Admin/{UPDATE_JOB_POSTING}')
+class UpdateJobPosting(Resource):
+    """
+    This class allows admin accounts to update job postings
+    """
+    def put(self):
+        """
+        updates job postings
+        """
+        return {"status": "success", "message": "Job posting updated"}, 200
+
+@api.route(f'/{DELETE_ACCOUNT}')
+class DeleteAccount(Resource):
+    """
+    This class allows users to delete their account
+    """
+    def delete(self):
+        return {"status": "success", "message": "Account successfully deleted"}, 200
+
+
 
 
 @api.route(f'/{UPDATE_USER_INFO}')
