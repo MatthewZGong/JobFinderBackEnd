@@ -13,6 +13,9 @@ api = Api(app)
 MAIN_MENU = 'MainMenu'
 MAIN_MENU_NM = "Welcome to Text Game!"
 USERS = 'users'
+UPDATE_USER_INFO = 'UpdateUserInfo'
+UPDATE_AVAILABLE_JOBS = 'UpdateAvailableJobs'
+KEYWORD_SEARCH = 'Keyword_Search'
 
 
 @api.route('/hello')
@@ -76,3 +79,47 @@ class Users(Resource):
         This method returns all users.
         """
         return 'Current Users:\nSai\nAbhishek\nKristian\n'
+
+
+@api.route(f'/{UPDATE_USER_INFO}')
+class UpdateUserInfo(Resource):
+    """
+    This endpoint allows updating a user's information.
+    """
+    def put(self, user_id):
+        """
+        Updates the specified user's information based on input.
+        For the sake of the skeleton, it does nothing and just returns success.
+        """
+
+        return {"status": "success", "message": "User info updated"}, 200
+
+
+@api.route(f'/{UPDATE_AVAILABLE_JOBS}')
+class UpdateAvailableJobs(Resource):
+    """
+    This endpoint updates the list of available jobs.
+    """
+    def put(self):
+        """
+        Updates the list of available jobs based on input.
+        Right now it does nothing and just returns success.
+        """
+
+        return {"status": "success", "message": "Jobs updated"}, 200
+
+
+@api.route(f'/{KEYWORD_SEARCH}')
+class KeywordSearchDatabase(Resource):
+    """
+    This endpoint performs a keyword search on the database.
+    """
+    def get(self, keyword):
+        """
+        Searches the database for the given keyword and returns results.
+        Right now it returns dummy data.
+        """
+
+        dummy_results = [{"id": 1, "name": "Sample Data 1"},
+                         {"id": 2, "name": "Sample Data 2"}]
+        return {"results": dummy_results}, 200
