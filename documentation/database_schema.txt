@@ -1,4 +1,4 @@
-Database schema 
+Database schema - All four of us worked together (Tanzir, Matthew, Shao, Michelle)
 User Info
 	Object_ID
 	User type : bool/string
