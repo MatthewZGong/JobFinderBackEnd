@@ -62,7 +62,7 @@ def test_get_user_reports():
 def test_send_user_report():
     assert True
 
-def test_create_account(data):
+def test_create_account():
     assert True
     # passed in data for creating an account include:
     # username, password, email
