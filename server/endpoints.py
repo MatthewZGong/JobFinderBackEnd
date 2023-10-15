@@ -178,7 +178,6 @@ class DeleteAccount(Resource):
     def delete(self):
         return {"status": "success",
                 "message": "Account successfully deleted"}, 200
-    
 
 
 @api.route(f'/{CREATE_USER_ACCOUNT}')
@@ -192,17 +191,6 @@ class CreateAccount(Resource):
                 "message": "Account successfully created"}, 200
 
 
-
-@api.route(f'/{LOGIN_TO_ACCOUNT}')
-class Login(Resource):
-    """
-    This class allows users to login to account
-    """
-    def login(self):
-        return {"status": "success",
-                "message": "Successfully Logged In"}, 200
-
-
 @api.route(f'/{UPDATE_PREFERENCES}')
 class Update_preferences(Resource):
     """
@@ -211,3 +199,12 @@ class Update_preferences(Resource):
     def login(self):
         return {"status": "success",
                 "message": "Preferences Successfully Updated"}, 200
+
+
+@api.route(f'/{LOGIN_TO_ACCOUNT}')
+class Login(Resource):
+    """
+    This class allows users to login to account
+    """
+    def login(self):
+        return {"status": "success", "message": "Successfully Logged In"}, 200
