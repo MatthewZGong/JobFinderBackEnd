@@ -82,4 +82,21 @@ def test_login_to_account(): # go to db and check if username/email matches pass
 def test_update_preferences():
     assert True
 
+def test_read_most_recent_jobs():
+    assert True
+
+def test_admin_delete_jobs():
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}')
+    resp_json = resp.get_json()
+    assert isinstance(resp_json, dict)
+    assert 'status' in resp_json
+    assert resp_json['status'] == 'success'
+    assert 'message' in resp_json
+    assert resp_json['message'] == "bad jobs successfully deleted"
+
+def test_admin_delete_past_date():
+    assert True
+
+
+
 
