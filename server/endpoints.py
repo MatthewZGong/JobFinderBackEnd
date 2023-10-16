@@ -28,6 +28,9 @@ UPDATE_JOB_POSTING = "update-job-posting"
 CREATE_USER_ACCOUNT = "create-account"
 LOGIN_TO_ACCOUNT = "login-to-account"
 UPDATE_PREFERENCES = "update-preferences"
+READ_MOST_RECENT_JOBS = "read_most_recent_jobs"
+ADMIN_DELETE_JOBS = "admin_delete_jobs"
+ADMIN_DELETE_PAST_DATE = "admin_delete_past_date"
 
 
 @api.route('/hello')
@@ -208,3 +211,35 @@ class Login(Resource):
     """
     def login(self):
         return {"status": "success", "message": "Successfully Logged In"}, 200
+
+
+@api.route(f'/{READ_MOST_RECENT_JOBS}')
+class read_most_recent_jobs(Resource):
+    """
+    This endpoint allows updating a user's information.
+    """
+    def get(self):
+        user_id = request.json.get("user_id")
+        # data = request.json.get("data")
+
+        return {"status": "success",
+                "message":  "recent job successfully get"}, 200
+    
+@api.route(f'/{ADMIN_DELETE_JOBS}')
+class admin_delete_jobs(Resource):
+    """
+    This endpoint allows updating a user's information.
+    """
+    def delete(self):
+        
+        return {"status": "success",
+                "message": "bad jobs successfully deleted"}, 200
+
+@api.route(f'/{ADMIN_DELETE_PAST_DATE}')
+class admin_delete_past_date(Resource):
+    """
+    This endpoint allows updating a user's information.
+    """
+    def delete(self):
+        return {"status": "success",
+                "message": "past date jobs successfully deleted"}, 200
