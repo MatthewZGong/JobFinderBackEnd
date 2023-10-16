@@ -219,12 +219,11 @@ class read_most_recent_jobs(Resource):
     This endpoint allows updating a user's information.
     """
     def get(self):
-        user_id = request.json.get("user_id")
-        # data = request.json.get("data")
-
+        
         return {"status": "success",
                 "message":  "recent job successfully get"}, 200
     
+
 @api.route(f'/{ADMIN_DELETE_JOBS}')
 class admin_delete_jobs(Resource):
     """
@@ -234,6 +233,7 @@ class admin_delete_jobs(Resource):
         
         return {"status": "success",
                 "message": "bad jobs successfully deleted"}, 200
+
 
 @api.route(f'/{ADMIN_DELETE_PAST_DATE}')
 class admin_delete_past_date(Resource):
