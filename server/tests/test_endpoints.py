@@ -4,9 +4,6 @@ import server.endpoints as ep
 TEST_CLIENT = ep.app.test_client()
 
 
-def test_hello():
-    assert True
-
 def test_update_user_info():
     data_to_send = {
         "user_id": 123,

@@ -1,10 +1,8 @@
-LINTER = flake8
+include common.mk
+
 API_DIR = server
 DB_DIR = db
 REQ_DIR = .
-
-PKG = $(API_DIR)
-PYTESTFLAGS = -vv --verbose --cov-branch --cov-report term-missing --tb=short -W ignore::FutureWarning
 
 FORCE:
 
@@ -14,7 +12,7 @@ github: FORCE
 	- git commit -a
 	git push origin master
 
-tests: db server
+all_tests: db server
 
 server: FORCE
 	cd $(API_DIR); make tests;
