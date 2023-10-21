@@ -14,14 +14,13 @@ github: FORCE
 	- git commit -a
 	git push origin master
 
-tests: lint unit
+tests: db server
 
-unit: FORCE
-	cd $(API_DIR); pytest $(PYTESTFLAGS) --cov=$(PKG)
+server: FORCE
+	cd $(API_DIR); make tests;
 
-lint: FORCE
-	$(LINTER) $(API_DIR)/*.py
-	$(LINTER) $(DB_DIR)/*.py
+db: FORCE
+	cd $(DB_DIR); make tests;
 
 dev_env: FORCE
 	pip install -r $(REQ_DIR)/requirements-dev.txt
