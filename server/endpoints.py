@@ -144,9 +144,24 @@ class UserReport(Resource):
     """
     This class supports user to send in reports about job postings
     """
+    Jobs = set([1, 2, 3, 4])
+    Users = set([1,2,3,4])
     def post(self):
+        user_id = request.json.get("user_id")
+        job_id = request.json.get("job_id")
+        report = request.json.get("report")
+        if(user_id not in UserReport.Users): 
+            return {"status": "failure", "message":
+                "Invalid User ID"}, 400
+        if(job_id != None and job_id not in UserReport.Jobs ): 
+            return {"status": "failure", "message":
+                "Invalid Job Id"}, 400
+        if(report == None): 
+            return {"status": "failure", "message":
+                "Invalid report"}, 400 
+
         return {"status": "success", "message":
-                "User report successfully submitted"}, 200
+                "User report successfully submitted report"}, 200
 
 
 @api.route(f'/Admin/{GET_USER_REPORTS}')

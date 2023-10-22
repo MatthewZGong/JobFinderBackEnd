@@ -57,7 +57,18 @@ def test_get_user_reports():
     assert True
 
 def test_send_user_report():
-    assert True
+        #     user_id = request.json.get("user_id")
+        # job_id = request.json.get("job_id")
+        # report = request.json.get("report")
+
+    resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
+        'user_id': 1, 'job_id': 1, "report": "TESTING"
+    })
+    assert isinstance(resp, dict)
+
+    expected_results = {"status": "success", "message":
+                "User report successfully submitted report"}
+    assert resp == expected_results 
 
 def test_create_account():
     assert True
