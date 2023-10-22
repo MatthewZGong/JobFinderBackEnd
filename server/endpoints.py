@@ -219,7 +219,9 @@ class CreateAccount(Resource):
     This class allows users to create an account
     """
     def create(self):
-        # ask for name, email, password
+        name = request.json.get("name")
+        password = request.json.get("password")
+        email = request.json.get("email")
         return {"status": "success",
                 "message": "Account successfully created"}, 200
 
@@ -229,7 +231,7 @@ class Update_preferences(Resource):
     """
     This class allows users to update their account preferences
     """
-    def login(self):
+    def update(self):
         return {"status": "success",
                 "message": "Preferences Successfully Updated"}, 200
 
