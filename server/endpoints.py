@@ -220,8 +220,9 @@ class CreateAccount(Resource):
     """
     def create(self):
         name = request.json.get("name")
-        password = request.json.get("password")
         email = request.json.get("email")
+        # check if email is associated with an existing account, if no, get password and create account
+        password = request.json.get("password")
         return {"status": "success",
                 "message": "Account successfully created"}, 200
 
@@ -242,4 +243,7 @@ class Login(Resource):
     This class allows users to login to account
     """
     def login(self):
+        password = request.json.get("password")
+        email = request.json.get("email")
+        # check if the password-email combination matches with a entry in db. If yes, login and return login success
         return {"status": "success", "message": "Successfully Logged In"}, 200
