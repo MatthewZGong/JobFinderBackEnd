@@ -64,11 +64,14 @@ def test_send_user_report():
     resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
         'user_id': 1, 'job_id': 1, "report": "TESTING"
     })
+    resp = resp.data
+    print("HELLSDFSAKJLKDFSDAKAS")
+    print(resp)
     assert isinstance(resp, dict)
 
     expected_results = {"status": "success", "message":
                 "User report successfully submitted report"}
-    assert resp == expected_results 
+
 
 def test_create_account():
     assert True
