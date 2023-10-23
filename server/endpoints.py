@@ -215,11 +215,19 @@ class read_most_recent_jobs(Resource):
 @api.route(f'/{ADMIN_DELETE_JOBS}')
 class admin_delete_jobs(Resource):
     """
-    This endpoint allows updating a user's information.
+    This endpoint allows deleting the expired jobs based on job_name.
     """
+    
     def delete(self):
-        return {"status": "success",
-                "message": "bad jobs successfully deleted"}, 200
+        job_name=request.json.get("invalid jobs")
+        #connect to sql to find the jobs corresponding to this job name and delete it, return 1 if suffcessfull deleted, 0 if fail
+        res=1
+        if res==1:
+            return {"status": "success",
+                    "message": job_name+"successfully deleted"}, 200
+        else:
+            return {"status": "fail",
+                    "message": job_name+"deleted fail"}, 200
 
 
 @api.route(f'/{ADMIN_DELETE_PAST_DATE}')
