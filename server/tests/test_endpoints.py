@@ -1,5 +1,7 @@
 
 import server.endpoints as ep
+import json
+
 
 TEST_CLIENT = ep.app.test_client()
 
@@ -57,16 +59,15 @@ def test_get_user_reports():
     assert True
 
 def test_send_user_report():
-        #     user_id = request.json.get("user_id")
-        # job_id = request.json.get("job_id")
-        # report = request.json.get("report")
-
     resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
         'user_id': 1, 'job_id': 1, "report": "TESTING"
     })
-    resp = resp.data
-
-
+    print(resp.__dict__)
+    print("HESKJHFDKJLAKSHDFKSLAKF")
+    resp = json.loads(resp.data.decode('utf-8'))
+    expected_results = {"status": "success", "message":
+                "User report successfully submitted report"}
+    assert resp == expected_results 
 
 def test_create_account():
     assert True
