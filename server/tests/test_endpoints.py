@@ -113,7 +113,8 @@ def test_read_most_recent_jobs():
 
 def test_admin_delete_jobs():
     headers = {'Content-Type': 'application/json'}
-    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', headers=headers)
+    data = {"invalid_job": "job_name_to_delete"}  # Provide the expected JSON payload
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', headers=headers, json=data)  # Use the json parameter to include JSON data in the request
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
     assert 'status' in resp_json
