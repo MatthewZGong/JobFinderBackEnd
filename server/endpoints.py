@@ -219,12 +219,12 @@ class admin_delete_jobs(Resource):
     """
     
     def delete(self):
-        job_name=request.json.get("invalid jobs")
+        job_name=request.json.get("invalid job")
         #connect to sql to find the jobs corresponding to this job name and delete it, return 1 if suffcessfull deleted, 0 if fail
         res=1
         if res==1:
             return {"status": "success",
-                    "message": "successfully deleted"}, 200
+                    "message": "bad job successfully deleted"}, 200
         else:
             return {"status": "fail",
                     "message": "deleted fail"}, 200

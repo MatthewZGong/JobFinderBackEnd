@@ -118,7 +118,7 @@ def test_admin_delete_jobs():
     assert 'status' in resp_json
     assert resp_json['status'] == 'success'
     assert 'message' in resp_json
-    assert resp_json['message'] == "bad jobs successfully deleted"
+    assert resp_json['message'] == "bad job successfully deleted"
 
 def test_admin_delete_past_date():
     assert True
