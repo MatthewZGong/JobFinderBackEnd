@@ -112,7 +112,8 @@ def test_read_most_recent_jobs():
     assert True
 
 def test_admin_delete_jobs():
-    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}')
+    headers = {'Content-Type': 'application/json'}
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', headers=headers)
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
     assert 'status' in resp_json
