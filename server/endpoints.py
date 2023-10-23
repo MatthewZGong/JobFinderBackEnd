@@ -224,10 +224,10 @@ class admin_delete_jobs(Resource):
         res=1
         if res==1:
             return {"status": "success",
-                    "message": job_name+"successfully deleted"}, 200
+                    "message": "successfully deleted"}, 200
         else:
             return {"status": "fail",
-                    "message": job_name+"deleted fail"}, 200
+                    "message": "deleted fail"}, 200
 
 
 @api.route(f'/{ADMIN_DELETE_PAST_DATE}')
