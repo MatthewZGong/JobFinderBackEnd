@@ -201,11 +201,15 @@ class DeleteAccount(Resource):
 @api.route(f'/{READ_MOST_RECENT_JOBS}')
 class read_most_recent_jobs(Resource):
     """
-    This endpoint allows updating a user's information.
+    This endpoint allows getting most recent jobs.
     """
     def get(self):
+        numbers=request.json.get("numbers")
+        #connect to sql to get the X number of jobs based on their date and store it into job list
+        job_list=[]
         return {"status": "success",
-                "message":  "recent job successfully get"}, 200
+                "message":  "recent job successfully get",
+                "jobs": job_list}, 200
 
 
 @api.route(f'/{ADMIN_DELETE_JOBS}')
