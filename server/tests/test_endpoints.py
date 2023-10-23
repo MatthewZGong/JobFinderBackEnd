@@ -62,11 +62,30 @@ def test_send_user_report():
     resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
         'user_id': 1, 'job_id': 1, "report": "TESTING"
     })
-    print(resp.__dict__)
-    print("HESKJHFDKJLAKSHDFKSLAKF")
+    assert resp._status_code == 200;
     resp = json.loads(resp.data.decode('utf-8'))
     expected_results = {"status": "success", "message":
                 "User report successfully submitted report"}
+                
+    assert resp == expected_results  
+
+
+    resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
+        'user_id': 10, 'job_id': 1, "report": "TESTING"
+    })
+    assert resp._status_code == 400;
+    resp = json.loads(resp.data.decode('utf-8'))
+    expected_results =  {"status": "failure", "message":
+                "Invalid User ID"}
+    assert resp == expected_results 
+
+    resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
+        'user_id': 1, 'job_id': 1, "report": ""
+    })
+    assert resp._status_code == 400;
+    resp = json.loads(resp.data.decode('utf-8'))
+    expected_results =  {"status": "failure", "message":
+                "Invalid report"}
     assert resp == expected_results 
 
 def test_create_account():

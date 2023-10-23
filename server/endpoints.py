@@ -156,7 +156,7 @@ class UserReport(Resource):
         if(job_id != None and job_id not in UserReport.Jobs ): 
             return {"status": "failure", "message":
                 "Invalid Job Id"}, 400
-        if(report == None): 
+        if(report == None or report == ""): 
             return {"status": "failure", "message":
                 "Invalid report"}, 400 
 
