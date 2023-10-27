@@ -160,11 +160,11 @@ class UserReport(Resource):
             return {"status": "failure", "message":
                 "Invalid report"}, 400 
 
-        return { "message":
+        return { "status": "success","message":
                 "User report successfully submitted report"}, 200
 
 
-@api.route(f'/Admin/{GET_USER_REPORTS}')
+@api.route(f'/{GET_USER_REPORTS}')
 class GetUserReports(Resource):
     """
     This class allows admin accounts to get User Reports

@@ -56,7 +56,15 @@ def test_delete_account():
     assert True
 
 def test_get_user_reports():
-    assert True
+    resp = TEST_CLIENT.get(f'/{ep.GET_USER_REPORTS}', json = {"user_id": 1})
+    assert resp._status_code == 200
+    resp = json.loads(resp.data.decode('utf-8'))
+    expected_results =  {"User Reports":  
+                [{"user_id" : 1, "job_id" : 1, "report" : "job post link is invalid"}, 
+                  {"user_id" : 2, "job_id" : 2, "report" : "job is closed"},
+                  {"user_id" : 3, "job_id" : 3, "report" : "page dosent exist"},]
+                  }
+    assert resp == expected_results
 
 def test_send_user_report():
     resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
