@@ -160,7 +160,7 @@ class UserReport(Resource):
             return {"status": "failure", "message":
                 "Invalid report"}, 400 
 
-        return {"status": "success", "message":
+        return { "message":
                 "User report successfully submitted report"}, 200
 
 
@@ -169,11 +169,22 @@ class GetUserReports(Resource):
     """
     This class allows admin accounts to get User Reports
     """
+    TempReport = [{"user_id" : 1, "job_id" : 1, "report" : "job post link is invalid"}, 
+                  {"user_id" : 2, "job_id" : 2, "report" : "job is closed"},
+                  {"user_id" : 3, "job_id" : 3, "report" : "page dosent exist"},]
     def get(self):
         """
         returns all user reports
         """
-        return {"User Reports": []}
+        #checks if user is admin
+
+        if request.json.get("user_id") != 1:
+            return {"message":
+                "Invalid User ID"}, 400
+        response = []
+        for report in GetUserReports.TempReport:
+            response.append(report)
+        return {"User Reports": response}, 200
 
 
 @api.route(f'/Admin/{UPDATE_JOB_POSTING}')
