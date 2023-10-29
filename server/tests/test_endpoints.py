@@ -24,6 +24,19 @@ def test_update_user_info():
     assert 'message' in resp_json
     assert resp_json['message'] == f"User {data_to_send['user_id']} info updated"
 
+    test2 = {
+        "user_id": 1123,
+        "data": {
+            "username": "new_username",
+            "email": "new_email@example.com"
+        }
+    }
+
+    resp2 = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json=test2)
+    resp2_json = resp2.get_json()
+
+    assert 'status' in resp2_json
+    assert resp2_json['status'] == 'failure'
 
 def test_UpdateAvailableJobs():
     resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}')
