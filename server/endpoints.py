@@ -312,6 +312,5 @@ class Login(Resource):
         # check if the password-email combination matches with a entry in db.
         # If yes, login and return login success
         if email != 1:
-            return {"message":
-                    "Invalid User ID/Email"}, 400
+            return {"message":"Invalid User ID/Email"}, 400
         return {"status": "success", "message": "Successfully Logged In"}, 200
