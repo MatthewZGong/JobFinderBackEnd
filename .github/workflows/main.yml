@@ -44,4 +44,4 @@ jobs:
         run: make dev_env
 
       - name: Run Python tests.
-        run: make tests
+        run: make all_tests
