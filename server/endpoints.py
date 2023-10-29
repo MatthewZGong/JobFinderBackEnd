@@ -101,9 +101,14 @@ class UpdateUserInfo(Resource):
     """
     This endpoint allows updating a user's information.
     """
+    Users = set([1, 2, 3, 4])
+
     def put(self):
         user_id = request.json.get("user_id")
         # data = request.json.get("data")
+        if (user_id not in UserReport.Users):
+            return {"status": "failure", "message":
+                    "Invalid User ID"}, 400
 
         return {"status": "success",
                 "message": f"User {user_id} info updated"}, 200
@@ -114,13 +119,17 @@ class UpdateAvailableJobs(Resource):
     """
     This endpoint updates the list of available jobs.
     """
+
     def put(self):
+        def external_job_update():
+            return True
         """
         Updates the list of available jobs based on input.
         Right now it does nothing and just returns success.
         """
-
-        return {"status": "success", "message": "Jobs updated"}, 200
+        if external_job_update():
+            return {"status": "success", "message": "Jobs updated"}, 200
+        return {"status": "failed", "message": "Failed to update jobs"}, 400
 
 
 @api.route(f'/{KEYWORD_SEARCH}/<string:keyword>')
@@ -145,20 +154,20 @@ class UserReport(Resource):
     This class supports user to send in reports about job postings
     """
     Jobs = set([1, 2, 3, 4])
-    Users = set([1,2,3,4])
+    Users = set([1, 2, 3, 4])
     def post(self):
         user_id = request.json.get("user_id")
         job_id = request.json.get("job_id")
         report = request.json.get("report")
         if(user_id not in UserReport.Users): 
             return {"status": "failure", "message":
-                "Invalid User ID"}, 400
-        if(job_id != None and job_id not in UserReport.Jobs ): 
+                    "Invalid User ID"}, 400
+        if (job_id is not None and job_id not in UserReport.Jobs): 
             return {"status": "failure", "message":
-                "Invalid Job Id"}, 400
-        if(report == None or report == ""): 
+                    "Invalid Job Id"}, 400
+        if (report is None or report == ""): 
             return {"status": "failure", "message":
-                "Invalid report"}, 400 
+                    "Invalid report"}, 400 
 
         return { "status": "success","message":
                 "User report successfully submitted report"}, 200
