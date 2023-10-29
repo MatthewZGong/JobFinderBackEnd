@@ -13,7 +13,7 @@ def fetch_pets():
 
 def check_account():
     """
-    A function to check if account exists and whether password/username pair matches an entry in db
+    A function to check if account exists and whether password/username pair matches an entry in db.
     """
     return {True}
 
