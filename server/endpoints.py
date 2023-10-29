@@ -106,7 +106,7 @@ class UpdateUserInfo(Resource):
     def put(self):
         user_id = request.json.get("user_id")
         # data = request.json.get("data")
-        if (user_id not in UserReport.Users):
+        if (user_id not in UpdateUserInfo.Users):
             return {"status": "failure", "message":
                     "Invalid User ID"}, 400
 
