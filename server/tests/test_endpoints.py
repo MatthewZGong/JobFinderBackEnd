@@ -8,7 +8,7 @@ TEST_CLIENT = ep.app.test_client()
 
 def test_update_user_info():
     data_to_send = {
-        "user_id": 123,
+        "user_id": 1,
         "data": {
             "username": "new_username",
             "email": "new_email@example.com"
@@ -60,9 +60,9 @@ def test_get_user_reports():
     assert resp._status_code == 200
     resp = json.loads(resp.data.decode('utf-8'))
     expected_results =  {"User Reports":  
-                [{"user_id" : 1, "job_id" : 1, "report" : "job post link is invalid"}, 
-                  {"user_id" : 2, "job_id" : 2, "report" : "job is closed"},
-                  {"user_id" : 3, "job_id" : 3, "report" : "page dosent exist"},]
+                [{"user_id": 1, "job_id": 1, "report": "invalid link"},
+                  {"user_id": 2, "job_id": 2, "report": "job is closed"},
+                  {"user_id": 3, "job_id": 3, "report": "page not found"},]
                   }
     assert resp == expected_results
 

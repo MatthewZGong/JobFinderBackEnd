@@ -155,21 +155,22 @@ class UserReport(Resource):
     """
     Jobs = set([1, 2, 3, 4])
     Users = set([1, 2, 3, 4])
+
     def post(self):
         user_id = request.json.get("user_id")
         job_id = request.json.get("job_id")
         report = request.json.get("report")
-        if(user_id not in UserReport.Users): 
+        if (user_id not in UserReport.Users):
             return {"status": "failure", "message":
                     "Invalid User ID"}, 400
-        if (job_id is not None and job_id not in UserReport.Jobs): 
+        if (job_id is not None and job_id not in UserReport.Jobs):
             return {"status": "failure", "message":
                     "Invalid Job Id"}, 400
-        if (report is None or report == ""): 
+        if (report is None or report == ""):
             return {"status": "failure", "message":
-                    "Invalid report"}, 400 
+                    "Invalid report"}, 400
 
-        return { "status": "success","message":
+        return {"status": "success", "message":
                 "User report successfully submitted report"}, 200
 
 
@@ -178,18 +179,18 @@ class GetUserReports(Resource):
     """
     This class allows admin accounts to get User Reports
     """
-    TempReport = [{"user_id" : 1, "job_id" : 1, "report" : "job post link is invalid"}, 
-                  {"user_id" : 2, "job_id" : 2, "report" : "job is closed"},
-                  {"user_id" : 3, "job_id" : 3, "report" : "page dosent exist"},]
+    TempReport = [{"user_id": 1, "job_id": 1, "report": "invalid link"},
+                  {"user_id": 2, "job_id": 2, "report": "job is closed"},
+                  {"user_id": 3, "job_id": 3, "report": "page not found"},]
+
     def get(self):
         """
         returns all user reports
         """
-        #checks if user is admin
 
         if request.json.get("user_id") != 1:
             return {"message":
-                "Invalid User ID"}, 400
+                    "Invalid User ID"}, 400
         response = []
         for report in GetUserReports.TempReport:
             response.append(report)
@@ -224,9 +225,11 @@ class read_most_recent_jobs(Resource):
     This endpoint allows getting most recent jobs.
     """
     def get(self):
-        numbers=request.json.get("numbers")
-        #connect to sql to get the X number of jobs based on their date and store it into job list
-        job_list=[]
+        numbers = request.json.get("numbers")
+        numbers = numbers
+        # connect to sql to get the X number of jobs based
+        # on their date and store it into job list
+        job_list = []
         return {"status": "success",
                 "message":  "recent job successfully get",
                 "jobs": job_list}, 200
@@ -237,12 +240,14 @@ class admin_delete_jobs(Resource):
     """
     This endpoint allows deleting the expired jobs based on job_name.
     """
-    
+
     def delete(self):
-        job_name=request.json.get("invalid_job")
-        #connect to sql to find the jobs corresponding to this job name and delete it, return 1 if suffcessfull deleted, 0 if fail
-        res=1
-        if res==1:
+        job_name = request.json.get("invalid_job")
+        job_name = job_name
+        # connect to sql to find the jobs corresponding to this
+        # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
+        res = 1
+        if res == 1:
             return {"status": "success",
                     "message": "bad job successfully deleted"}, 200
         else:
@@ -268,8 +273,12 @@ class CreateAccount(Resource):
     def create(self):
         name = request.json.get("name")
         email = request.json.get("email")
-        # check if email is associated with an existing account, if no, get password and create account
+        # check if email is associated with an existing account,
+        # if no, get password and create account
         password = request.json.get("password")
+        name = name
+        email = email
+        password = password
         return {"status": "success",
                 "message": "Account successfully created"}, 200
 
@@ -292,5 +301,8 @@ class Login(Resource):
     def login(self):
         password = request.json.get("password")
         email = request.json.get("email")
-        # check if the password-email combination matches with a entry in db. If yes, login and return login success
+        password = password
+        email = email
+        # check if the password-email combination matches with a entry in db.
+        # If yes, login and return login success
         return {"status": "success", "message": "Successfully Logged In"}, 200
