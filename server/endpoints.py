@@ -282,6 +282,9 @@ class CreateAccount(Resource):
         information = {"name": name,
                        "email/userid": email,
                        "password": password}
+        if information != 1:
+            return {"status": "failure",
+                "message": "Fail to create account"}, 200
         return {"status": "success",
                 "message": "Account successfully created"}, 200
 
@@ -310,5 +313,5 @@ class Login(Resource):
         # If yes, login and return login success
         if email != 1:
             return {"message":
-                        "Invalid User ID/Email"}, 400
+                    "Invalid User ID/Email"}, 400
         return {"status": "success", "message": "Successfully Logged In"}, 200
