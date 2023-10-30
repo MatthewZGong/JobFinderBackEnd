@@ -263,12 +263,12 @@ class admin_delete_past_date(Resource):
     def delete(self):
         past_certain_date = request.json.get("past_certain_date")
         past_certain_date = past_certain_date
-        # connect to the sql and delete the jobs before the past_certain_date 
+        # connect to the sql and delete the jobs before the past_certain_date
         # eg: DELETE FROM jobs where release_date<past_certain_date
         # return 1 if successfully deleted
         # return 0 if some errors occured
         res = 1
-        if res == 1: 
+        if res == 1:
             return {"status": "success",
                     "message": "past date jobs successfully deleted"}, 200
         else:
