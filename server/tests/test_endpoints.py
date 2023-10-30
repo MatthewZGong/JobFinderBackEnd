@@ -144,7 +144,15 @@ def test_admin_delete_jobs():
     assert resp_json['message'] == "bad job successfully deleted"
 
 def test_admin_delete_past_date():
-    assert True
+    headers = {'Content-Type': 'application/json'}
+    data = {"invalid_job_date": "past_dates_jobs_to_delete"}  # Provide the expected JSON payload
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_PAST_DATE}', headers=headers, json=data)  # Use the json parameter to include JSON data in the request
+    resp_json = resp.get_json()
+    assert isinstance(resp_json, dict)
+    assert 'status' in resp_json
+    assert resp_json['status'] == 'success'
+    assert 'message' in resp_json
+    assert resp_json['message'] == "past date jobs successfully deleted"
 
 
 
