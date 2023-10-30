@@ -258,12 +258,21 @@ class admin_delete_jobs(Resource):
 @api.route(f'/{ADMIN_DELETE_PAST_DATE}')
 class admin_delete_past_date(Resource):
     """
-    This endpoint allows updating a user's information.
+    This endpoint allows admin to delete all entries in the past certain date.
     """
     def delete(self):
-        return {"status": "success",
+        past_certain_date=request.json.get("past_certain_date")
+        past_certain_date=past_certain_date
+        #connect to the sql and delete the jobs before the past_certain_date eg: DELETE FROM jobs where release_date<past_certain_date
+        # return 1 if successfully deleted
+        # return 0 if some errors occured
+        res=1
+        if res==1: 
+            return {"status": "success",
                 "message": "past date jobs successfully deleted"}, 200
-
+        else:
+            return {"status": "fail",
+                    "message": "deleted fail"}, 200
 
 @api.route(f'/{CREATE_USER_ACCOUNT}')
 class CreateAccount(Resource):
