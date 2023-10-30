@@ -274,6 +274,7 @@ class admin_delete_past_date(Resource):
             return {"status": "fail",
                     "message": "deleted fail"}, 200
 
+
 @api.route(f'/{CREATE_USER_ACCOUNT}')
 class CreateAccount(Resource):
     """
