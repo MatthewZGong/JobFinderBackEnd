@@ -119,17 +119,39 @@ class UpdateAvailableJobs(Resource):
     """
     This endpoint updates the list of available jobs.
     """
+    data = {
+        1: {
+            "data": {
+                "keywords": ["internship"]
+            },
+            "userid": 1
+        },
+        2: {
+            "data": {
+               "keywords": ["Remote"]
+            },
+            "userid": 2
+        }
+    }
 
     def put(self):
-        def external_job_update():
-            return True
         """
         Updates the list of available jobs based on input.
         Right now it does nothing and just returns success.
         """
-        if external_job_update():
-            return {"status": "success", "message": "Jobs updated"}, 200
-        return {"status": "failed", "message": "Failed to update jobs"}, 400
+        def external_job_update(id, position, arg):
+            if id in UpdateAvailableJobs.data:
+                UpdateAvailableJobs.data[id]["data"][position] = arg
+                return True
+            else:
+                return False
+        id = request.json.get("id")
+        position = request.json.get("position")
+        arg = request.json.get("arg")
+        if external_job_update(id, position, arg):
+            return {"status": "success", "message": f"Job {id} updated"}, 200
+        return {"status": "failed", "message":
+                f"Failed to update job {id}"}, 400
 
 
 @api.route(f'/{KEYWORD_SEARCH}')

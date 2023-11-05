@@ -39,14 +39,23 @@ def test_update_user_info():
     assert resp2_json['status'] == 'failure'
 
 def test_UpdateAvailableJobs():
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}')
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {
+        "id": 1,
+        "position": "keywords",
+        "args": ["internship", "remote"]})
     resp_json = resp.get_json()
-    
     assert isinstance(resp_json, dict)
-    assert 'status' in resp_json
-    assert resp_json['status'] == 'success'
-    assert 'message' in resp_json
-    assert resp_json['message'] == "Jobs updated"
+    assert "status" in resp_json
+    assert resp_json["message"] == "Job 1 updated"
+
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {
+        "id": 9,
+        "position": "keywords",
+        "args": ["internship", "remote"]})
+    resp_json = resp.get_json()
+    assert isinstance(resp_json, dict)
+    assert "status" in resp_json
+    assert resp_json["message"] == "Failed to update job 9"
 
 
 def test_keyword_search_database():
