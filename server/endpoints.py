@@ -255,18 +255,21 @@ class DeleteAccount(Resource):
     """
     This class allows users to delete their account
     """
+    Temp_users = set([1, 2, 3, 4])
+
     def delete(self):
         # check if user is admin or not
         user_id = request.json.get("user_id")
         # check if user is in database
-        if user_id is None:
+        if user_id is None or user_id not in DeleteAccount.Temp_users:
             return {"status": "failure",
                     "message": "Wrong Permission"}, 400
         # db not set up yet
         # make sure user sending is correct user and has correct permsission
-        # do authentication
+        # do authentication that user deleting acount
+        # is the same as user sending
         # make sure user is not admin user
-        if user_id != 1:
+        if user_id == 1:
             return {"status": "failure",
                     "message": "Wrong Permission"}, 400
         # db not set up yet

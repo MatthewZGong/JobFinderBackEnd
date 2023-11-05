@@ -72,6 +72,19 @@ def test_update_job_postings():
     assert True
 
 def test_delete_account():
+    #try to delete admin acount
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 1})
+    assert resp._status_code == 400 
+
+    #try to delete non-existent account
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 5})
+    assert resp._status_code == 400 
+
+    #try to delete account
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 2})
+    assert resp._status_code == 200
+
+    
     assert True
 
 def test_get_user_reports():
