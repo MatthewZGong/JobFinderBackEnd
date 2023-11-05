@@ -50,16 +50,13 @@ def test_UpdateAvailableJobs():
 
 
 def test_keyword_search_database():
-    keyword = "sample"
-    resp = TEST_CLIENT.get(f'/{ep.KEYWORD_SEARCH}/{keyword}')
+    keyword = "internship"
+    resp = TEST_CLIENT.get(f'/{ep.KEYWORD_SEARCH}', json = {"keyword": keyword})
     resp_json = resp.get_json()
-
     assert isinstance(resp_json, dict)
-    assert 'results' in resp_json
-    assert isinstance(resp_json['results'], list)
-
-    expected_results = [{"id": 1, "name": "Sample Data 1"},
-                        {"id": 2, "name": "Sample Data 2"}]
+    assert "results" in resp_json
+    assert isinstance(resp_json["results"], list)
+    expected_results = [{"data": {"keywords": ["internship"]},"userid" : 1}]
     assert resp_json['results'] == expected_results
 
 def test_update_job_postings():
@@ -153,7 +150,3 @@ def test_admin_delete_past_date():
     assert resp_json['status'] == 'success'
     assert 'message' in resp_json
     assert resp_json['message'] == "past date jobs successfully deleted"
-
-
-
-

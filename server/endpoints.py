@@ -132,20 +132,39 @@ class UpdateAvailableJobs(Resource):
         return {"status": "failed", "message": "Failed to update jobs"}, 400
 
 
-@api.route(f'/{KEYWORD_SEARCH}/<string:keyword>')
+@api.route(f'/{KEYWORD_SEARCH}')
 class KeywordSearchDatabase(Resource):
     """
     This endpoint performs a keyword search on the database.
     """
-    def get(self, keyword):
+    data = {
+        1: {
+            "data": {
+                "keywords": ["internship"]
+            },
+            "userid": 1
+        },
+        2: {
+            "data": {
+               "keywords": ["Remote"]
+            },
+            "userid": 2
+        }
+    }
+
+    def get(self):
         """
         Searches the database for the given keyword and returns results.
-        Right now it returns dummy data.
+        Right now it returns dummy data since we don't have a database.
         """
 
-        dummy_results = [{"id": 1, "name": "Sample Data 1"},
-                         {"id": 2, "name": "Sample Data 2"}]
-        return {"results": dummy_results}, 200
+        keyword = request.json.get("keyword")
+        results = []
+        for i in KeywordSearchDatabase.data:
+            entry = KeywordSearchDatabase.data[i]
+            if keyword in entry["data"]["keywords"]:
+                results.append(entry)
+        return {"results": results}, 200
 
 
 @api.route(f'/{USER_REPORT}')
