@@ -256,6 +256,23 @@ class DeleteAccount(Resource):
     This class allows users to delete their account
     """
     def delete(self):
+        #check if user is admin or not
+        user_id = request.json.get("user_id")
+        #check if user is in database
+        if user_id is None:
+            return {"status": "failure",
+                    "message": "Wrong Permission"}, 400
+        #db not set up yet
+        #make sure user sending is correct user and has correct permsission 
+        #do authentication 
+        #make sure user is not admin user
+        if user_id != 1:
+            return {"status": "failure",
+                    "message": "Wrong Permission"}, 400
+        #db not set up yet 
+
+        #log out user
+        
         return {"status": "success",
                 "message": "Account successfully deleted"}, 200
 
