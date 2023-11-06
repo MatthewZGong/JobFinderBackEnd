@@ -157,9 +157,16 @@ def test_create_account():
     #create account and provide user_id
 
 def test_login_to_account(): # go to db and check if username/email matches password
+    # waiting for db to be set
     assert True
 
 def test_update_preferences():
+    test1 = {
+        'user_id': 1, 'email': "TESTING", "job_type": "type", "location": "place"
+    }
+
+    expected_results = {"status": "success", "message":
+                "User Preferences Successfully Updated"}
     assert True
 
 def test_read_most_recent_jobs():
