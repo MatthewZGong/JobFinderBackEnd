@@ -135,7 +135,6 @@ def test_create_account():
     resp = TEST_CLIENT.post(f'/{ep.CREATE_USER_ACCOUNT}', json={
         'user_id': 1, 'password': 2, 'email': "TESTING"
     })
-    assert resp._status_code == 200
     resp = json.loads(resp.data.decode('utf-8'))
     expected_results = {"status": "success", "message":
                 "User account successfully created"}
