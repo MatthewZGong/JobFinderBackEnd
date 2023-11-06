@@ -363,6 +363,17 @@ class Update_preferences(Resource):
     This class allows users to update their account preferences
     """
     def update(self):
+        user_id = request.json.get("user_id")
+        user_id = user_id
+        preference_attribute = request.json.get("preference_attribute")
+        preference_attribute = preference_attribute
+        preference_attribute_val = request.json.get("preference_attribute_val")
+        preference_attribute_val = preference_attribute_val
+        # connect to the sql and update users specific preference attribute
+        # eg: update for user 1 jobs type from intern to full time
+        # UPDATE users
+        # set preference.job_type = full_time
+        # where user_id = 1
         return {"status": "success",
                 "message": "Preferences Successfully Updated"}, 200
 
