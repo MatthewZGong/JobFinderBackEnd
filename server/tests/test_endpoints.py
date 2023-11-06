@@ -129,10 +129,18 @@ def test_send_user_report():
     assert resp == expected_results 
 
 def test_create_account():
-    assert True
+    # assert True
     # passed in data for creating an account include:
     # username, password, email
-    
+    resp = TEST_CLIENT.post(f'/{ep.CREATE_USER_ACCOUNTT}', json={
+        'user_id': 1, 'password': 2, 'email': "TESTING"
+    })
+    assert resp._status_code == 200
+    resp = json.loads(resp.data.decode('utf-8'))
+    expected_results = {"status": "success", "message":
+                "User account successfully created"}
+                
+    assert resp == expected_results
     # check each variable aligned with the requirments, provide user_id if successfully create account 
     # if data["username"]:
 
