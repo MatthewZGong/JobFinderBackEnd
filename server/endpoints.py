@@ -290,8 +290,7 @@ class read_most_recent_jobs(Resource):
         # on their date and store it into job list
         job_list = []
         return {"status": "success",
-                "message":  "recent job successfully get",
-                "jobs": job_list}, 200
+                "message":  "recent job successfully get"}, 200
 
 
 @api.route(f'/{ADMIN_DELETE_JOBS}')

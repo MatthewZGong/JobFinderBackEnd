@@ -180,8 +180,6 @@ def test_read_most_recent_jobs():
     assert resp_json['status'] == 'success'
     assert 'message' in resp_json
     assert resp_json['message'] == "recent job successfully get"
-    assert 'jobs' in resp_json
-    assert resp_json['jobs'] == job_list
 
 def test_admin_delete_jobs():
     headers = {'Content-Type': 'application/json'}
