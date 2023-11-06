@@ -132,9 +132,18 @@ def test_create_account():
     # assert True
     # passed in data for creating an account include:
     # username, password, email
-    resp = TEST_CLIENT.post(f'/{ep.CREATE_USER_ACCOUNT}', json={
+    test1 = {
         'user_id': 1, 'password': 2, 'email': "TESTING"
-    })
+    }
+
+    test2 = {
+        'user_id': 1, 'password': 2, 'email': "TESTING@"
+    }
+
+    test3 = {
+        'user_id': 1, 'password': "test", 'email': "TESTING@"
+    }
+
     resp = json.loads(resp.data.decode('utf-8'))
     expected_results = {"status": "success", "message":
                 "User account successfully created"}
