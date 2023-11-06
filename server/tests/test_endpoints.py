@@ -132,7 +132,7 @@ def test_create_account():
     # assert True
     # passed in data for creating an account include:
     # username, password, email
-    resp = TEST_CLIENT.post(f'/{ep.CREATE_USER_ACCOUNTT}', json={
+    resp = TEST_CLIENT.post(f'/{ep.CREATE_USER_ACCOUNT}', json={
         'user_id': 1, 'password': 2, 'email': "TESTING"
     })
     assert resp._status_code == 200
