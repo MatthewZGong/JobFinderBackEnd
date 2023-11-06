@@ -170,7 +170,18 @@ def test_update_preferences():
     assert True
 
 def test_read_most_recent_jobs():
-    assert True
+    job_list=[]
+    headers = {'Content-Type': 'application/json'}
+    data = {"most_recent_jobs": "number_of_jobs"}  # Provide the expected JSON payload
+    resp = TEST_CLIENT.delete(f'/{ep.READ_MOST_RECENT_JOBS}', headers=headers, json=data)  # Use the json parameter to include JSON data in the request
+    resp_json = resp.get_json()
+    assert isinstance(resp_json, dict)
+    assert 'status' in resp_json
+    assert resp_json['status'] == 'success'
+    assert 'message' in resp_json
+    assert resp_json['message'] == "recent job successfully get"
+    assert 'jobs' in resp_json
+    assert resp_json['jobs'] == job_list
 
 def test_admin_delete_jobs():
     headers = {'Content-Type': 'application/json'}
