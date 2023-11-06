@@ -172,7 +172,7 @@ def test_update_preferences():
 def test_read_most_recent_jobs():
     headers = {'Content-Type': 'application/json'}
     data = {"most_recent_jobs": "number_of_jobs"}  # Provide the expected JSON payload
-    resp = TEST_CLIENT.delete(f'/{ep.READ_MOST_RECENT_JOBS}', headers=headers, json=data)  # Use the json parameter to include JSON data in the request
+    resp = TEST_CLIENT.get(f'/{ep.READ_MOST_RECENT_JOBS}', headers=headers, json=data)  # Use the json parameter to include JSON data in the request
     resp_json = resp.get_json()
     assert isinstance(resp_json, dict)
     assert 'status' in resp_json
