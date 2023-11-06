@@ -288,7 +288,6 @@ class read_most_recent_jobs(Resource):
         numbers = numbers
         # connect to sql to get the X number of jobs based
         # on their date and store it into job list
-        job_list = []
         return {"status": "success",
                 "message":  "recent job successfully get"}, 200
 

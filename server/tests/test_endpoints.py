@@ -170,7 +170,6 @@ def test_update_preferences():
     assert True
 
 def test_read_most_recent_jobs():
-    job_list=[]
     headers = {'Content-Type': 'application/json'}
     data = {"most_recent_jobs": "number_of_jobs"}  # Provide the expected JSON payload
     resp = TEST_CLIENT.delete(f'/{ep.READ_MOST_RECENT_JOBS}', headers=headers, json=data)  # Use the json parameter to include JSON data in the request
