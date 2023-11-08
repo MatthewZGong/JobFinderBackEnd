@@ -258,7 +258,7 @@ class read_most_recent_jobs(Resource):
         numbers = request.json.get("numbers")
         try:
             db.get_most_recent_job(user_id, numbers)
-            return {"status": "success", 
+            return {"status": "success",
                     "message": f"Recent {numbers} Jobs successfully get"}, 200
         except Exception as e:
             raise wz.NotAcceptable(str(e))
