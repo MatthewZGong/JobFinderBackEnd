@@ -187,16 +187,26 @@ def test_read_most_recent_jobs():
     assert 'message' in resp_json
     assert resp_json['message'] == "recent job successfully get"
 
-def test_admin_delete_jobs():
-    headers = {'Content-Type': 'application/json'}
-    data = {"invalid_job": "job_name_to_delete"}  # Provide the expected JSON payload
-    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', headers=headers, json=data)  # Use the json parameter to include JSON data in the request
-    resp_json = resp.get_json()
-    assert isinstance(resp_json, dict)
-    assert 'status' in resp_json
-    assert resp_json['status'] == 'success'
-    assert 'message' in resp_json
-    assert resp_json['message'] == "bad job successfully deleted"
+@patch('db.db.delete_job', return_value=True, autospec=True)
+def test_admin_delete_jobs_OK(mock_add):
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', json = {
+        "admin_id": 1,
+        "invalid_job_id": 1})
+    assert resp.status_code == OK
+
+@patch('db.db.delete_job', side_effect=KeyError(), autospec=True)
+def test_admin_delete_jobs_BAD(mock_add):
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', json = {
+        "admin_id": 1,
+        "invalid_job_id": 9})
+    assert resp.status_code == NOT_ACCEPTABLE
+
+@patch('db.db.delete_job', side_effect=KeyError(), autospec=True)
+def test_admin_delete_jobs_BAD1(mock_add):
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', json = {
+        "admin_id": 1,
+        "invalid_job_id": None})
+    assert resp.status_code == NOT_ACCEPTABLE
 
 def test_admin_delete_past_date():
     headers = {'Content-Type': 'application/json'}

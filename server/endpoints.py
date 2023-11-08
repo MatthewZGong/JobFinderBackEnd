@@ -6,7 +6,7 @@ The endpoint called `endpoints` will return all available endpoints.
 from http import HTTPStatus
 
 from flask import Flask, request
-from flask_restx import Resource, Api
+from flask_restx import Resource, Api, fields
 
 import werkzeug.exceptions as wz
 
@@ -261,21 +261,28 @@ class read_most_recent_jobs(Resource):
 @api.route(f'/{ADMIN_DELETE_JOBS}')
 class admin_delete_jobs(Resource):
     """
-    This endpoint allows deleting the expired jobs based on job_name.
+    This endpoint allows deleting the expired jobs based on job_id.
     """
-
+    @api.expect(api.model('DeleteJobRequest', {
+        'admin_id': fields.String(required=True, description='Admin ID'),
+        'job_id': fields.String(required=True, description='Job ID')
+    }))
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def delete(self):
-        job_name = request.json.get("invalid_job")
-        job_name = job_name
-        # connect to sql to find the jobs corresponding to this
-        # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
-        res = 1
-        if res == 1:
-            return {"status": "success",
-                    "message": "bad job successfully deleted"}, 200
-        else:
-            return {"status": "fail",
-                    "message": "deleted fail"}, 200
+        admin_id = request.json.get("admin_id")
+        # check if admin is in database
+        if admin_id is None:
+            return {"status": "failure",
+                    "message": "Wrong Permission"}, 400
+        job_id = request.json.get("invalid_job_id")
+        if job_id is None:
+            raise wz.NotAcceptable("Expected json with job_ID")
+        try:
+            db.delete_job(job_id)
+            return {"status": "success", "message": f"Job {job_id} deleted"}, 200
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
 
 
 @api.route(f'/{ADMIN_DELETE_PAST_DATE}')
