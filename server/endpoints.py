@@ -271,15 +271,13 @@ class admin_delete_jobs(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def delete(self):
         admin_id = request.json.get("admin_id")
-        # check if admin is in database
         if admin_id is None:
-            return {"status": "failure",
-                    "message": "Wrong Permission"}, 400
+            raise wz.NotAcceptable("Expected json with admin_ID")
         job_id = request.json.get("invalid_job_id")
         if job_id is None:
             raise wz.NotAcceptable("Expected json with job_ID")
         try:
-            db.delete_job(job_id)
+            db.delete_job(admin_id, job_id)
             return {"status": "success", "message": f"Job {job_id} deleted"}, 200
         except Exception as e:
             raise wz.NotAcceptable(str(e))

@@ -49,10 +49,10 @@ def external_job_update(id, position, arg):
         raise KeyError("id not found")
 
 
-def delete_job(job_id):
+def delete_job(admin_id, job_id):
     # connect to sql to find the jobs corresponding to this
     # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
-    if job_id in job_data:
+    if job_id in job_data and admin_id in admin_data:
         try:
             #del job_data[job_id]
             return True

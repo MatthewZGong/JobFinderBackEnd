@@ -195,17 +195,17 @@ def test_admin_delete_jobs_OK(mock_add):
     assert resp.status_code == OK
 
 @patch('db.db.delete_job', side_effect=KeyError(), autospec=True)
-def test_admin_delete_jobs_BAD(mock_add):
+def test_admin_delete_jobs_BAD_for_jobID(mock_add):
     resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', json = {
         "admin_id": 1,
         "invalid_job_id": 9})
     assert resp.status_code == NOT_ACCEPTABLE
 
 @patch('db.db.delete_job', side_effect=KeyError(), autospec=True)
-def test_admin_delete_jobs_BAD1(mock_add):
+def test_admin_delete_jobs_BAD_for_adminID(mock_add):
     resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', json = {
-        "admin_id": 1,
-        "invalid_job_id": None})
+        "admin_id": 9,
+        "invalid_job_id": 1})
     assert resp.status_code == NOT_ACCEPTABLE
 
 def test_admin_delete_past_date():
