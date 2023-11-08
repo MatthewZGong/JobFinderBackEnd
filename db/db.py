@@ -3,7 +3,7 @@ This file will manage interactions with our data store.
 At first, it will just contain stubs that return fake data.
 Gradually, we will fill in actual calls to our datastore.
 """
-data = {
+job_data = {
         1: {
             "data": {
                 "keywords": ["internship"]
@@ -18,11 +18,21 @@ data = {
         }
     }
 
+user_data = {
+        1: {
+            "user_id": 1,
+            "data": {
+                "username": "new_username",
+                "email": "new_email@example.com"
+            }
+        }
+    }
+
 
 def external_job_update(id, position, arg):
-    if id in data:
+    if id in job_data:
         try:
-            data[id]["data"][position] = arg
+            job_data[id]["data"][position] = arg
             return True
         except Exception as e:
             raise e

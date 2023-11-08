@@ -91,14 +91,15 @@ class UpdateUserInfo(Resource):
     """
     This endpoint allows updating a user's information.
     """
-    Users = set([1, 2, 3, 4])
 
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def put(self):
         user_id = request.json.get("user_id")
-        # data = request.json.get("data")
-        if (user_id not in UpdateUserInfo.Users):
-            return {"status": "failure", "message":
-                    "Invalid User ID"}, 400
+        if user_id is None:
+            raise wz.NotAcceptable("Invalid User_ID")
+        if (user_id not in db.user_data):
+            raise wz.NotAcceptable("Invalid User_ID")
 
         return {"status": "success",
                 "message": f"User {user_id} info updated"}, 200
@@ -135,21 +136,8 @@ class KeywordSearchDatabase(Resource):
     """
     This endpoint performs a keyword search on the database.
     """
-    data = {
-        1: {
-            "data": {
-                "keywords": ["internship"]
-            },
-            "userid": 1
-        },
-        2: {
-            "data": {
-               "keywords": ["Remote"]
-            },
-            "userid": 2
-        }
-    }
-
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def get(self):
         """
         Searches the database for the given keyword and returns results.
@@ -157,9 +145,11 @@ class KeywordSearchDatabase(Resource):
         """
 
         keyword = request.json.get("keyword")
+        if keyword is None:
+            raise wz.NotAcceptable("Keyword Needed")
         results = []
-        for i in KeywordSearchDatabase.data:
-            entry = KeywordSearchDatabase.data[i]
+        for i in db.job_data:
+            entry = db.job_data[i]
             if keyword in entry["data"]["keywords"]:
                 results.append(entry)
         return {"results": results}, 200

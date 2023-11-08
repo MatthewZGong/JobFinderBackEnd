@@ -12,24 +12,19 @@ TEST_CLIENT = ep.app.test_client()
 
 
 def test_update_user_info():
-    data_to_send = {
-        "user_id": 1,
-        "data": {
-            "username": "new_username",
-            "email": "new_email@example.com"
-        }
-    }
 
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json=data_to_send)
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json={"user_id": 1})
     resp_json = resp.get_json()
     
     assert isinstance(resp_json, dict)
     assert 'status' in resp_json
     assert resp_json['status'] == 'success'
     assert 'message' in resp_json
-    assert resp_json['message'] == f"User {data_to_send['user_id']} info updated"
+    assert resp_json['message'] == f"User {1} info updated"
 
-    test2 = {
+
+def test_update_user_info_bad():
+    test = {
         "user_id": 1123,
         "data": {
             "username": "new_username",
@@ -37,11 +32,8 @@ def test_update_user_info():
         }
     }
 
-    resp2 = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json=test2)
-    resp2_json = resp2.get_json()
-
-    assert 'status' in resp2_json
-    assert resp2_json['status'] == 'failure'
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json=test)
+    assert resp.status_code == NOT_ACCEPTABLE
 
 @patch('db.db.external_job_update', return_value=True, autospec=True)
 def test_UpdateAvailableJobs_OK(mock_add):
@@ -80,7 +72,7 @@ def test_keyword_search_database():
     assert isinstance(resp_json, dict)
     assert "results" in resp_json
     assert isinstance(resp_json["results"], list)
-    expected_results = [{"data": {"keywords": ["internship"]},"userid" : 1}]
+    expected_results = [{"data": {"keywords": ["internship", "remote"]},"userid" : 1}]
     assert resp_json['results'] == expected_results
 
 def test_update_job_postings():
