@@ -87,6 +87,19 @@ def test_update_job_postings():
     assert True
 
 def test_delete_account():
+    #try to delete admin acount
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 1})
+    assert resp._status_code == 400 
+
+    #try to delete non-existent account
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 5})
+    assert resp._status_code == 400 
+
+    #try to delete account
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 2})
+    assert resp._status_code == 200
+
+    
     assert True
 
 def test_get_user_reports():
@@ -131,10 +144,24 @@ def test_send_user_report():
     assert resp == expected_results 
 
 def test_create_account():
-    assert True
+    # assert True
     # passed in data for creating an account include:
     # username, password, email
-    
+    test1 = {
+        'user_id': 1, 'password': 2, 'email': "TESTING"
+    }
+
+    test2 = {
+        'user_id': 1, 'password': 2, 'email': "TESTING@"
+    }
+
+    test3 = {
+        'user_id': 1, 'password': "test", 'email': "TESTING@"
+    }
+    expected_results = {"status": "success", "message":
+                "User account successfully created"}
+                
+    assert True
     # check each variable aligned with the requirments, provide user_id if successfully create account 
     # if data["username"]:
 
@@ -145,13 +172,28 @@ def test_create_account():
     #create account and provide user_id
 
 def test_login_to_account(): # go to db and check if username/email matches password
+    # waiting for db to be set
     assert True
 
 def test_update_preferences():
+    test1 = {
+        'user_id': 1, 'email': "TESTING", "job_type": "type", "location": "place"
+    }
+
+    expected_results = {"status": "success", "message":
+                "User Preferences Successfully Updated"}
     assert True
 
 def test_read_most_recent_jobs():
-    assert True
+    headers = {'Content-Type': 'application/json'}
+    data = {"most_recent_jobs": "number_of_jobs"}  # Provide the expected JSON payload
+    resp = TEST_CLIENT.get(f'/{ep.READ_MOST_RECENT_JOBS}', headers=headers, json=data)  # Use the json parameter to include JSON data in the request
+    resp_json = resp.get_json()
+    assert isinstance(resp_json, dict)
+    assert 'status' in resp_json
+    assert resp_json['status'] == 'success'
+    assert 'message' in resp_json
+    assert resp_json['message'] == "recent job successfully get"
 
 def test_admin_delete_jobs():
     headers = {'Content-Type': 'application/json'}

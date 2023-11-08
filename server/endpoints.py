@@ -231,7 +231,25 @@ class DeleteAccount(Resource):
     """
     This class allows users to delete their account
     """
+    Temp_users = set([1, 2, 3, 4])
+
     def delete(self):
+        # check if user is admin or not
+        user_id = request.json.get("user_id")
+        # check if user is in database
+        if user_id is None or user_id not in DeleteAccount.Temp_users:
+            return {"status": "failure",
+                    "message": "Wrong Permission"}, 400
+        # db not set up yet
+        # make sure user sending is correct user and has correct permsission
+        # do authentication that user deleting acount
+        # is the same as user sending
+        # make sure user is not admin user
+        if user_id == 1:
+            return {"status": "failure",
+                    "message": "Wrong Permission"}, 400
+        # db not set up yet
+        # log out user
         return {"status": "success",
                 "message": "Account successfully deleted"}, 200
 
@@ -246,10 +264,8 @@ class read_most_recent_jobs(Resource):
         numbers = numbers
         # connect to sql to get the X number of jobs based
         # on their date and store it into job list
-        job_list = []
         return {"status": "success",
-                "message":  "recent job successfully get",
-                "jobs": job_list}, 200
+                "message":  "recent job successfully get"}, 200
 
 
 @api.route(f'/{ADMIN_DELETE_JOBS}')
@@ -323,6 +339,17 @@ class Update_preferences(Resource):
     This class allows users to update their account preferences
     """
     def update(self):
+        user_id = request.json.get("user_id")
+        user_id = user_id
+        preference_attribute = request.json.get("preference_attribute")
+        preference_attribute = preference_attribute
+        preference_attribute_val = request.json.get("preference_attribute_val")
+        preference_attribute_val = preference_attribute_val
+        # connect to the sql and update users specific preference attribute
+        # eg: update for user 1 jobs type from intern to full time
+        # UPDATE users
+        # set preference.job_type = full_time
+        # where user_id = 1
         return {"status": "success",
                 "message": "Preferences Successfully Updated"}, 200
 
