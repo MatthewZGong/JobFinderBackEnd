@@ -66,7 +66,6 @@ def delete_job(admin_id, job_id):
 def get_most_recent_job(user_id, numbers):
     # connect to sql to get the numbers of jobs based
     # on their date and store it into job list
-    job_list=[]
     if user_id in user_data:
         try:
             return True
