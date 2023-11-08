@@ -1,7 +1,12 @@
 
 import server.endpoints as ep
 import json
-
+import pytest
+from unittest.mock import patch
+from http.client import (
+    NOT_ACCEPTABLE,
+    OK
+)
 
 TEST_CLIENT = ep.app.test_client()
 
@@ -38,7 +43,23 @@ def test_update_user_info():
     assert 'status' in resp2_json
     assert resp2_json['status'] == 'failure'
 
-def test_UpdateAvailableJobs():
+@patch('db.db.external_job_update', return_value=True, autospec=True)
+def test_UpdateAvailableJobs_OK(mock_add):
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {
+        "id": 1,
+        "position": "keywords",
+        "args": ["internship", "remote"]})
+    assert resp.status_code == OK
+
+@patch('db.db.external_job_update', side_effect=KeyError(), autospec=True)
+def test_UpdateAvailableJobs_BAD(mock_add):
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {
+        "id": 9,
+        "position": "keywords",
+        "args": ["internship", "remote"]})
+    assert resp.status_code == NOT_ACCEPTABLE
+
+def test_UpdateAvailableJobs_working():
     resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {
         "id": 1,
         "position": "keywords",
@@ -48,15 +69,9 @@ def test_UpdateAvailableJobs():
     assert "status" in resp_json
     assert resp_json["message"] == "Job 1 updated"
 
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {
-        "id": 9,
-        "position": "keywords",
-        "args": ["internship", "remote"]})
-    resp_json = resp.get_json()
-    assert isinstance(resp_json, dict)
-    assert "status" in resp_json
-    assert resp_json["message"] == "Failed to update job 9"
-
+def test_UpdateAvailableJobs_invalid_format ():
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {})
+    assert resp.status_code == NOT_ACCEPTABLE
 
 def test_keyword_search_database():
     keyword = "internship"

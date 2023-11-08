@@ -3,10 +3,14 @@ This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
 
+from http import HTTPStatus
+
 from flask import Flask, request
 from flask_restx import Resource, Api
 
-# import db.db as db
+import werkzeug.exceptions as wz
+
+import db.db as db
 
 app = Flask(__name__)
 api = Api(app)
@@ -31,20 +35,6 @@ UPDATE_PREFERENCES = "update-preferences"
 READ_MOST_RECENT_JOBS = "read_most_recent_jobs"
 ADMIN_DELETE_JOBS = "admin_delete_jobs"
 ADMIN_DELETE_PAST_DATE = "admin_delete_past_date"
-
-
-@api.route('/hello')
-class HelloWorld(Resource):
-    """
-    The purpose of the HelloWorld class is to have a simple test to see if the
-    app is working at all.
-    """
-    def get(self):
-        """
-        A trivial endpoint to see if the server is running.
-        It just answers with "hello world."
-        """
-        return {'hello': 'world'}
 
 
 @api.route('/endpoints')
@@ -119,39 +109,25 @@ class UpdateAvailableJobs(Resource):
     """
     This endpoint updates the list of available jobs.
     """
-    data = {
-        1: {
-            "data": {
-                "keywords": ["internship"]
-            },
-            "userid": 1
-        },
-        2: {
-            "data": {
-               "keywords": ["Remote"]
-            },
-            "userid": 2
-        }
-    }
 
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def put(self):
         """
         Updates the list of available jobs based on input.
         Right now it does nothing and just returns success.
         """
-        def external_job_update(id, position, arg):
-            if id in UpdateAvailableJobs.data:
-                UpdateAvailableJobs.data[id]["data"][position] = arg
-                return True
-            else:
-                return False
+
         id = request.json.get("id")
         position = request.json.get("position")
-        arg = request.json.get("arg")
-        if external_job_update(id, position, arg):
+        arg = request.json.get("args")
+        if id is None or position is None or arg is None:
+            raise wz.NotAcceptable("Expected json with ID, Position, Args")
+        try:
+            db.external_job_update(id, position, arg)
             return {"status": "success", "message": f"Job {id} updated"}, 200
-        return {"status": "failed", "message":
-                f"Failed to update job {id}"}, 400
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
 
 
 @api.route(f'/{KEYWORD_SEARCH}')
