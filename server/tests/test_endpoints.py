@@ -176,16 +176,19 @@ def test_update_preferences():
                 "User Preferences Successfully Updated"}
     assert True
 
-def test_read_most_recent_jobs():
-    headers = {'Content-Type': 'application/json'}
-    data = {"most_recent_jobs": "number_of_jobs"}  # Provide the expected JSON payload
-    resp = TEST_CLIENT.get(f'/{ep.READ_MOST_RECENT_JOBS}', headers=headers, json=data)  # Use the json parameter to include JSON data in the request
-    resp_json = resp.get_json()
-    assert isinstance(resp_json, dict)
-    assert 'status' in resp_json
-    assert resp_json['status'] == 'success'
-    assert 'message' in resp_json
-    assert resp_json['message'] == "recent job successfully get"
+@patch('db.db.get_most_recent_job', return_value=True, autospec=True)
+def test_read_most_recent_jobs_OK(mock_add):
+    resp = TEST_CLIENT.get(f'/{ep.READ_MOST_RECENT_JOBS}', json = {
+        "user_id": 1,
+        "numbers": 1})
+    assert resp.status_code == OK
+
+@patch('db.db.get_most_recent_job', side_effect=KeyError(), autospec=True)
+def test_read_most_recent_jobs_BAD_for_userID(mock_add):
+    resp = TEST_CLIENT.get(f'/{ep.READ_MOST_RECENT_JOBS}', json = {
+        "user_id": 9,
+        "numbers": 9})
+    assert resp.status_code == NOT_ACCEPTABLE
 
 @patch('db.db.delete_job', return_value=True, autospec=True)
 def test_admin_delete_jobs_OK(mock_add):

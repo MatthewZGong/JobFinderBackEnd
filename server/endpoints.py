@@ -249,13 +249,19 @@ class read_most_recent_jobs(Resource):
     """
     This endpoint allows getting most recent jobs.
     """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def get(self):
+        user_id = request.json.get("user_id")
+        if user_id is None:
+            raise wz.NotAcceptable("Expected json with user_ID")
         numbers = request.json.get("numbers")
-        numbers = numbers
-        # connect to sql to get the X number of jobs based
-        # on their date and store it into job list
-        return {"status": "success",
-                "message":  "recent job successfully get"}, 200
+        try:
+            db.get_most_recent_job(user_id, numbers)
+            return {"status": "success", 
+                    "message": f"Recent {numbers} Jobs successfully get"}, 200
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
 
 
 @api.route(f'/{ADMIN_DELETE_JOBS}')

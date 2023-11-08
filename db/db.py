@@ -63,6 +63,19 @@ def delete_job(admin_id, job_id):
         raise KeyError("id not found")
 
 
+def get_most_recent_job(user_id, numbers):
+    # connect to sql to get the numbers of jobs based
+    # on their date and store it into job list
+    job_list=[]
+    if user_id in user_data:
+        try:
+            return True
+        except Exception as e:
+            raise e
+    else:
+        raise KeyError("id not found")
+
+
 def fetch_pets():
     """
     A function to return all pets in the data store.
