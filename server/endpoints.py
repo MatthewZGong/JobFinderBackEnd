@@ -278,7 +278,8 @@ class admin_delete_jobs(Resource):
             raise wz.NotAcceptable("Expected json with job_ID")
         try:
             db.delete_job(admin_id, job_id)
-            return {"status": "success", "message": f"Job {job_id} deleted"}, 200
+            return {"status": "success", "message": f"Job {job_id} deleted"},
+            200
         except Exception as e:
             raise wz.NotAcceptable(str(e))
 
