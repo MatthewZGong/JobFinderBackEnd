@@ -38,6 +38,7 @@ admin_data = {
         }
     }
 
+
 def external_job_update(id, position, arg):
     if id in job_data:
         try:
@@ -54,7 +55,7 @@ def delete_job(admin_id, job_id):
     # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
     if job_id in job_data and admin_id in admin_data:
         try:
-            #del job_data[job_id]
+            # del job_data[job_id]
             return True
         except Exception as e:
             raise e
