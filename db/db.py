@@ -88,11 +88,13 @@ def check_account():
     """
     return True
 
-def get_user_reports(): 
+
+def get_user_reports():
     """
     function to fetch all user reports
     """
     return {}
+
 
 def add_user_report():
     """
@@ -100,17 +102,9 @@ def add_user_report():
     """
     return True
 
+
 def delete_user_report(user_id, report_id):
     """
     function to delete a user report
     """
-    # if report_id in reports: 
-    #     try:
-    #         job_data[id]["data"][position] = arg
-    #         return True
-    #     except Exception as e:
-    #         raise e
-    # else:
-    #     raise KeyError("id not found") 
-
     return True
