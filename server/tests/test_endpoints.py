@@ -78,6 +78,8 @@ def test_keyword_search_database():
 def test_update_job_postings():
     assert True
 
+
+patch('db.db.delete_account', return_value=True, autospec=True)
 def test_delete_account():
     #try to delete admin acount
     resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 1})
@@ -93,7 +95,7 @@ def test_delete_account():
 
     
     assert True
-
+patch('db.db.get_user_reports', return_value=True, autospec=True)
 def test_get_user_reports():
     resp = TEST_CLIENT.get(f'/{ep.GET_USER_REPORTS}', json = {"user_id": 1})
     assert resp._status_code == 200
@@ -105,6 +107,8 @@ def test_get_user_reports():
                   }
     assert resp == expected_results
 
+
+patch('db.db.add_user_report', return_value=True, autospec=True)
 def test_send_user_report():
     resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
         'user_id': 1, 'job_id': 1, "report": "TESTING"
