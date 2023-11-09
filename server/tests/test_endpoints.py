@@ -167,7 +167,8 @@ def test_create_account():
 
     #create account and provide user_id
 
-def test_login_to_account(): # go to db and check if username/email matches password
+def test_login_to_account(): # @skip
+    # go to db and check if username/email matches password
     # waiting for db to be set
     assert True
 
