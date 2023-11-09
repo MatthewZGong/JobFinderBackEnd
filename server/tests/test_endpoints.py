@@ -101,9 +101,9 @@ def test_get_user_reports():
     assert resp._status_code == 200
     resp = json.loads(resp.data.decode('utf-8'))
     expected_results =  {"User Reports":  
-                [{"user_id": 1, "job_id": 1, "report": "invalid link"},
-                  {"user_id": 2, "job_id": 2, "report": "job is closed"},
-                  {"user_id": 3, "job_id": 3, "report": "page not found"},]
+                [{"user_id": 1, "job_id": 1, "data": {"report": "invalid link"}},
+                  {"user_id": 2, "job_id": 2, "data": { "report": "job is closed" }},
+                  {"user_id": 3, "job_id": 3, "data": {"report": "page not found"}}]
                   }
     assert resp == expected_results
 

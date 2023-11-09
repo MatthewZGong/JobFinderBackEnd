@@ -186,10 +186,8 @@ class GetUserReports(Resource):
     """
     This class allows admin accounts to get User Reports
     """
-    TempReport = [{"user_id": 1, "job_id": 1, "report": "invalid link"},
-                  {"user_id": 2, "job_id": 2, "report": "job is closed"},
-                  {"user_id": 3, "job_id": 3, "report": "page not found"},]
-
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def get(self):
         """
         returns all user reports
@@ -199,8 +197,8 @@ class GetUserReports(Resource):
             return {"message":
                     "Invalid User ID"}, 400
         response = []
-        for report in GetUserReports.TempReport:
-            response.append(report)
+        for i in db.user_reports:
+            response.append(db.user_reports[i])
         return {"User Reports": response}, 200
 
 

@@ -39,6 +39,33 @@ admin_data = {
     }
 
 
+user_reports = {
+        1: {
+            "user_id": 1,
+            "job_id": 1,
+            "data": {
+                "report": "invalid link"
+            }
+        },
+        2: {
+            "user_id": 2,
+            "job_id": 2,
+            "data": {
+                "report": "job is closed"
+            }
+        },
+        3: {
+            "user_id": 3,
+            "job_id": 3,
+            "data": {
+                "report": "page not found"
+            }
+        }
+
+
+    }
+
+
 def external_job_update(id, position, arg):
     if id in job_data:
         try:
