@@ -156,7 +156,9 @@ def test_create_account():
     }
     expected_results = {"status": "success", "message":
                 "User account successfully created"}
-                
+
+    if False:
+        raise Exception('Fail to create account') 
     assert True
     # check each variable aligned with the requirments, provide user_id if successfully create account 
     # if data["username"]:
