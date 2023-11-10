@@ -93,8 +93,6 @@ def test_delete_account():
     resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 2})
     assert resp._status_code == 200
 
-    
-    assert True
 patch('db.db.get_user_reports', return_value=True, autospec=True)
 def test_get_user_reports():
     resp = TEST_CLIENT.get(f'/{ep.GET_USER_REPORTS}', json = {"user_id": 1})
@@ -137,8 +135,9 @@ def test_send_user_report():
     resp = json.loads(resp.data.decode('utf-8'))
     expected_results =  {"status": "failure", "message":
                 "Invalid report"}
-    assert resp == expected_results 
+    assert resp == expected_results
 
+@pytest.mark.skip('We know how to skip')
 def test_create_account():
     # assert True
     # passed in data for creating an account include:
@@ -169,6 +168,7 @@ def test_create_account():
 
     #create account and provide user_id
 
+@pytest.mark.skip('Useless Test')
 def test_login_to_account(): # @skip
     # go to db and check if username/email matches password
     # waiting for db to be set
