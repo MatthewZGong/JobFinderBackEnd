@@ -10,6 +10,15 @@ from http.client import (
 
 TEST_CLIENT = ep.app.test_client()
 
+@pytest.fixture
+def sample_data():
+    return {
+        "user_id": 1123,
+        "data": {
+            "username": "new_username",
+            "email": "new_email@example.com"
+        }
+    }
 
 def test_update_user_info():
 
@@ -23,14 +32,8 @@ def test_update_user_info():
     assert resp_json['message'] == f"User {1} info updated"
 
 
-def test_update_user_info_bad():
-    test = {
-        "user_id": 1123,
-        "data": {
-            "username": "new_username",
-            "email": "new_email@example.com"
-        }
-    }
+def test_update_user_info_bad(sample_data):
+    test = sample_data
 
     resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json=test)
     assert resp.status_code == NOT_ACCEPTABLE
@@ -142,9 +145,6 @@ def test_create_account():
     # assert True
     # passed in data for creating an account include:
     # username, password, email
-    test1 = {
-        'user_id': 1, 'password': 2, 'email': "TESTING"
-    }
 
     test2 = {
         'user_id': 1, 'password': 2, 'email': "TESTING@"
