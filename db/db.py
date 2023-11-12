@@ -23,7 +23,8 @@ user_data = {
             "user_id": 1,
             "data": {
                 "username": "new_username",
-                "email": "new_email@example.com"
+                "email": "new_email@example.com",
+                "password": "new_password"
             }
         }
     }
@@ -109,11 +110,14 @@ def fetch_pets():
     return {"tigers": 2, "lions": 3, "zebras": 1}
 
 
-def check_account():
+def check_account(user_id, user_password):
     """
     Check whether password/username pair matches an entry in db.
     """
-    return True
+    if user_id in user_data:
+        if user_password == user_data[1]["data"]["password"]:
+            return True
+    return False
 
 
 def get_user_reports():
