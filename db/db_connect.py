@@ -1,6 +1,7 @@
 import os
 
 import pymongo as pm
+from bson.objectid import ObjectId
 
 LOCAL = "0"
 CLOUD = "1"
@@ -84,6 +85,17 @@ def fetch_all_as_dict(key, collection, db=DB_NAME):
     return ret
 
 
+def find_by_id(id, collection, db=DB_NAME):
+    return client[db][collection].find({'_id': ObjectId(id)})
+
+
+def exists_by_id(id, collection,  db=DB_NAME):
+    return client[db][collection].count_documents({'_id': ObjectId(id)}) != 0
+
+
 if __name__ == "__main__":
     test = connect_db()
-    print(insert_one("users", {'user_id': 1}))
+    cur = find_by_id("6557c2c7328bd0df911c9ec6", "users")
+    print(exists_by_id("6557c2c7328bd0df911c9ec7", "users"))
+    for i in cur:
+        print(i)

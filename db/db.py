@@ -1,8 +1,13 @@
+import db.db_connect as dbc
 """
 This file will manage interactions with our data store.
 At first, it will just contain stubs that return fake data.
 Gradually, we will fill in actual calls to our datastore.
 """
+
+# print(__name__)
+dbc.connect_db()
+
 job_data = {
         1: {
             "data": {
@@ -127,11 +132,22 @@ def get_user_reports():
     return {}
 
 
-def add_user_report():
+def add_user_report(user_id, job_id, report):
     """
     function to add a user report
     """
-    return True
+    if not dbc.exists_by_id(user_id, "users"):
+        return False
+    if not dbc.exists_by_id(user_id, "jobs"):
+        return False
+
+    return dbc.insert_one('user_reports', {
+            "user_id": user_id,
+            "job_id": job_id,
+            "data": {
+                "report": "page not found"
+            }
+        })
 
 
 def delete_user_report(user_id, report_id):
