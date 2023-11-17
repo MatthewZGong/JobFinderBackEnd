@@ -83,6 +83,7 @@ def fetch_all_as_dict(key, collection, db=DB_NAME):
         ret[doc[key]] = doc
     return ret
 
-if __name__ == "__main__": 
+
+if __name__ == "__main__":
     test = connect_db()
     print(insert_one("users", {'user_id': 1}))
