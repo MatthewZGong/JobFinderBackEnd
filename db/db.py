@@ -108,13 +108,6 @@ def get_most_recent_job(user_id, numbers):
         raise KeyError("id not found")
 
 
-def fetch_pets():
-    """
-    A function to return all pets in the data store.
-    """
-    return {"tigers": 2, "lions": 3, "zebras": 1}
-
-
 def check_account(user_id, user_password):
     """
     Check whether password/username pair matches an entry in db.
