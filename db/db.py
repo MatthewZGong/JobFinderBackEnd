@@ -129,9 +129,9 @@ def add_user_report(user_id, job_id, report):
     """
     function to add a user report
     """
-    if not dbc.fetch_one("users", {"_id": user_id}):
+    if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
-    if not dbc.fetch_one("jobs", {"_id": job_id}):
+    if not dbc.exists_by_id(job_id, "jobs"):
         raise KeyError(f"No Job {job_id}")
 
     return dbc.insert_one('user_reports', {
