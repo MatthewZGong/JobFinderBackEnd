@@ -152,6 +152,15 @@ def add_user_report(user_id, job_id, report):
         })
 
 
+def check_preference(user_id):
+    """
+    function to check and return current user preference
+    """
+    if not dbc.exists_by_id(user_id, "users"):
+        raise KeyError(f"No User {user_id}")
+    
+    return True
+
 def delete_user_report(user_id, report_id):
     """
     function to delete a user report
