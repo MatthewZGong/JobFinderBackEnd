@@ -71,6 +71,16 @@ user_reports = {
 
     }
 
+user_preference = {
+    1: {
+        "user_id": 1,
+        "preferred location": "string",
+        "preferred job type": "string",
+        "sort by": ["string"]
+    
+    }
+}
+
 
 def external_job_update(id, position, arg):
     if id in job_data:
