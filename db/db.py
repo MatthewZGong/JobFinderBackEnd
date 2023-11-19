@@ -80,6 +80,7 @@ user_preference = {
     }
 }
 
+
 def external_job_update(id, position, arg):
     if id in job_data:
         try:
