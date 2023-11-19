@@ -158,7 +158,6 @@ def check_preference(user_id):
     """
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
-    
     return True
 
 
