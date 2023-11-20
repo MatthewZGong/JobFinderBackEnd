@@ -1,4 +1,4 @@
-
+from datetime import datetime
 import server.endpoints as ep
 import json
 import pytest
@@ -218,13 +218,22 @@ def test_admin_delete_jobs_BAD_for_adminID(mock_add):
         "invalid_job_id": 1})
     assert resp.status_code == NOT_ACCEPTABLE
 
-def test_admin_delete_past_date():
-    headers = {'Content-Type': 'application/json'}
-    data = {"invalid_job_date": "past_dates_jobs_to_delete"}  # Provide the expected JSON payload
-    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_PAST_DATE}', headers=headers, json=data)  # Use the json parameter to include JSON data in the request
-    resp_json = resp.get_json()
-    assert isinstance(resp_json, dict)
-    assert 'status' in resp_json
-    assert resp_json['status'] == 'success'
-    assert 'message' in resp_json
-    assert resp_json['message'] == "past date jobs successfully deleted"
+@patch('db.db.delete_job_past_date', side_effect=KeyError(), autospec=True)
+def test_admin_delete_past_date_OK(mock_add):
+    invalid_past_date = datetime(2022, 11, 30)
+    # Convert the datetime object to a string with a specific format
+    formatted_date = invalid_past_date.strftime('%Y-%m-%d')
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_PAST_DATE}', json = {
+        "admin_id": 1,
+        "invalid_past_date": formatted_date})
+    assert resp.status_code == OK
+
+@patch('db.db.delete_job_past_date', side_effect=KeyError(), autospec=True)
+def test_admin_delete_past_date_bad(mock_add):
+    invalid_past_date = datetime(2022, 11, 30)
+    # Convert the datetime object to a string with a specific format
+    formatted_date = invalid_past_date.strftime('%Y-%m-%d')
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_PAST_DATE}', json = {
+        "admin_id": 9,
+        "invalid_past_date": formatted_date})
+    assert resp.status_code ==  NOT_ACCEPTABLE

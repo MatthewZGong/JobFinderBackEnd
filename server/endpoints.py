@@ -293,20 +293,19 @@ class admin_delete_past_date(Resource):
     """
     This endpoint allows admin to delete all entries in the past certain date.
     """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def delete(self):
-        past_certain_date = request.json.get("past_certain_date")
-        past_certain_date = past_certain_date
-        # connect to the sql and delete the jobs before the past_certain_date
-        # eg: DELETE FROM jobs where release_date<past_certain_date
-        # return 1 if successfully deleted
-        # return 0 if some errors occured
-        res = 1
-        if res == 1:
-            return {"status": "success",
-                    "message": "past date jobs successfully deleted"}, 200
-        else:
-            return {"status": "fail",
-                    "message": "deleted fail"}, 200
+        admin_id = request.json.get("admin_id")
+        if admin_id is None:
+            raise wz.NotAcceptable("Expected json with admin_ID")
+        invalid_past_date = request.json.get("invalid_past_date")
+        try:
+            db.delete_job_past_date(admin_id, invalid_past_date)
+            return {"status": "success", "message": f"Jobs before{invalid_past_date} deleted"},
+            200
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
 
 
 @api.route(f'/{CREATE_USER_ACCOUNT}')
