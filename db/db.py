@@ -1,5 +1,4 @@
 import db.db_connect as dbc
-from datetime import datetime
 """
 This file will manage interactions with our data store.
 At first, it will just contain stubs that return fake data.
