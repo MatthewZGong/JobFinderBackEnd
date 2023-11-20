@@ -303,7 +303,7 @@ class admin_delete_past_date(Resource):
         try:
             db.delete_job_past_date(admin_id, invalid_past_date)
             return {"status": "success", "message": f"Job before
-            {invalid_past_date} deleted"}, 200
+                        {invalid_past_date} deleted"}, 200
         except Exception as e:
             raise wz.NotAcceptable(str(e))
 
