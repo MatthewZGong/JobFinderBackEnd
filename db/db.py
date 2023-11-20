@@ -95,8 +95,8 @@ def external_job_update(id, position, arg):
 def delete_job(admin_id, job_id):
     # connect to mongodb to find the jobs corresponding to this
     # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
-    if not dbc.exists_by_id(admin_id, "users"):
-        raise KeyError(f"No User {admin_id}")
+    if not dbc.exists_by_id(admin_id, "admins"):
+        raise KeyError(f"No admin {admin_id}")
     if not dbc.exists_by_id(job_id, "jobs"):
         raise KeyError(f"No Job {job_id}")
     return True
@@ -106,8 +106,8 @@ def delete_job_past_date(admin_id, past_date):
     # connect to mongodb to find the jobs corresponding to date
     # before past_date and delete it
     # change the type of past_date from string to datetime
-    if not dbc.exists_by_id(admin_id, "users"):
-        raise KeyError(f"No User {admin_id}")
+    if not dbc.exists_by_id(admin_id, "admins"):
+        raise KeyError(f"No admin {admin_id}")
     return True
 
 

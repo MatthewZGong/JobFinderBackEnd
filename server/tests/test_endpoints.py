@@ -218,7 +218,7 @@ def test_admin_delete_jobs_BAD_for_adminID(mock_add):
         "invalid_job_id": 1})
     assert resp.status_code == NOT_ACCEPTABLE
 
-@patch('db.db.delete_job_past_date', side_effect=KeyError(), autospec=True)
+@patch('db.db.delete_job_past_date', return_value=True, autospec=True)
 def test_admin_delete_past_date_OK(mock_add):
     invalid_past_date = datetime(2022, 11, 30)
     # Convert the datetime object to a string with a specific format
