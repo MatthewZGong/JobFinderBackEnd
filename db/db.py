@@ -14,12 +14,14 @@ job_data = {
                 "keywords": ["internship"]
             },
             "userid": 1
+            "postdate": datetime(2022, 11, 21)
         },
         2: {
             "data": {
                "keywords": ["Remote"]
             },
             "userid": 2
+            "postdate": datetime(2022, 11, 20)
         }
     }
 
@@ -93,28 +95,28 @@ def external_job_update(id, position, arg):
 
 
 def delete_job(admin_id, job_id):
-    # connect to sql to find the jobs corresponding to this
+    # connect to mongodb to find the jobs corresponding to this
     # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
-    if job_id in job_data and admin_id in admin_data:
-        try:
-            # del job_data[job_id]
-            return True
-        except Exception as e:
-            raise e
-    else:
-        raise KeyError("id not found")
+    if not dbc.exists_by_id(user_id, "users"):
+        raise KeyError(f"No User {user_id}")
+    if not dbc.exists_by_id(job_id, "jobs"):
+        raise KeyError(f"No Job {job_id}")
+    return True
 
+
+def delete_job_past_date(admin_id, past_date):
+    # connect to mongodb to find the jobs corresponding to date
+    # before past_date and delete it, return 1 if suffcessfull deleted, 0 if fail
+    if not dbc.exists_by_id(admin_id, "users"):
+        raise KeyError(f"No User {admin_id}")
+    return True
 
 def get_most_recent_job(user_id, numbers):
-    # connect to sql to get the numbers of jobs based
+    # connect to mongodb to get the numbers of jobs based
     # on their date and store it into job list
-    if user_id in user_data:
-        try:
-            return True
-        except Exception as e:
-            raise e
-    else:
-        raise KeyError("id not found")
+    if not dbc.exists_by_id(user_id, "users"):
+        raise KeyError(f"No User {user_id}")
+    return True
 
 
 def check_account(user_id, user_password):
