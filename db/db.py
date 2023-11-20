@@ -1,4 +1,5 @@
 import db.db_connect as dbc
+from datetime import datetime
 """
 This file will manage interactions with our data store.
 At first, it will just contain stubs that return fake data.
@@ -97,8 +98,8 @@ def external_job_update(id, position, arg):
 def delete_job(admin_id, job_id):
     # connect to mongodb to find the jobs corresponding to this
     # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
-    if not dbc.exists_by_id(user_id, "users"):
-        raise KeyError(f"No User {user_id}")
+    if not dbc.exists_by_id(admin_id, "users"):
+        raise KeyError(f"No User {admin_id}")
     if not dbc.exists_by_id(job_id, "jobs"):
         raise KeyError(f"No Job {job_id}")
     return True
@@ -106,10 +107,11 @@ def delete_job(admin_id, job_id):
 
 def delete_job_past_date(admin_id, past_date):
     # connect to mongodb to find the jobs corresponding to date
-    # before past_date and delete it, return 1 if suffcessfull deleted, 0 if fail
+    # before past_date and delete it
     if not dbc.exists_by_id(admin_id, "users"):
         raise KeyError(f"No User {admin_id}")
     return True
+
 
 def get_most_recent_job(user_id, numbers):
     # connect to mongodb to get the numbers of jobs based
