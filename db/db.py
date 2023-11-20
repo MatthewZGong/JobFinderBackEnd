@@ -13,14 +13,14 @@ job_data = {
             "data": {
                 "keywords": ["internship"]
             },
-            "userid": 1
+            "userid": 1,
             "postdate": datetime(2022, 11, 21)
         },
         2: {
             "data": {
                "keywords": ["Remote"]
             },
-            "userid": 2
+            "userid": 2,
             "postdate": datetime(2022, 11, 20)
         }
     }
