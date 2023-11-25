@@ -21,6 +21,12 @@ def sample_data():
         }
     }
 
+def sample_get_users():
+    return [{'_id': '65594839ee7a3c7d7d46eead',
+    'data': {'report': 'page not found'},
+    'job_id': '507f191e810c19729de860ea',
+    'user_id': '507f1f77bcf86cd799439011'}]
+
 def test_update_user_info():
 
     resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json={"user_id": 1})
@@ -99,10 +105,7 @@ def test_delete_account():
 
 
 @patch('db.db.get_user_reports', 
-    return_value=[{'_id': '65594839ee7a3c7d7d46eead',
-    'data': {'report': 'page not found'},
-    'job_id': '507f191e810c19729de860ea',
-    'user_id': '507f1f77bcf86cd799439011'}], autospec=True)
+    return_value=sample_get_users(), autospec=True)
 def test_get_user_reports(mock_get):
     resp = TEST_CLIENT.get(f'/{ep.GET_USER_REPORTS}', json = {"user_id": 1})
     assert resp._status_code == 200
