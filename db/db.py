@@ -133,7 +133,7 @@ def get_user_reports():
     """
     function to fetch all user reports
     """
-    return {}
+    return dbc.fetch_all('user_reports')
 
 
 def add_user_report(user_id, job_id, report):
@@ -149,7 +149,7 @@ def add_user_report(user_id, job_id, report):
             "user_id": user_id,
             "job_id": job_id,
             "data": {
-                "report": "page not found"
+                "report": report
             }
         })
 

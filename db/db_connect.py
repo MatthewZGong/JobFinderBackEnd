@@ -89,7 +89,7 @@ def find_by_id(id, collection, db=DB_NAME):
     return client[db][collection].find({'_id': ObjectId(id)})
 
 
-def exists_by_id(id, collection,  db=DB_NAME):
+def exists_by_id(id, collection, db=DB_NAME):
     return client[db][collection].count_documents({'_id': ObjectId(id)}) != 0
 
 
