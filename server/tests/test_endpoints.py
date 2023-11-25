@@ -1,3 +1,4 @@
+from bson import ObjectId
 from datetime import datetime
 import server.endpoints as ep
 import json
@@ -96,20 +97,24 @@ def test_delete_account():
     resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 2})
     assert resp._status_code == 200
 
-patch('db.db.get_user_reports', return_value=True, autospec=True)
-def test_get_user_reports():
+
+@patch('db.db.get_user_reports', 
+    return_value=[{'_id': '65594839ee7a3c7d7d46eead',
+    'data': {'report': 'page not found'},
+    'job_id': '507f191e810c19729de860ea',
+    'user_id': '507f1f77bcf86cd799439011'}], autospec=True)
+def test_get_user_reports(mock_get):
     resp = TEST_CLIENT.get(f'/{ep.GET_USER_REPORTS}', json = {"user_id": 1})
     assert resp._status_code == 200
     resp = json.loads(resp.data.decode('utf-8'))
-    expected_results =  {"User Reports":  
-                [{"user_id": 1, "job_id": 1, "data": {"report": "invalid link"}},
-                  {"user_id": 2, "job_id": 2, "data": { "report": "job is closed" }},
-                  {"user_id": 3, "job_id": 3, "data": {"report": "page not found"}}]
-                  }
+    expected_results =  {"User Reports": [{'_id': '65594839ee7a3c7d7d46eead',
+    'data': {'report': 'page not found'},
+    'job_id': '507f191e810c19729de860ea',
+    'user_id': '507f1f77bcf86cd799439011'}]}
     assert resp == expected_results
 
 
-patch('db.db.add_user_report', return_value=True, autospec=True)
+patch('db.db.add_user_report', return_value=[True], autospec=True)
 def test_send_user_report():
     resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
         'user_id': 1, 'job_id': 1, "report": "TESTING"

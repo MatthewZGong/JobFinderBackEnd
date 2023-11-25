@@ -192,13 +192,7 @@ class GetUserReports(Resource):
         """
         returns all user reports
         """
-
-        if request.json.get("user_id") != 1:
-            return {"message":
-                    "Invalid User ID"}, 400
-        response = []
-        for i in db.user_reports:
-            response.append(db.user_reports[i])
+        response = db.get_user_reports()
         return {"User Reports": response}, 200
 
 
