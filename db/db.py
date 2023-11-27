@@ -153,6 +153,15 @@ def add_account(username, email, password):
         })
 
 
+def delete_account(user_id):
+    """
+    function to delete an account
+    """
+    if not dbc.exists_by_id(user_id, "users"):
+        raise KeyError(f"No User {user_id}")
+    return dbc.del_one("users", {"_id": user_id})
+
+
 def get_user_reports():
     """
     function to fetch all user reports

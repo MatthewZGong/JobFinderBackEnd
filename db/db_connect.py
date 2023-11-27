@@ -63,7 +63,7 @@ def del_one(collection, filt, db=DB_NAME):
     """
     Find with a filter and return on the first doc found.
     """
-    client[db][collection].delete_one(filt)
+    return client[db][collection].delete_one(filt)
 
 
 def fetch_all(collection, db=DB_NAME):
@@ -91,8 +91,10 @@ def exists_by_id(id, collection, db=DB_NAME):
 
 if __name__ == "__main__":
     test = connect_db()
-    cur = find_by_id("6557c2c7328bd0df911c9ec6", "users")
-    print(exists_by_id("6557c2c7328bd0df911c9ec7", "users"))
-    print(os.environ.get("DB_NAME", LOCAL))
-    for i in cur:
-        print(i)
+    user_id = ObjectId("507f1f77bcf86cd799439011")
+    # job_id = ObjectId("507f191e810c19729de860ea")
+    # cur = find_by_id("6557c2c7328bd0df911c9ec6", "users")
+    # print(exists_by_id("6557c2c7328bd0df911c9ec7", "users"))
+    # print(os.environ.get("DB_NAME", LOCAL))
+    # for i in cur:
+    #     print(i)
