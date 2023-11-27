@@ -119,14 +119,32 @@ def get_most_recent_job(user_id, numbers):
     return True
 
 
-def check_account(user_id, user_password):
+def check_account(username, user_password):
     """
     Check whether password/username pair matches an entry in db.
     """
-    if user_id in user_data:
-        if user_password == user_data[1]["data"]["password"]:
-            return True
+    for i in user_data:
+        if username == user_data[i]["data"]["username"]:
+            if user_password == user_data[i]["data"]["password"]:
+                return True
     return False
+
+
+def add_account(username, email, password):
+    """
+    function to add new account
+    """
+    if check_account(username, password) == True:
+        raise KeyError(f"Username used {username}")
+    else:
+        return dbc.insert_one('user_data', {
+            "user_id": 10,
+            "data": {
+                "username": username,
+                "email": email,
+                "password": password
+            }
+        })
 
 
 def get_user_reports():
