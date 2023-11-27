@@ -25,20 +25,16 @@ def connect_db():
     if client is None:  # not connected yet!
         print("Setting client because it is None.")
         if os.environ.get("CLOUD_MONGO", LOCAL) == CLOUD:
-            password = os.environ.get("GAME_MONGO_PW")
+            password = os.environ.get("MONGO_PASSWORD")
+            username = os.environ.get("MONGO_USERNAME")
             if not password:
                 raise ValueError('You must set your password '
                                  + 'to use Mongo in the cloud.')
+            url = f"mongodb+srv://{username}:{password}@cluster0.\
+mpx0yi5.mongodb.net/?retryWrites=true&w=majority"
+            print(url)
             print("Connecting to Mongo in the cloud.")
-            client = pm.MongoClient(f'mongodb+srv://gcallah:{password}'
-                                    + '@cluster0.eqxbbqd.mongodb.net/'
-                                    + '?retryWrites=true&w=majority')
-            # PA recommends these settings:
-            # + 'connectTimeoutMS=30000&'
-            # + 'socketTimeoutMS=None
-            # + '&connect=false'
-            # + 'maxPoolsize=1')
-            # but they don't seem necessary
+            client = pm.MongoClient(url.format(password, username))
         else:
             print("Connecting to Mongo locally.")
             client = pm.MongoClient()
@@ -97,5 +93,6 @@ if __name__ == "__main__":
     test = connect_db()
     cur = find_by_id("6557c2c7328bd0df911c9ec6", "users")
     print(exists_by_id("6557c2c7328bd0df911c9ec7", "users"))
+    print(os.environ.get("DB_NAME", LOCAL))
     for i in cur:
         print(i)
