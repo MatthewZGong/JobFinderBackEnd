@@ -82,7 +82,7 @@ def test_keyword_search_database():
     assert isinstance(resp_json, dict)
     assert "results" in resp_json
     assert isinstance(resp_json["results"], list)
-    expected_results = [{"data": {"keywords": ["internship", "remote"]},"userid" : 1}]
+    expected_results = [{"data": {"keywords": ["internship", "remote"]},"userid" : 1, "date": datetime.datetime(2020, 5, 17)}]
     assert resp_json['results'] == expected_results
 
 def test_update_job_postings():
