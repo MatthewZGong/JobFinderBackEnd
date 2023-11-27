@@ -15,10 +15,10 @@ github: FORCE
 all_tests: db server
 
 server: FORCE
-	cd $(API_DIR); make tests;
+	export CLOUD_MONGO=0; cd $(API_DIR); make tests;
 
 db: FORCE
-	cd $(DB_DIR); make tests;
+	export CLOUD_MONGO=0; cd $(DB_DIR); make tests;
 
 dev_env: FORCE
 	pip install -r $(REQ_DIR)/requirements-dev.txt
