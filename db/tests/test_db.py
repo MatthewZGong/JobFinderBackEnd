@@ -37,6 +37,6 @@ def test_get_user_report(temp_user, temp_posting):
     b = db.get_user_reports()
     assert len(b) == 1
 
-def test_add_user(temp_username, temp_email, temp_password):
-    res = db.add_account(temp_username, temp_email, temp_password)
+def test_add_user():
+    res = db.add_account("temp_username", "temp_email", "temp_password")
     assert res
