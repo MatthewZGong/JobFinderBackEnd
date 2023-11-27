@@ -15,14 +15,14 @@ job_data = {
                 "keywords": ["internship"]
             },
             "userid": 1,
-            "date": datetime.datetime(2020,5,17)
+            "date": datetime.datetime(2020, 5, 17)
         },
         2: {
             "data": {
                "keywords": ["Remote"]
             },
             "userid": 2,
-            "date": datetime.datetime(2020,5,18)
+            "date": datetime.datetime(2020, 5, 18)
         }
     }
 
@@ -112,7 +112,7 @@ def delete_job_past_date(admin_id, past_date):
     if not dbc.exists_by_id(admin_id, "admins"):
         raise KeyError(f"No admin {admin_id}")
     for i in job_data:
-        if job_data[i][date] < past_date:
+        if job_data[i]["date"] < past_date:
             dbc.del_one("jobs", i)
     return True
 
