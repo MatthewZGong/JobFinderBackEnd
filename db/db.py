@@ -111,9 +111,9 @@ def delete_job_past_date(admin_id, past_date):
     # change the type of past_date from string to datetime
     if not dbc.exists_by_id(admin_id, "admins"):
         raise KeyError(f"No admin {admin_id}")
-    for i in job_data:
-        if job_data[i]["date"] < past_date:
-            dbc.del_one("jobs", i)
+    for job in dbc.fetch_all("jobs"):
+        if job["date"] < past_date:
+            dbc.del_one("jobs", {"_id": job["_id"]})
     return True
 
 
