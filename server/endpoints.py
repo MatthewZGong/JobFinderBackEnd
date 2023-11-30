@@ -11,7 +11,7 @@ from flask_restx import Resource, Api, fields
 import werkzeug.exceptions as wz
 
 import db.db as db
-
+from datetime import datetime
 app = Flask(__name__)
 api = Api(app)
 
@@ -151,6 +151,9 @@ class KeywordSearchDatabase(Resource):
         for i in db.job_data:
             entry = db.job_data[i]
             if keyword in entry["data"]["keywords"]:
+                entry_date = entry.get("date", "")
+                if isinstance(entry_date, datetime):
+                    entry["date"] = entry_date.isoformat()
                 results.append(entry)
         return {"results": results}, 200
 
