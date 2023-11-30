@@ -76,5 +76,6 @@ def test_delete_job_past_date(temp_jobs_1, temp_admin):
     res = dbc.fetch_all("jobs")
     # for test this function, I create two jobs, job_id_1 is before (2022, 5, 17), the other is after
     # it should delete job_id_1
+    print(res) # to print if something went wrong
     assert len(res) == 1
     assert res[0]["_id"] == job_id_2
