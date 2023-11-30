@@ -102,7 +102,7 @@ def delete_job(admin_id, job_id):
         raise KeyError(f"No admin {admin_id}")
     if not dbc.exists_by_id(job_id, "jobs"):
         raise KeyError(f"No Job {job_id}")
-    return dbc.del_one("jobs", job_id)
+    return dbc.del_one("jobs", {"_id": job_id})
 
 
 def delete_job_past_date(admin_id, past_date):

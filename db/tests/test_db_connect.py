@@ -13,6 +13,8 @@ def temp_rec():
     dbc.connect_db()
     dbc.client[TEST_DB][TEST_COLLECT].insert_one({TEST_NAME: TEST_NAME})
     # yield to our test function
+    # delete_one operation will not be executed until the test function, which 
+    # is using the temp_rec fixture, has completed or it explicitly calls next()
     yield
     dbc.client[TEST_DB][TEST_COLLECT].delete_one({TEST_NAME: TEST_NAME})
 

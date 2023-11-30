@@ -7,16 +7,19 @@ TEST_DB = dbc.DB_NAME
 
 user_id = ObjectId("507f1f77bcf86cd799439011")
 job_id = ObjectId("507f191e810c19729de860ea")
+admin_id = ObjectId()
 dbc.client.drop_database(TEST_DB)
 
 @pytest.fixture(scope='function')
 def temp_user():
     dbc.client[TEST_DB]["users"].insert_one({"_id": user_id, "username": "GeometryDash"})
     dbc.client[TEST_DB]["jobs"].insert_one({"_id": job_id, "description": "Janitor"})
+    dbc.client[TEST_DB]["admins"].insert_one({"_id": admin_id, "username": "Captain"})
     # yield to our test function
     yield
     dbc.client[TEST_DB]["users"].delete_one({"_id": user_id})
     dbc.client[TEST_DB]["jobs"].delete_one({"_id": job_id})
+    dbc.client[TEST_DB]["admins"].delete_one({"_id": admin_id})
 
 @pytest.fixture(scope='function')
 def temp_posting(temp_user):
@@ -44,3 +47,10 @@ def test_delete_user_report():
     print(b)
     assert b
 
+def test_delete_job_bad():
+    with pytest.raises(KeyError):
+        db.delete_job(admin_id, job_id)
+
+def test_delete_job_good(temp_user):
+    res = db.delete_job(admin_id, job_id)
+    assert res
