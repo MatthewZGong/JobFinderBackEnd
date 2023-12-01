@@ -193,7 +193,7 @@ def test_update_preferences():
 
 @patch('db.db.get_most_recent_job', return_value=True, autospec=True)
 def test_read_most_recent_jobs_OK(mock_add):
-    resp = TEST_CLIENT.get(f'/{ep.READ_MOST_RECENT_JOBS}', json = {
+    resp = TEST_CLIENT.get(f'/{ep.READ_MOST_RECENT_JOBS}', query_string = {
         "user_id": 1,
         "numbers": 1})
     assert resp.status_code == OK
@@ -207,16 +207,16 @@ def test_read_most_recent_jobs_BAD_for_userID(mock_add):
 
 @patch('db.db.delete_job', return_value=True, autospec=True)
 def test_admin_delete_jobs_OK(mock_add):
-    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', json = {
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', query_string = {
         "admin_id": 1,
-        "invalid_job_id": 1})
+        "job_id": '507f1f77bcf86cd799439011'})
     assert resp.status_code == OK
 
 @patch('db.db.delete_job', side_effect=KeyError(), autospec=True)
 def test_admin_delete_jobs_BAD_for_jobID(mock_add):
     resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_JOBS}', json = {
         "admin_id": 1,
-        "invalid_job_id": 9})
+        "job_id": 9})
     assert resp.status_code == NOT_ACCEPTABLE
 
 @patch('db.db.delete_job', side_effect=KeyError(), autospec=True)

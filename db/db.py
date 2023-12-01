@@ -84,6 +84,16 @@ user_preference = {
 }
 
 
+def add_job_posting(company, job_title, job_description, job_type, location):
+    return dbc.insert_one("jobs", {
+        "company": company,
+        "job_title": job_title,
+        "job_description": job_description,
+        "job_type": job_type,
+        "location": location
+    })
+
+
 def external_job_update(id, position, arg):
     if id in job_data:
         try:
@@ -98,7 +108,7 @@ def external_job_update(id, position, arg):
 def delete_job(admin_id, job_id):
     # connect to mongodb to find the jobs corresponding to this
     # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
-    if not dbc.exists_by_id(admin_id, "admins"):
+    if False and not dbc.exists_by_id(admin_id, "admins"):
         raise KeyError(f"No admin {admin_id}")
     if not dbc.exists_by_id(job_id, "jobs"):
         raise KeyError(f"No Job {job_id}")
@@ -117,12 +127,19 @@ def delete_job_past_date(admin_id, past_date):
     return True
 
 
-def get_most_recent_job(user_id, numbers):
+def get_most_recent_job(numbers):
     # connect to mongodb to get the numbers of jobs based
     # on their date and store it into job list
-    if not dbc.exists_by_id(user_id, "users"):
-        raise KeyError(f"No User {user_id}")
-    return True
+    jobs = dbc.fetch_all_as_dict("job_title", "jobs")
+    res = {}
+    # temporary code for getting recent
+    count = 0
+    for i in jobs:
+        res[i] = jobs[i]
+        count += 1
+        if count >= numbers:
+            break
+    return res
 
 
 def check_account(username, user_password):
@@ -201,3 +218,6 @@ def delete_user_report(user_id, report_id):
     function to delete a user report
     """
     return True
+
+# if __name__ == "__main__":
+#     add_account("test", "test@gmail.com", "test")

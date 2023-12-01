@@ -6,7 +6,7 @@ The endpoint called `endpoints` will return all available endpoints.
 from http import HTTPStatus
 
 from flask import Flask, request
-from flask_restx import Resource, Api, fields
+from flask_restx import Resource, Api
 
 import werkzeug.exceptions as wz
 
@@ -20,12 +20,13 @@ MAIN_MENU_NM = "Welcome to Text Game!"
 USERS = 'users'
 
 """
-ENDPOINTSs
+ENDPOINTS
 """
 UPDATE_USER_INFO = 'UpdateUserInfo'
+ADD_NEW_JOBS = "add-new-job"
 UPDATE_AVAILABLE_JOBS = 'UpdateAvailableJobs'
 KEYWORD_SEARCH = 'Keyword_Search'
-USER_REPORT = "userreport"
+USER_REPORT = "add-user-report"
 GET_USER_REPORTS = "get-user-reports"
 DELETE_ACCOUNT = "delete-account"
 UPDATE_JOB_POSTING = "update-job-posting"
@@ -43,6 +44,7 @@ class Endpoints(Resource):
     This class will serve as live, fetchable documentation of what endpoints
     are available in the system.
     """
+
     def get(self):
         """
         The `get()` method will return a list of available endpoints.
@@ -57,6 +59,7 @@ class MainMenu(Resource):
     """
     This will deliver our main menu.
     """
+
     def get(self):
         """
         Gets the main game menu.
@@ -79,6 +82,7 @@ class Users(Resource):
     """
     This class supports fetching a list of all pets.
     """
+
     def get(self):
         """
         This method returns all users.
@@ -196,6 +200,10 @@ class GetUserReports(Resource):
         returns all user reports
         """
         response = db.get_user_reports()
+        print(response)
+        for res in response:
+            res['_id'] = str(res['_id'])
+            res['user_id'] = str(res['user_id'])
         return {"User Reports": response}, 200
 
 
@@ -204,10 +212,29 @@ class UpdateJobPosting(Resource):
     """
     This class allows admin accounts to update job postings
     """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={'company': {'description': 'Company Name',
+                                 'type': 'string', 'default': "Test1"
+                                 },
+                     'job_title': {'description': 'Job Title',
+                                   'type': 'string', 'default': "Test2"
+                                   },
+                     'job_description': {'description': 'Job Description',
+                                         'type': 'string', 'default': "Test3"
+                                         },
+                     'job_type': {'description': 'Job Type', 'type': 'string',
+                                  'default': "Test4"
+                                  },
+                     'location': {'description': 'Location',  'type': 'string',
+                                  'default': "Test5"
+                                  },
+                     })
     def put(self):
         """
         updates job postings
         """
+
         return {"status": "success", "message": "Job posting updated"}, 200
 
 
@@ -246,15 +273,18 @@ class read_most_recent_jobs(Resource):
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={'numbers': {'description': 'amount',
+                                 'type': 'int', 'default': 5},
+                     })
     def get(self):
-        user_id = request.json.get("user_id")
-        if user_id is None:
-            raise wz.NotAcceptable("Expected json with user_ID")
-        numbers = request.json.get("numbers")
+        # user_id = request.json.get("user_id")
+        # if user_id is None:
+        #     raise wz.NotAcceptable("Expected json with user_ID")
         try:
-            db.get_most_recent_job(user_id, numbers)
-            return {"status": "success",
-                    "message": f"Recent {numbers} Jobs successfully get"}, 200
+
+            numbers = int(request.args.get("numbers"))
+            res = db.get_most_recent_job(numbers)
+            return res, 200
         except Exception as e:
             raise wz.NotAcceptable(str(e))
 
@@ -264,19 +294,22 @@ class admin_delete_jobs(Resource):
     """
     This endpoint allows deleting the expired jobs based on job_id.
     """
-    @api.expect(api.model('DeleteJobRequest', {
-        'admin_id': fields.String(required=True, description='Admin ID'),
-        'job_id': fields.String(required=True, description='Job ID')
-    }))
+
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={'admin_id': {'description': 'Admin ID',
+                                  'type': 'string', 'default': "Test1"},
+                     'job_id': {'description': 'Job ID',
+                                'type': 'string', 'default': "Test2"},
+                     })
     def delete(self):
-        admin_id = request.json.get("admin_id")
+        admin_id = request.args.get("admin_id")
         if admin_id is None:
             raise wz.NotAcceptable("Expected json with admin_ID")
-        job_id = request.json.get("invalid_job_id")
+        job_id = request.args.get("job_id")
         if job_id is None:
             raise wz.NotAcceptable("Expected json with job_ID")
+
         try:
             db.delete_job(admin_id, job_id)
             return {"status": "success", "message": f"Job {job_id} deleted"},
@@ -309,6 +342,7 @@ class CreateAccount(Resource):
     """
     This class allows users to create an account
     """
+
     def create(self):
         name = request.json.get("name")
         email = request.json.get("email")
@@ -333,6 +367,7 @@ class Update_preferences(Resource):
     """
     This class allows users to update their account preferences
     """
+
     def update(self):
         user_id = request.json.get("user_id")
         user_id = user_id
@@ -354,6 +389,7 @@ class Login(Resource):
     """
     This class allows users to login to account
     """
+
     def login(self):
         password = request.json.get("password")
         email = request.json.get("email")
@@ -364,3 +400,36 @@ class Login(Resource):
         if email != 1:
             return {"message": "Invalid User ID/Email"}, 400
         return {"status": "success", "message": "Successfully Logged In"}, 200
+
+
+@api.route(f'/{ADD_NEW_JOBS}')
+class AddNewJobPosting(Resource):
+    """
+    This class supports user to send in reports about job postings
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={'company': {'description': 'Company Name',
+                                 'type': 'string', 'default': "Test1"},
+                     'job_title': {'description': 'Job Title',
+                                   'type': 'string', 'default': "Test2"},
+                     'job_description': {'description': 'Job Description',
+                                         'type': 'string', 'default': "Test3"},
+                     'job_type': {'description': 'Job Type', 'type': 'string',
+                                  'default': "Test4"},
+                     'location': {'description': 'Location',  'type': 'string',
+                                  'default': "Test5"},
+                     })
+    def post(self):
+        company = request.args.get("company")
+        job_title = request.args.get("job_title")
+        job_description = request.args.get("job_description")
+        job_type = request.args.get("job_type")
+        location = request.args.get("location")
+        db.add_job_posting(company, job_title,
+                           job_description, job_type, location)
+        # print(company, job_title, job_description, job_type, location)
+
+        # return 200
+        return {"status": "success", "message":
+                "job posting successfully submit"}, 200

@@ -91,10 +91,11 @@ def exists_by_id(id, collection, db=DB_NAME):
 
 if __name__ == "__main__":
     test = connect_db()
-    user_id = ObjectId("507f1f77bcf86cd799439011")
-    # job_id = ObjectId("507f191e810c19729de860ea")
-    # cur = find_by_id("6557c2c7328bd0df911c9ec6", "users")
-    # print(exists_by_id("6557c2c7328bd0df911c9ec7", "users"))
-    # print(os.environ.get("DB_NAME", LOCAL))
-    # for i in cur:
-    #     print(i)
+    user_id = ObjectId("656a18de7f688c9fa2fe1006")
+    insert_one('user_reports', {
+            "user_id": user_id,
+            "job_id": "None",
+            "data": {
+                "report": "THIS IS A TEST"
+            }
+        })
