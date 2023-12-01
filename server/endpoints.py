@@ -371,6 +371,12 @@ class Update_preferences(Resource):
     """
     This class allows users to update their account preferences
     """
+    @api.expect(api.model('UpdatePreferenceRequest', {
+        "user_id": fields.String(required=True, description='user_id'),
+        "preferred_location": fields.String(required=True, description='preferred_location'),
+        "preferred_job_type": fields.String(required=True, description='preferred_job_type'),
+        "sort_by": fields.String(required=True, description='sort_by')
+    }))
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     def put(self):
@@ -378,16 +384,15 @@ class Update_preferences(Resource):
         updates account preferences
         """
         user_id = request.json.get("user_id")
-        user_id = user_id
-        preference_attribute = request.json.get("preference_attribute")
-        preference_attribute = preference_attribute
-        preference_attribute_val = request.json.get("preference_attribute_val")
-        preference_attribute_val = preference_attribute_val
+        preferred_location = request.json.get("preferred_location")
+        preferred_job_type = request.json.get("preferred_job_type")
+        sort_by = request.json.get("sort_by")
         # connect to the sql and update users specific preference attribute
         # eg: update for user 1 jobs type from intern to full time
         # UPDATE users
         # set preference.job_type = full_time
         # where user_id = 1
+        db.update_preference(user_id, preferred_location, preferred_job_type, sort_by)
         return {"status": "success",
                 "message": "Preferences Successfully Updated"}, 200
 
@@ -397,7 +402,7 @@ class Login(Resource):
     """
     This class allows users to login to account
     """
-    @api.expect(api.model('DeleteJobRequest', {
+    @api.expect(api.model('LoginRequest', {
         "user_id": fields.String(required=True, description='user_id'),
         "password": fields.String(required=True, description='data')
     }))

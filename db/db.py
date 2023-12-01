@@ -158,7 +158,7 @@ def add_account(username, email, password):
     function to add new account
     """
     if check_account(username, password):
-        raise KeyError(f"Username used {username}")
+        raise KeyError(f"Username already exists {username}")
     else:
         return dbc.insert_one('user_data', {
             "user_id": 10,
