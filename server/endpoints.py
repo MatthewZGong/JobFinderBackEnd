@@ -378,6 +378,6 @@ class Login(Resource):
         email = request.json.get("email")
         # check if the password-email combination matches with a entry in db.
         # If yes, login and return login success
-        if email != 1:
-            return {"message": "Invalid User ID/Email", "note": f"entered: {email}"}, 400
+        if email != 1 or password != 1:
+            return {"message": f"Invalid User ID/Email: {email}"}, 400
         return {"status": "success", "message": "Successfully Logged In"}, 200
