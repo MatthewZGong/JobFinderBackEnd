@@ -6,7 +6,7 @@ The endpoint called `endpoints` will return all available endpoints.
 from http import HTTPStatus
 
 from flask import Flask, request
-from flask_restx import Resource, Api
+from flask_restx import Resource, Api, fields
 
 import werkzeug.exceptions as wz
 
@@ -342,8 +342,12 @@ class CreateAccount(Resource):
     """
     This class allows users to create an account
     """
-
-    def create(self):
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self):
+        """
+        create new account
+        """
         name = request.json.get("name")
         email = request.json.get("email")
         # check if email is associated with an existing account,
@@ -367,8 +371,12 @@ class Update_preferences(Resource):
     """
     This class allows users to update their account preferences
     """
-
-    def update(self):
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self):
+        """
+        updates account preferences
+        """
         user_id = request.json.get("user_id")
         user_id = user_id
         preference_attribute = request.json.get("preference_attribute")
@@ -389,16 +397,22 @@ class Login(Resource):
     """
     This class allows users to login to account
     """
-
-    def login(self):
+    @api.expect(api.model('DeleteJobRequest', {
+        'user_id': fields.String(required=True, description='user_id'),
+        'data': fields.String(required=True, description='data')
+    }))
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    def put(self):
+        """
+        login to accounts
+        """
         password = request.json.get("password")
         email = request.json.get("email")
-        password = password
-        email = email
         # check if the password-email combination matches with a entry in db.
         # If yes, login and return login success
-        if email != 1:
-            return {"message": "Invalid User ID/Email"}, 400
+        if email != 1 or password != 1:
+            return {"message": f"Invalid User ID/Email: {email}"}, 400
         return {"status": "success", "message": "Successfully Logged In"}, 200
 
 

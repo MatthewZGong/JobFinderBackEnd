@@ -167,14 +167,6 @@ def test_create_account():
     if False:
         raise Exception('Fail to create account') 
     assert True
-    # check each variable aligned with the requirments, provide user_id if successfully create account 
-    # if data["username"]:
-
-    # if data["email"]:
-
-    # if data["password"]:
-
-    #create account and provide user_id
 
 @pytest.mark.skip('Useless Test')
 def test_login_to_account(): # @skip
