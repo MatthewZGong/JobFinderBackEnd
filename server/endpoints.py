@@ -373,8 +373,8 @@ class Update_preferences(Resource):
     """
     @api.expect(api.model('UpdatePreferenceRequest', {
         "user_id": fields.String(required=True, description='user_id'),
-        "preferred_location": fields.String(required=True, description='preferred_location'),
-        "preferred_job_type": fields.String(required=True, description='preferred_job_type'),
+        "location": fields.String(required=True, description='location'),
+        "job_type": fields.String(required=True, description='type'),
         "sort_by": fields.String(required=True, description='sort_by')
     }))
     @api.response(HTTPStatus.OK, 'Success')
@@ -392,7 +392,7 @@ class Update_preferences(Resource):
         # UPDATE users
         # set preference.job_type = full_time
         # where user_id = 1
-        db.update_preference(user_id, preferred_location, preferred_job_type, sort_by)
+        db.update_preference(user_id, location, job_type, sort_by)
         return {"status": "success",
                 "message": "Preferences Successfully Updated"}, 200
 
