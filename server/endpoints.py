@@ -364,18 +364,21 @@ class Login(Resource):
     """
     This class allows users to login to account
     """
+    @api.expect(api.model('DeleteJobRequest', {
+        'user_id': fields.String(required=True, description='user_id'),
+        'data': fields.String(required=True, description='data')
+    }))
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def get(self):
+    def put(self):
         """
         login to accounts
         """
         password = request.json.get("password")
         email = request.json.get("email")
-        password = password
-        email = email
         # check if the password-email combination matches with a entry in db.
         # If yes, login and return login success
         if email != 1:
-            return {"message": "Invalid User ID/Email"}, 400
+            return {"message": "Invalid User ID/Email", 
+                    "message": f"Email entered: {email}, password entered: {password}"}, 400
         return {"status": "success", "message": "Successfully Logged In"}, 200
