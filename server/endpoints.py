@@ -384,8 +384,8 @@ class Update_preferences(Resource):
         updates account preferences
         """
         user_id = request.json.get("user_id")
-        preferred_location = request.json.get("preferred_location")
-        preferred_job_type = request.json.get("preferred_job_type")
+        location = request.json.get("preferred_location")
+        job_type = request.json.get("preferred_job_type")
         sort_by = request.json.get("sort_by")
         # connect to the sql and update users specific preference attribute
         # eg: update for user 1 jobs type from intern to full time
