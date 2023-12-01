@@ -416,10 +416,9 @@ class Login(Resource):
             return {"message": f"Invalid User ID: {user_id}"}, 400
         else:
             if db.user_data[user_id]["data"]["password"] == password:
-                #login
-                return {"status": "success", "message": "Successfully Logged In"}, 200
+                return {"status": "success", "message": "Login Success"}, 200
             else:
-                return {"message": f"Invalid password"}, 400
+                return {"message": "Invalid password"}, 400
 
 
 @api.route(f'/{ADD_NEW_JOBS}')
