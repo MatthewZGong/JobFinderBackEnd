@@ -36,6 +36,7 @@ UPDATE_PREFERENCES = "update-preferences"
 READ_MOST_RECENT_JOBS = "read_most_recent_jobs"
 ADMIN_DELETE_JOBS = "admin_delete_jobs"
 ADMIN_DELETE_PAST_DATE = "admin_delete_past_date"
+DELETE_USER_REPORT = "delete_user_report"
 
 
 @api.route('/endpoints')
@@ -457,3 +458,11 @@ class AddNewJobPosting(Resource):
         # return 200
         return {"status": "success", "message":
                 "job posting successfully submit"}, 200
+
+
+@api.route(f'/{DELETE_USER_REPORT}')
+class DeleteUserReport(Resource):
+    def post():
+        report_id = request.args.get("report_id")
+        db.delete_user_report(report_id)
+        return "Successfully deleted", 400

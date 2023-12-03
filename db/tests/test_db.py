@@ -25,7 +25,7 @@ def temp_user():
 @pytest.fixture(scope='function')
 def temp_posting(temp_user):
     res = db.add_user_report(user_id, job_id, "Garbage")
-    yield
+    yield res
     dbc.del_one("user_reports", {"_id": res.inserted_id})
 
 @pytest.fixture(scope='function')
@@ -52,6 +52,9 @@ def test_delete_user():
     # dbc.client[TEST_DB]["jobs"].insert_one({"_id": job_id, "description": "Janitor"})
     b = db.delete_account(user_id)
     assert b
+
+def test_delete_user_report(temp_posting):
+    assert db.delete_user_report(temp_posting.inserted_id)
 
 def test_delete_user():
     with pytest.raises(KeyError):

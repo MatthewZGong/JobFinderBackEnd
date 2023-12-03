@@ -225,7 +225,7 @@ def check_preference(user_id):
     return True
 
 
-def delete_user_report(user_id, report_id):
+def delete_user_report(report_id):
     """
     function to delete a user report
     """
