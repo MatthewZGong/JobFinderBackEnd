@@ -47,12 +47,15 @@ def test_get_user_report(temp_user, temp_posting):
     b = db.get_user_reports()
     assert len(b) == 1
 
-def test_delete_user_report():
+def test_delete_user():
     dbc.client[TEST_DB]["users"].insert_one({"_id": user_id, "username": "GeometryDash"})
     # dbc.client[TEST_DB]["jobs"].insert_one({"_id": job_id, "description": "Janitor"})
     b = db.delete_account(user_id)
-    print(b)
     assert b
+
+def test_delete_user():
+    with pytest.raises(KeyError):
+        b = db.delete_account(user_id)
 
 def test_delete_job_bad():
     with pytest.raises(KeyError):

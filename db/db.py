@@ -229,7 +229,9 @@ def delete_user_report(user_id, report_id):
     """
     function to delete a user report
     """
-    return True
+    if not dbc.exists_by_id(report_id, "user_reports"):
+        raise KeyError(f"No Report_ID {report_id}")
+    return dbc.del_one("user_reports", {"_id": report_id})
 
 # if __name__ == "__main__":
 #     add_account("test", "test@gmail.com", "test")
