@@ -110,7 +110,8 @@ celerybeat.pid
 # Environments
 .env
 .venv
-*.DS_Store
+.DS_Store
+.coverage*
 env/
 venv/
 ENV/
