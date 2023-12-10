@@ -85,3 +85,12 @@ def test_delete_job_past_date(temp_jobs_1, temp_admin):
     print(res) # to print if something went wrong
     assert len(res) == 1
     assert res[0]["_id"] == job_id_2
+
+def test_add_account():
+    identification = db.add_account("FakeAcc", "Fakemail.com").inserted_id
+    assert dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
+
+def test_add_account_bad():
+    with pytest.raises(KeyError):
+        db.add_account("FakeAcc", "Fakemail.com").inserted_id
+        db.add_account("FakeAcc", "Fakemail.com").inserted_id

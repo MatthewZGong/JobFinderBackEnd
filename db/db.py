@@ -157,14 +157,14 @@ def add_account(username, email):
     """
     function to add new account
     """
-    if check_account(username):
-        raise KeyError(f"Username already exists {username}")
+    exist = dbc.fetch_one("users", {"username": username})
+    exist = exist or dbc.fetch_one("users", {"email": email})
+    if exist:
+        raise KeyError("User with Username or email already exists")
     else:
         return dbc.insert_one('users', {
-            "data": {
-                "username": username,
-                "email": email,
-            }
+            "username": username,
+            "email": email,
         })
 
 
