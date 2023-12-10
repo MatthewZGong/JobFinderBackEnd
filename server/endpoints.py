@@ -331,22 +331,15 @@ class CreateAccount(Resource):
         """
         create new account
         """
-        name = request.json.get("name")
+        username = request.json.get("name")
         email = request.json.get("email")
-        # check if email is associated with an existing account,
-        # if no, get password and create account
-        password = request.json.get("password")
-        name = name
-        email = email
-        password = password
-        information = {"name": name,
-                       "email/userid": email,
-                       "password": password}
-        if information != 1:
-            return {"status": "failure",
-                    "message": "Fail to create account"}, 200
-        return {"status": "success",
-                "message": "Account successfully created"}, 200
+
+        try:
+            db.add_account(username, email)
+            return {"status": "success",
+                    "message": "Account successfully created"}, 200
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
 
 
 @api.route(f'/{UPDATE_PREFERENCES}')
