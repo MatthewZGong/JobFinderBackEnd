@@ -114,14 +114,21 @@ def test_delete_account_real():
 
 @patch('db.db.get_user_reports', 
     return_value=sample_get_users(), autospec=True)
-def test_get_user_reports(mock_get):
-    resp = TEST_CLIENT.get(f'/{ep.GET_USER_REPORTS}', json = {"user_id": 1})
+def test_get_user_reports_mock(mock_get):
+    resp = TEST_CLIENT.get(f'/{ep.GET_USER_REPORTS}')
     assert resp._status_code == 200
     resp = json.loads(resp.data.decode('utf-8'))
     expected_results =  {"User Reports": [{'_id': '65594839ee7a3c7d7d46eead',
     'data': {'report': 'page not found'},
     'job_id': '507f191e810c19729de860ea',
     'user_id': '507f1f77bcf86cd799439011'}]}
+    assert resp == expected_results
+
+def test_get_user_reports_empty():
+    resp = TEST_CLIENT.get(f'/{ep.GET_USER_REPORTS}')
+    assert resp._status_code == 200
+    resp = json.loads(resp.data.decode('utf-8'))
+    expected_results =  {"User Reports": []}
     assert resp == expected_results
 
 

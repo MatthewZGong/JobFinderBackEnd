@@ -183,7 +183,7 @@ class GetUserReports(Resource):
         returns all user reports
         """
         response = db.get_user_reports()
-        print(response)
+
         for res in response:
             res['_id'] = str(res['_id'])
             res['user_id'] = str(res['user_id'])
@@ -234,7 +234,6 @@ class DeleteAccount(Resource):
                     },
             })
     def delete(self):
-        # check if user is admin or not
         user_id = request.json.get("user_id")
         try:
             db.delete_account(ObjectId(user_id))
