@@ -339,9 +339,9 @@ class CreateAccount(Resource):
         """
         create new account
         """
-        username = request.json.get("username")
-        email = request.json.get("email")
-        password = request.json.get("password")
+        username = request.args.get("username")
+        email = request.args.get("email")
+        password = request.args.get("password")
         try:
             db.add_account(username, email, password)
             return {"status": "success",

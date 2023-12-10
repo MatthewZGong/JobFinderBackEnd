@@ -196,7 +196,7 @@ def test_create_account_success(mock):
     }
     expected = {"status": "success", "message": "Account new_user successfully created"}
 
-    resp = TEST_CLIENT.put(f'/{ep.CREATE_USER_ACCOUNT}', json=test_data)
+    resp = TEST_CLIENT.put(f'/{ep.CREATE_USER_ACCOUNT}', query_string=test_data)
     text = json.loads(resp.data.decode('utf-8'))
     assert resp._status_code == 200
     assert text == expected
@@ -211,7 +211,7 @@ def test_create_account_bad(mock):
     }
     expected = {'message': "'User with Username or email already exists'"}
 
-    resp = TEST_CLIENT.put(f'/{ep.CREATE_USER_ACCOUNT}', json=test_data)
+    resp = TEST_CLIENT.put(f'/{ep.CREATE_USER_ACCOUNT}', query_string=test_data)
     text = json.loads(resp.data.decode('utf-8'))
     assert resp._status_code == NOT_ACCEPTABLE
     assert text == expected
