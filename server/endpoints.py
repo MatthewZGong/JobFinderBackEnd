@@ -361,18 +361,18 @@ class Update_preferences(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     @api.doc(params={
         'user_id': {'description': 'User ID',
-                     'type': 'string', 'default': "Test1"
-                     },
-        'location': {'description': 'Location',
-                  'type': 'string', 'default': "Test2"
-                  },
-        'job_type': {'description': 'Job Type',
-                  'type': 'string', 'default': "Test3"
+                    'type': 'string', 'default': "Test1"
                     },
-        'sort_by':{'description': 'Sort By (Latest/Trending)',
-                   'type': 'string', 'default': "Test4"
+        'location': {'description': 'Location',
+                     'type': 'string', 'default': "Test2"
+                     },
+        'job_type': {'description': 'Job Type',
+                     'type': 'string', 'default': "Test3"
+                     },
+        'sort_by': {'description': 'Sort By (Latest/Trending)',
+                    'type': 'string', 'default': "Test4"
                     }
-                  })
+                     })
     def put(self):
         """
         updates account preferences
