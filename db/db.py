@@ -139,15 +139,10 @@ def delete_job_past_date(admin_id, past_date):
 def get_most_recent_job(numbers):
     # connect to mongodb to get the numbers of jobs based
     # on their date and store it into job list
-    jobs = dbc.fetch_all_as_dict("job_title", "jobs")
-    res = {}
-    # temporary code for getting recent
-    count = 0
-    for i in jobs:
-        res[i] = jobs[i]
-        count += 1
-        if count >= numbers:
-            break
+    jobs = dbc.fetch_all_as_dict("date", "jobs") # jobs is a dictionary, key is date
+    sorted_key=sorted(jobs)
+    last_keys=sorted_key[-numbers:] # find the most recent numbers of jobs based on key
+    res = [jobs[key] for key in last_keys]
     return res
 
 
