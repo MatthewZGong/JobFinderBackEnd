@@ -331,6 +331,9 @@ class CreateAccount(Resource):
         'email': {'description': 'Email',
                   'type': 'string', 'default': "Test2"
                   },
+        'password': {'description': 'Password',
+                     'type': 'string', 'default': "Test3"
+                     }
                   })
     def put(self):
         """
@@ -340,7 +343,7 @@ class CreateAccount(Resource):
         email = request.json.get("email")
 
         try:
-            db.add_account(username, email)
+            db.add_account(username, email, password)
             return {"status": "success",
                     "message": f"Account {username} successfully created"}, 200
         except Exception as e:
