@@ -105,6 +105,15 @@ def external_job_update(id, position, arg):
         raise KeyError("id not found")
 
 
+def update_job(job_id, changes):
+    """
+    function to update the parameters of a job
+    """
+    if not dbc.exists_by_id(job_id, "jobs"):
+        raise KeyError(f"No User {job_id}")
+    return dbc.update_doc("jobs", {"_id": job_id}, changes)
+
+
 def delete_job(admin_id, job_id):
     # connect to mongodb to find the jobs corresponding to this
     # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
@@ -180,6 +189,9 @@ def update_preference(user_id, preferred_location, preferred_type, sort_by):
 
 
 def update_account(user_id, changes):
+    """
+    function to update the parameters of a user
+    """
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
     return dbc.update_doc("users", {"_id": user_id}, changes)
