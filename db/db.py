@@ -151,18 +151,20 @@ def get_most_recent_job(numbers):
     return res
 
 
-def check_account(username, user_password):
+def check_account(user_id, username, password):
     """
     Check whether password/username pair matches an entry in db.
     """
-    for i in user_data:
-        if username == user_data[i]["data"]["username"]:
-            if user_password == user_data[i]["data"]["password"]:
-                return True
-    return False
+    if not dbc.exists_by_id(user_id, "users"):
+        raise KeyError(f"No User {user_id}")
+    else:
+        user = dbc.find_by_id(user_id, "users")
+        if user["username"] == username and user["password"] == password:
+            return True
+        raise KeyError(f"Invalid password or username")
 
 
-def add_account(username, email):
+def add_account(username, email, password):
     """
     function to add new account
     """
@@ -174,6 +176,7 @@ def add_account(username, email):
         return dbc.insert_one('users', {
             "username": username,
             "email": email,
+            "password": password
         })
 
 
