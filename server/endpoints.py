@@ -12,7 +12,7 @@ from flask_restx import Resource, Api
 import werkzeug.exceptions as wz
 
 import db.db as db
-from datetime import datetime
+from datetime import datetime, date
 app = Flask(__name__)
 api = Api(app)
 
@@ -236,7 +236,7 @@ class DeleteAccount(Resource):
         'user_id': {'description': 'User ID is not publicly facing',
                     'type': 'string', 'default': "Test1"
                     },
-            })
+    })
     def delete(self):
         user_id = request.json.get("user_id")
         try:
@@ -334,7 +334,7 @@ class CreateAccount(Resource):
         'password': {'description': 'Password',
                      'type': 'string', 'default': "Test3"
                      }
-                  })
+    })
     def put(self):
         """
         create new account
@@ -370,7 +370,7 @@ class Update_preferences(Resource):
         'sort_by': {'description': 'Sort By (Latest/Trending)',
                     'type': 'string', 'default': "Test4"
                     }
-                     })
+    })
     def put(self):
         """
         updates account preferences
@@ -433,6 +433,8 @@ class AddNewJobPosting(Resource):
                                   'default': "Test4"},
                      'location': {'description': 'Location',  'type': 'string',
                                   'default': "Test5"},
+                     'date': {'description': 'Date', 'type': str,
+                              'default': str(date.today().isoformat())}
                      })
     def post(self):
         company = request.args.get("company")
@@ -440,8 +442,20 @@ class AddNewJobPosting(Resource):
         job_description = request.args.get("job_description")
         job_type = request.args.get("job_type")
         location = request.args.get("location")
+        date = request.args.get("date")
+        if date is None:
+            date = str(date.today().isoformat())
+        date_obj = None
+        try:
+            date_obj = datetime.strptime(date, '%Y-%m-%d')
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
+
+        date_obj = date_obj.isoformat()
+
+        # date =
         db.add_job_posting(company, job_title,
-                           job_description, job_type, location)
+                           job_description, job_type, location, date)
         # print(company, job_title, job_description, job_type, location)
 
         # return 200

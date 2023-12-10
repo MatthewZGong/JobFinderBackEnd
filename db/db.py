@@ -10,69 +10,69 @@ Gradually, we will fill in actual calls to our datastore.
 dbc.connect_db()
 
 job_data = {
-        1: {
-            "data": {
-                "keywords": ["internship"]
-            },
-            "userid": 1,
-            "date": datetime.datetime(2020, 5, 17)
+    1: {
+        "data": {
+            "keywords": ["internship"]
         },
-        2: {
-            "data": {
-               "keywords": ["Remote"]
-            },
-            "userid": 2,
-            "date": datetime.datetime(2020, 5, 18)
-        }
+        "userid": 1,
+        "date": datetime.datetime(2020, 5, 17)
+    },
+    2: {
+        "data": {
+            "keywords": ["Remote"]
+        },
+        "userid": 2,
+        "date": datetime.datetime(2020, 5, 18)
     }
+}
 
 user_data = {
-        1: {
-            "user_id": 1,
-            "data": {
-                "username": "new_username",
-                "email": "new_email@example.com",
-                "password": "new_password"
-            }
+    1: {
+        "user_id": 1,
+        "data": {
+            "username": "new_username",
+            "email": "new_email@example.com",
+            "password": "new_password"
         }
     }
+}
 
 admin_data = {
-        1: {
-            "admin_id": 1,
-            "data": {
-                "username": "new_username",
-                "password": "new_password"
-            }
+    1: {
+        "admin_id": 1,
+        "data": {
+            "username": "new_username",
+            "password": "new_password"
         }
     }
+}
 
 
 user_reports = {
-        1: {
-            "user_id": 1,
-            "job_id": 1,
-            "data": {
-                "report": "invalid link"
-            }
-        },
-        2: {
-            "user_id": 2,
-            "job_id": 2,
-            "data": {
-                "report": "job is closed"
-            }
-        },
-        3: {
-            "user_id": 3,
-            "job_id": 3,
-            "data": {
-                "report": "page not found"
-            }
+    1: {
+        "user_id": 1,
+        "job_id": 1,
+        "data": {
+            "report": "invalid link"
         }
-
-
+    },
+    2: {
+        "user_id": 2,
+        "job_id": 2,
+        "data": {
+            "report": "job is closed"
+        }
+    },
+    3: {
+        "user_id": 3,
+        "job_id": 3,
+        "data": {
+            "report": "page not found"
+        }
     }
+
+
+}
 
 user_preference = {
     1: {
@@ -84,13 +84,15 @@ user_preference = {
 }
 
 
-def add_job_posting(company, job_title, job_description, job_type, location):
+def add_job_posting(company, job_title,
+                    job_description, job_type, location, date):
     return dbc.insert_one("jobs", {
         "company": company,
         "job_title": job_title,
         "job_description": job_description,
         "job_type": job_type,
-        "location": location
+        "location": location,
+        'date': date
     })
 
 
@@ -182,10 +184,10 @@ def update_preference(user_id, preferred_location, preferred_type, sort_by):
         raise KeyError(f"No User {user_id}")
     return dbc.update_doc("users", {"_id": user_id},
                           {
-                            "preferred location": preferred_location,
-                            "preferred job type": preferred_type,
-                            "sort by": sort_by
-                          })
+        "preferred location": preferred_location,
+        "preferred job type": preferred_type,
+        "sort by": sort_by
+    })
 
 
 def update_account(user_id, changes):
@@ -223,12 +225,12 @@ def add_user_report(user_id, job_id, report):
         raise KeyError(f"No Job {job_id}")
 
     return dbc.insert_one('user_reports', {
-            "user_id": user_id,
-            "job_id": job_id,
-            "data": {
-                "report": report
-            }
-        })
+        "user_id": user_id,
+        "job_id": job_id,
+        "data": {
+            "report": report
+        }
+    })
 
 
 def check_preference(user_id):
