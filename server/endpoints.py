@@ -66,18 +66,20 @@ class UpdateUserInfo(Resource):
         '_id': {
             'description': 'User ID',
             'type': 'string',
-            'default': "Test1"
+            'default': "Test1",
         },
         'changes': {
             'email': {
                 'description': 'Email',
                 'type': 'string',
-                'default': "Test2"
+                'default': "Test2",
+                'required': False
             },
             'username': {
                 'description': 'Username',
                 'type': 'string',
-                'default': "Test3"
+                'default': "Test3",
+                'required': False
             },
         }
     })
