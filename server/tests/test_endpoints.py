@@ -133,7 +133,7 @@ def test_send_user_report():
     resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
         'user_id': 10, 'job_id': 1, "report": "TESTING"
     })
-    assert resp._status_code == 400;
+    assert resp._status_code == 400
     resp = json.loads(resp.data.decode('utf-8'))
     expected_results =  {"status": "failure", "message":
                 "Invalid User ID"}
@@ -142,31 +142,39 @@ def test_send_user_report():
     resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
         'user_id': 1, 'job_id': 1, "report": ""
     })
-    assert resp._status_code == 400;
+    assert resp._status_code == 400
     resp = json.loads(resp.data.decode('utf-8'))
     expected_results =  {"status": "failure", "message":
                 "Invalid report"}
     assert resp == expected_results
 
-@pytest.mark.skip('We know how to skip')
-def test_create_account():
-    # assert True
-    # passed in data for creating an account include:
-    # username, password, email
-
-    test2 = {
-        'user_id': 1, 'password': 2, 'email': "TESTING@"
+@patch('db.db.add_account', return_value=True, autospec=True)
+def test_create_account_success(mock):
+    # Test data with new username and email
+    test_data = {
+        'username': 'new_user',
+        'email': 'new_email@example.com'
     }
+    expected = {"status": "success", "message": f"Account new_user successfully created"}
 
-    test3 = {
-        'user_id': 1, 'password': "test", 'email': "TESTING@"
+    resp = TEST_CLIENT.put(f'/{ep.CREATE_USER_ACCOUNT}', json=test_data)
+    text = json.loads(resp.data.decode('utf-8'))
+    assert resp._status_code == 200
+    assert text == expected
+
+@patch('db.db.add_account', side_effect=KeyError("User with Username or email already exists"), autospec=True)
+def test_create_account_bad(mock):
+    # Test data with new username and email
+    test_data = {
+        'username': 'new_user',
+        'email': 'new_email@example.com'
     }
-    expected_results = {"status": "success", "message":
-                "User account successfully created"}
+    expected = {'message': "'User with Username or email already exists'"}
 
-    if False:
-        raise Exception('Fail to create account') 
-    assert True
+    resp = TEST_CLIENT.put(f'/{ep.CREATE_USER_ACCOUNT}', json=test_data)
+    text = json.loads(resp.data.decode('utf-8'))
+    assert resp._status_code == NOT_ACCEPTABLE
+    assert text == expected
 
 @pytest.mark.skip('Useless Test')
 def test_login_to_account(): # @skip

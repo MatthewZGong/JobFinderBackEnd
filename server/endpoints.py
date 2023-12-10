@@ -331,13 +331,13 @@ class CreateAccount(Resource):
         """
         create new account
         """
-        username = request.json.get("name")
+        username = request.json.get("username")
         email = request.json.get("email")
 
         try:
             db.add_account(username, email)
             return {"status": "success",
-                    "message": "Account successfully created"}, 200
+                    "message": f"Account {username} successfully created"}, 200
         except Exception as e:
             raise wz.NotAcceptable(str(e))
 
