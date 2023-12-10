@@ -4,7 +4,7 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 
 from http import HTTPStatus
-
+from bson.objectid import ObjectId
 from flask import Flask, request
 from flask_restx import Resource, Api, fields
 
@@ -226,27 +226,21 @@ class DeleteAccount(Resource):
     """
     This class allows users to delete their account
     """
-    Temp_users = set([1, 2, 3, 4])
-
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={
+        'user_id': {'description': 'User ID is not publicly facing',
+                    'type': 'string', 'default': "Test1"
+                    },
+            })
     def delete(self):
         # check if user is admin or not
         user_id = request.json.get("user_id")
-        # check if user is in database
-        if user_id is None or user_id not in DeleteAccount.Temp_users:
-            return {"status": "failure",
-                    "message": "Wrong Permission"}, 400
-        # db not set up yet
-        # make sure user sending is correct user and has correct permsission
-        # do authentication that user deleting acount
-        # is the same as user sending
-        # make sure user is not admin user
-        if user_id == 1:
-            return {"status": "failure",
-                    "message": "Wrong Permission"}, 400
-        # db not set up yet
-        # log out user
-        return {"status": "success",
-                "message": "Account successfully deleted"}, 200
+        try:
+            db.delete_account(ObjectId(user_id))
+            return {"message": f"Successfully deleted {user_id}"}
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
 
 
 @api.route(f'/{READ_MOST_RECENT_JOBS}')
@@ -327,6 +321,14 @@ class CreateAccount(Resource):
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={
+        'username': {'description': 'Username',
+                     'type': 'string', 'default': "Test1"
+                     },
+        'email': {'description': 'Email',
+                  'type': 'string', 'default': "Test2"
+                  },
+                  })
     def put(self):
         """
         create new account

@@ -3,6 +3,9 @@ from datetime import datetime
 import server.endpoints as ep
 import json
 import pytest
+
+from db import db
+from db import db_connect as dbc
 from unittest.mock import patch
 from http.client import (
     NOT_ACCEPTABLE,
@@ -10,6 +13,8 @@ from http.client import (
 )
 
 TEST_CLIENT = ep.app.test_client()
+dbc.connect_db()
+
 
 @pytest.fixture
 def sample_data():
@@ -88,21 +93,24 @@ def test_keyword_search_database():
 def test_update_job_postings():
     assert True
 
-
-patch('db.db.delete_account', return_value=True, autospec=True)
 def test_delete_account():
-    #try to delete admin acount
-    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 1})
-    assert resp._status_code == 400 
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": "507f191e810c19729de860ea"})
 
-    #try to delete non-existent account
-    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 5})
-    assert resp._status_code == 400 
+    assert resp._status_code == NOT_ACCEPTABLE 
+    assert {'message': "'No User 507f191e810c19729de860ea'"} == resp.get_json()
 
-    #try to delete account
-    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": 2})
-    assert resp._status_code == 200
+@patch('db.db.delete_account', return_value=True, autospec=True)
+def test_delete_account_mockgood(mock):
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": "507f191e810c19729de860ea"})
 
+    assert resp._status_code == 200 
+    assert {"message": f"Successfully deleted 507f191e810c19729de860ea"} == resp.get_json()
+
+def test_delete_account_real():
+    identification = db.add_account('new_user', 'new_email').inserted_id
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": str(identification)})
+    assert resp._status_code == 200 
+    assert {"message": f"Successfully deleted {str(identification)}"} == resp.get_json()
 
 @patch('db.db.get_user_reports', 
     return_value=sample_get_users(), autospec=True)
@@ -155,7 +163,7 @@ def test_create_account_success(mock):
         'username': 'new_user',
         'email': 'new_email@example.com'
     }
-    expected = {"status": "success", "message": f"Account new_user successfully created"}
+    expected = {"status": "success", "message": "Account new_user successfully created"}
 
     resp = TEST_CLIENT.put(f'/{ep.CREATE_USER_ACCOUNT}', json=test_data)
     text = json.loads(resp.data.decode('utf-8'))
