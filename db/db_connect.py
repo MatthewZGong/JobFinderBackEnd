@@ -89,13 +89,16 @@ def exists_by_id(id, collection, db=DB_NAME):
     return client[db][collection].count_documents({'_id': ObjectId(id)}) != 0
 
 
-if __name__ == "__main__":
-    test = connect_db()
-    user_id = ObjectId("656a18de7f688c9fa2fe1006")
-    insert_one('user_reports', {
-            "user_id": user_id,
-            "job_id": "None",
-            "data": {
-                "report": "THIS IS A TEST"
-            }
-        })
+def update_doc(collection, filters, update_dict, db=DB_NAME):
+    return client[db][collection].update_one(filters, {'$set': update_dict})
+
+# if __name__ == "__main__":
+#     test = connect_db()
+#     user_id = ObjectId("656a18de7f688c9fa2fe1006")
+#     insert_one('user_reports', {
+#             "user_id": user_id,
+#             "job_id": "None",
+#             "data": {
+#                 "report": "THIS IS A TEST"
+#             }
+#         })
