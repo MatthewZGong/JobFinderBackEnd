@@ -130,7 +130,7 @@ def test_delete_account_mockgood(mock):
     assert {"message": f"Successfully deleted 507f191e810c19729de860ea"} == resp.get_json()
 
 def test_delete_account_real():
-    identification = db.add_account('new_user', 'new_email').inserted_id
+    identification = db.add_account('new_user', 'new_email', 'new_password').inserted_id
     resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": str(identification)})
     assert resp._status_code == 200 
     assert {"message": f"Successfully deleted {str(identification)}"} == resp.get_json()
@@ -191,7 +191,8 @@ def test_create_account_success(mock):
     # Test data with new username and email
     test_data = {
         'username': 'new_user',
-        'email': 'new_email@example.com'
+        'email': 'new_email@example.com',
+        'password': 'new_password'
     }
     expected = {"status": "success", "message": "Account new_user successfully created"}
 
@@ -205,7 +206,8 @@ def test_create_account_bad(mock):
     # Test data with new username and email
     test_data = {
         'username': 'new_user',
-        'email': 'new_email@example.com'
+        'email': 'new_email@example.com',
+        'password': 'new_password'
     }
     expected = {'message': "'User with Username or email already exists'"}
 
