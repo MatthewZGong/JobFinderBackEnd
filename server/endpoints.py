@@ -54,43 +54,6 @@ class Endpoints(Resource):
         return {"Available endpoints": endpoints}
 
 
-@api.route(f'/{MAIN_MENU}')
-@api.route('/')
-class MainMenu(Resource):
-    """
-    This will deliver our main menu.
-    """
-
-    def get(self):
-        """
-        Gets the main game menu.
-        """
-        return {'Title': MAIN_MENU_NM,
-                'Default': 2,
-                'Choices': {
-                    '1': {'url': '/', 'method': 'get',
-                          'text': 'List Available Characters'},
-                    '2': {'url': '/',
-                          'method': 'get', 'text': 'List Active Games'},
-                    '3': {'url': f'/{USERS}',
-                          'method': 'get', 'text': 'List Users'},
-                    'X': {'text': 'Exit'},
-                }}
-
-
-@api.route(f'/{USERS}')
-class Users(Resource):
-    """
-    This class supports fetching a list of all pets.
-    """
-
-    def get(self):
-        """
-        This method returns all users.
-        """
-        return 'Current Users:\nSai\nAbhishek\nKristian\n'
-
-
 @api.route(f'/{UPDATE_USER_INFO}')
 class UpdateUserInfo(Resource):
     """
