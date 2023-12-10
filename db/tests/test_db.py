@@ -88,11 +88,11 @@ def test_delete_job_past_date(temp_jobs_1, temp_admin):
     assert res[0]["_id"] == job_id_2
 
 def test_add_account():
-    identification = db.add_account("FakeAcc", "Fakemail.com").inserted_id
+    identification = db.add_account("FakeAcc", "Fakemail.com", "FakePassword").inserted_id
     assert dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
 
 def test_add_account_bad():
     with pytest.raises(KeyError):
-        identification = db.add_account("FakeAcc", "Fakemail.com").inserted_id
-        db.add_account("FakeAcc", "Fakemail.com").inserted_id
+        identification = db.add_account("FakeAcc", "Fakemail.com", "FakePassword").inserted_id
+        db.add_account("FakeAcc", "Fakemail.com", "FakePassword").inserted_id
     assert dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
