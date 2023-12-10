@@ -92,5 +92,6 @@ def test_add_account():
 
 def test_add_account_bad():
     with pytest.raises(KeyError):
+        identification = db.add_account("FakeAcc", "Fakemail.com").inserted_id
         db.add_account("FakeAcc", "Fakemail.com").inserted_id
-        db.add_account("FakeAcc", "Fakemail.com").inserted_id
+    assert dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
