@@ -171,9 +171,8 @@ def add_account(username, email):
 def update_preference(user_id, preferred_location, preferred_type, sort_by):
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
-    return dbc.insert_one("user_preference",
+    return dbc.update_doc("users", {"_id": user_id},
                           {
-                            "user_id": user_id,
                             "preferred location": preferred_location,
                             "preferred job type": preferred_type,
                             "sort by": sort_by
