@@ -451,11 +451,9 @@ class AddNewJobPosting(Resource):
         except Exception as e:
             raise wz.NotAcceptable(str(e))
 
-        date_obj = date_obj.isoformat()
-
         # date =
         db.add_job_posting(company, job_title,
-                           job_description, job_type, location, date)
+                           job_description, job_type, location, date_obj)
         # print(company, job_title, job_description, job_type, location)
 
         # return 200
