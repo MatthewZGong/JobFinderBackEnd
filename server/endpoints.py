@@ -351,14 +351,28 @@ class Update_preferences(Resource):
     """
     This class allows users to update their account preferences
     """
-    @api.expect(api.model('UpdatePreferenceRequest', {
-        "user_id": fields.String(required=True, description='user_id'),
-        "location": fields.String(required=True, description='location'),
-        "job_type": fields.String(required=True, description='type'),
-        "sort_by": fields.String(required=True, description='sort_by')
-    }))
+    # @api.expect(api.model('UpdatePreferenceRequest', {
+    #     "user_id": fields.String(required=True, description='user_id'),
+    #     "location": fields.String(required=True, description='location'),
+    #     "job_type": fields.String(required=True, description='type'),
+    #     "sort_by": fields.String(required=True, description='sort_by')
+    # }))
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={
+        'user_id': {'description': 'User ID',
+                     'type': 'string', 'default': "Test1"
+                     },
+        'location': {'description': 'Location',
+                  'type': 'string', 'default': "Test2"
+                  },
+        'job_type': {'description': 'Job Type',
+                  'type': 'string', 'default': "Test3"
+                    },
+        'sort_by':{'description': 'Sort By (Latest/Trending)',
+                   'type': 'string', 'default': "Test4"
+                    }
+                  })
     def put(self):
         """
         updates account preferences
