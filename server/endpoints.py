@@ -62,8 +62,27 @@ class UpdateUserInfo(Resource):
 
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={
+        '_id': {
+            'description': 'Company Name',
+            'type': 'string',
+            'default': "Test1"
+        },
+        'data': {
+            'email': {
+                'description': 'Email',
+                'type': 'string',
+                'default': "Test2"
+            },
+            'username': {
+                'description': 'Username',
+                'type': 'string',
+                'default': "Test3"
+            },
+        }
+    })
     def put(self):
-        user_id = request.json.get("user_id")
+        user_id = request.json.get("_id")
         if user_id is None:
             raise wz.NotAcceptable("Invalid User_ID")
         if (user_id not in db.user_data):

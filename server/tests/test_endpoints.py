@@ -29,7 +29,7 @@ def sample_get_users():
 
 def test_update_user_info():
 
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json={"user_id": 1})
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json={"_id": 1})
     resp_json = resp.get_json()
     
     assert isinstance(resp_json, dict)

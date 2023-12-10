@@ -153,19 +153,17 @@ def check_account(username, user_password):
     return False
 
 
-def add_account(username, email, password):
+def add_account(username, email):
     """
     function to add new account
     """
-    if check_account(username, password):
+    if check_account(username):
         raise KeyError(f"Username already exists {username}")
     else:
-        return dbc.insert_one('user_data', {
-            "user_id": 10,
+        return dbc.insert_one('users', {
             "data": {
                 "username": username,
                 "email": email,
-                "password": password
             }
         })
 
