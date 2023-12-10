@@ -161,7 +161,7 @@ def check_account(user_id, username, password):
         user = dbc.find_by_id(user_id, "users")
         if user["username"] == username and user["password"] == password:
             return True
-        raise KeyError(f"Invalid password or username")
+        raise KeyError("Invalid password or username")
 
 
 def add_account(username, email, password):
