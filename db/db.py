@@ -179,6 +179,12 @@ def update_preference(user_id, preferred_location, preferred_type, sort_by):
                           })
 
 
+def update_account(user_id, changes):
+    if not dbc.exists_by_id(user_id, "users"):
+        raise KeyError(f"No User {user_id}")
+    return dbc.update_doc("users", {"_id": user_id}, changes)
+
+
 def delete_account(user_id):
     """
     function to delete an account

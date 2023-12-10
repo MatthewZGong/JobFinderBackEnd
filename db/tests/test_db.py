@@ -16,7 +16,8 @@ dbc.client.drop_database(TEST_DB)
 @pytest.fixture(scope='function')
 def temp_user():
     dbc.client[TEST_DB]["users"].insert_one({"_id": user_id, "username": "GeometryDash"})
-    dbc.client[TEST_DB]["jobs"].insert_one({"_id": job_id, "description": "Janitor", "date": datetime.datetime(2020, 5, 17)})
+    dbc.client[TEST_DB]["jobs"].insert_one({"_id": job_id, "description": "Janitor",
+                                            "date": datetime.datetime(2020, 5, 17)})
     # yield to our test function
     yield
     dbc.client[TEST_DB]["users"].delete_one({"_id": user_id})

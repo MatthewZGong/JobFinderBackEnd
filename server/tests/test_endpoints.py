@@ -12,6 +12,14 @@ from http.client import (
     OK
 )
 
+TEST_DB = dbc.DB_NAME
+
+user_id = ObjectId("507f1f77bcf86cd799439011")
+job_id = ObjectId("507f191e810c19729de860ea")
+job_id_1 = ObjectId()
+job_id_2 = ObjectId()
+admin_id = ObjectId()
+
 TEST_CLIENT = ep.app.test_client()
 dbc.connect_db()
 
@@ -32,16 +40,31 @@ def sample_get_users():
     'job_id': '507f191e810c19729de860ea',
     'user_id': '507f1f77bcf86cd799439011'}]
 
-def test_update_user_info():
+@pytest.fixture(scope='function')
+def temp_user():
+    dbc.client[TEST_DB]["users"].insert_one({"_id": user_id, "username": "GeometryDash"})
+    # yield to our test function
+    yield
+    dbc.client[TEST_DB]["users"].delete_one({"_id": user_id})
 
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json={"_id": 1})
+def test_update_user_info_bad():
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json={"_id": '65594839ee7a3c7d7d46eead',
+                                                            "changes": {}})
     resp_json = resp.get_json()
     
-    assert isinstance(resp_json, dict)
-    assert 'status' in resp_json
-    assert resp_json['status'] == 'success'
-    assert 'message' in resp_json
-    assert resp_json['message'] == f"User {1} info updated"
+    assert resp._status_code == NOT_ACCEPTABLE
+    assert resp_json == {'message': "'No User 65594839ee7a3c7d7d46eead'"}
+
+def test_update_user_info(temp_user):
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json={"_id": '507f1f77bcf86cd799439011',
+                                                            "changes": {
+                                                                "username": "fortnite_player",
+                                                                "email": "fortnite@epic.com"
+                                                            }})
+    resp_json = resp.get_json()
+    
+    assert resp._status_code == 200
+    assert resp_json == {'status': 'success', 'message': 'User 507f1f77bcf86cd799439011 info updated'}
 
 
 def test_update_user_info_bad(sample_data):
