@@ -6,7 +6,8 @@ The endpoint called `endpoints` will return all available endpoints.
 from http import HTTPStatus
 from bson.objectid import ObjectId
 from flask import Flask, request
-from flask_restx import Resource, Api, fields
+from flask_restx import Resource, Api
+# from flask_restx import Resource, Api, fields
 
 import werkzeug.exceptions as wz
 
