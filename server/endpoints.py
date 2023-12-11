@@ -100,33 +100,6 @@ class UpdateUserInfo(Resource):
                 "message": f"User {user_id} info updated"}, 200
 
 
-@api.route(f'/{KEYWORD_SEARCH}')
-class KeywordSearchDatabase(Resource):
-    """
-    This endpoint performs a keyword search on the database.
-    """
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def get(self):
-        """
-        Searches the database for the given keyword and returns results.
-        Right now it returns dummy data since we don't have a database.
-        """
-
-        keyword = request.json.get("keyword")
-        if keyword is None:
-            raise wz.NotAcceptable("Keyword Needed")
-        results = []
-        for i in db.job_data:
-            entry = db.job_data[i]
-            if keyword in entry["data"]["keywords"]:
-                entry_date = entry.get("date", "")
-                if isinstance(entry_date, datetime):
-                    entry["date"] = entry_date.isoformat()
-                results.append(entry)
-        return {"results": results}, 200
-
-
 @api.route(f'/{USER_REPORT}')
 class UserReport(Resource):
     """
