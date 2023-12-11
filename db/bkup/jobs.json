@@ -1,2 +1,5 @@
-{"_id":{"$oid":"656a54a9b0d822639db0b7a4"},"company":"HELLO","job_title":"World","job_description":"Test3","job_type":"Test4","location":"Test5"}
-{"_id":{"$oid":"656e237ec363bd76d9e88ee6"},"company":"Apple","job_title":"Intern","job_description":"Test3","job_type":"Test4","location":"Test5"}
+{"_id":{"$oid":"657649116c8da5f257c382a3"},"company":"Apple","job_title":"9","job_description":"Test3","job_type":"Test4","location":"Test5","date":{"$date":"2023-12-09T00:00:00Z"}}
+{"_id":{"$oid":"657649196c8da5f257c382a4"},"company":"Apple","job_title":"8","job_description":"Test3","job_type":"Test4","location":"Test5","date":{"$date":"2023-12-08T00:00:00Z"}}
+{"_id":{"$oid":"6576491c6c8da5f257c382a5"},"company":"Apple","job_title":"7","job_description":"Test3","job_type":"Test4","location":"Test5","date":{"$date":"2023-12-07T00:00:00Z"}}
+{"_id":{"$oid":"657649206c8da5f257c382a6"},"company":"Apple","job_title":"6","job_description":"Test3","job_type":"Test4","location":"Test5","date":{"$date":"2023-12-06T00:00:00Z"}}
+{"_id":{"$oid":"657649246c8da5f257c382a7"},"company":"Apple","job_title":"5","job_description":"Test3","job_type":"Test4","location":"Test5","date":{"$date":"2023-12-05T00:00:00Z"}}
