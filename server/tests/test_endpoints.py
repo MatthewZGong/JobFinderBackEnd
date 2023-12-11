@@ -155,14 +155,14 @@ def test_get_user_reports_empty():
 
 @patch('db.db.add_user_report', return_value=True, autospec=True)
 def test_send_user_report(mock_add):
-    resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
+    resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', query_string={
         'user_id': 1, 'job_id': 1, "report": "TESTING"
     })
     assert resp._status_code == OK
 
 @patch('db.db.add_user_report', side_effect=KeyError(), autospec=True)
 def test_send_user_report_bad(mock_add):
-    resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', json={
+    resp = TEST_CLIENT.post(f'/{ep.USER_REPORT}', query_string={
         'user_id': 10, 'job_id': 1, "report": "TESTING"
     })
     assert resp._status_code == NOT_ACCEPTABLE
@@ -252,7 +252,7 @@ def test_admin_delete_past_date_OK(mock_add):
     invalid_past_date = datetime(2022, 11, 30)
     # Convert the datetime object to a string with a specific format
     formatted_date = invalid_past_date.strftime('%Y-%m-%d')
-    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_PAST_DATE}', json = {
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_PAST_DATE}', query_string = {
         "admin_id": 1,
         "invalid_past_date": formatted_date})
     assert resp.status_code == OK
@@ -262,7 +262,7 @@ def test_admin_delete_past_date_bad(mock_add):
     invalid_past_date = datetime(2022, 11, 30)
     # Convert the datetime object to a string with a specific format
     formatted_date = invalid_past_date.strftime('%Y-%m-%d')
-    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_PAST_DATE}', json = {
+    resp = TEST_CLIENT.delete(f'/{ep.ADMIN_DELETE_PAST_DATE}', query_string = {
         "admin_id": 9,
         "invalid_past_date": formatted_date})
     assert resp.status_code ==  NOT_ACCEPTABLE

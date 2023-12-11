@@ -149,13 +149,13 @@ class UserReport(Resource):
         }
     })
     def post(self):
-        user_id = request.json.get("user_id")
+        user_id = request.args.json.get("user_id")
         if user_id is None:
             raise wz.NotAcceptable("Expected json with user_ID")
-        job_id = request.json.get("job_id")
+        job_id = request.args.json.get("job_id")
         if job_id is None:
             raise wz.NotAcceptable("Expected json with job_ID")
-        report = request.json.get("report")
+        report = request.args.json.get("report")
         try:
             db.add_user_report(user_id, job_id, report)
             return {"status": "success", "message":
@@ -366,10 +366,10 @@ class admin_delete_past_date(Resource):
         }
     })
     def delete(self):
-        admin_id = request.json.get("admin_id")
+        admin_id = request.args.json.get("admin_id")
         if admin_id is None:
             raise wz.NotAcceptable("Expected json with admin_ID")
-        invalid_past_date = request.json.get("invalid_past_date")
+        invalid_past_date = request.args.json.get("invalid_past_date")
         try:
             db.delete_job_past_date(admin_id, invalid_past_date)
             return {"status": "success", "message": "Jobs deleted"}, 200
