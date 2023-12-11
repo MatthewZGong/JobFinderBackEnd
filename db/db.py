@@ -175,7 +175,11 @@ def add_account(username, email, password):
         return dbc.insert_one('users', {
             "username": username,
             "email": email,
-            "password": password
+            "password": password,
+            "preference": {"preferred location": None,
+                           "preferred job type": None,
+                           "sort by": None
+                            }
         })
 
 
@@ -255,11 +259,8 @@ def check_preference(user_id):
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
     else:
-        try:
-            user = dbc.find_by_id(user_id, "users")
-            return user["preference"]
-        except:
-            raise KeyError("No preference")
+        user = dbc.find_by_id(user_id, "users")
+        return user["preference"]
 
 
 def delete_user_report(report_id):
