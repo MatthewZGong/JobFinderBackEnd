@@ -264,7 +264,7 @@ class DeleteAccount(Resource):
                     },
     })
     def delete(self):
-        user_id = request.json.get("user_id")
+        user_id = request.args.get("user_id")
         try:
             db.delete_account(ObjectId(user_id))
             return {"message": f"Successfully deleted {user_id}"}

@@ -106,7 +106,7 @@ def test_update_job_postings_should_fail_job_id(mock):
 
 @patch('db.db.update_job', return_value=True)
 def test_update_job_postings_should_fail_date(mock):
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_JOB_POSTING}', query_string={"job_id": '507f1f77bcf86cd799439011',
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_JOB_POSTING}', query_string = {"job_id": '507f1f77bcf86cd799439011',
                                             'date': '123-123-123'                       
                                              })
     print("got past")
@@ -116,21 +116,21 @@ def test_update_job_postings_should_fail_date(mock):
     assert resp_json == {'message': "time data '123-123-123' does not match format '%Y-%m-%d'",}
 
 def test_delete_account():
-    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": "507f191e810c19729de860ea"})
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', query_string = {"user_id": "507f191e810c19729de860ea"})
 
     assert resp._status_code == NOT_ACCEPTABLE 
     assert {'message': "'No User 507f191e810c19729de860ea'"} == resp.get_json()
 
 @patch('db.db.delete_account', return_value=True, autospec=True)
 def test_delete_account_mockgood(mock):
-    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": "507f191e810c19729de860ea"})
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', query_string = {"user_id": "507f191e810c19729de860ea"})
 
     assert resp._status_code == 200 
     assert {"message": f"Successfully deleted 507f191e810c19729de860ea"} == resp.get_json()
 
 def test_delete_account_real():
     identification = db.add_account('new_user', 'new_email', 'new_password').inserted_id
-    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": str(identification)})
+    resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', query_string = {"user_id": str(identification)})
     assert resp._status_code == 200 
     assert {"message": f"Successfully deleted {str(identification)}"} == resp.get_json()
 
