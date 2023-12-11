@@ -119,8 +119,6 @@ def update_job(job_id, changes):
 def delete_job(admin_id, job_id):
     # connect to mongodb to find the jobs corresponding to this
     # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
-    if False and not dbc.exists_by_id(admin_id, "admins"):
-        raise KeyError(f"No admin {admin_id}")
     if not dbc.exists_by_id(job_id, "jobs"):
         raise KeyError(f"No Job {job_id}")
     return dbc.del_one("jobs", {"_id": job_id})

@@ -96,32 +96,6 @@ class UpdateUserInfo(Resource):
                 "message": f"User {user_id} info updated"}, 200
 
 
-@api.route(f'/{UPDATE_AVAILABLE_JOBS}')
-class UpdateAvailableJobs(Resource):
-    """
-    This endpoint updates the list of available jobs.
-    """
-
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def put(self):
-        """
-        Updates the list of available jobs based on input.
-        Right now it does nothing and just returns success.
-        """
-
-        id = request.json.get("id")
-        position = request.json.get("position")
-        arg = request.json.get("args")
-        if id is None or position is None or arg is None:
-            raise wz.NotAcceptable("Expected json with ID, Position, Args")
-        try:
-            db.external_job_update(id, position, arg)
-            return {"status": "success", "message": f"Job {id} updated"}, 200
-        except Exception as e:
-            raise wz.NotAcceptable(str(e))
-
-
 @api.route(f'/{KEYWORD_SEARCH}')
 class KeywordSearchDatabase(Resource):
     """
@@ -194,33 +168,70 @@ class GetUserReports(Resource):
         return {"User Reports": response}, 200
 
 
-@api.route(f'/Admin/{UPDATE_JOB_POSTING}')
+@api.route(f'/{UPDATE_JOB_POSTING}')
 class UpdateJobPosting(Resource):
     """
     This class allows admin accounts to update job postings
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    @api.doc(params={'company': {'description': 'Company Name',
-                                 'type': 'string', 'default': "Test1"
-                                 },
-                     'job_title': {'description': 'Job Title',
-                                   'type': 'string', 'default': "Test2"
-                                   },
-                     'job_description': {'description': 'Job Description',
-                                         'type': 'string', 'default': "Test3"
-                                         },
-                     'job_type': {'description': 'Job Type', 'type': 'string',
-                                  'default': "Test4"
-                                  },
-                     'location': {'description': 'Location',  'type': 'string',
-                                  'default': "Test5"
-                                  },
-                     })
+    @api.doc(params={
+        'job_id': {'description': 'Job ID', 'type': 'string'},
+
+        'company': {'description': 'Company Name',
+                    'type': 'string'
+                    },
+        'job_title': {'description': 'Job Title',
+                      'type': 'string'
+                      },
+        'job_description': {'description': 'Job Description',
+                            'type': 'string'
+                            },
+        'job_type': {'description': 'Job Type', 'type': 'string'
+                     },
+        'location': {'description': 'Location',  'type': 'string'
+                     },
+        'date': {'description': 'Date', 'type': str
+                 }
+
+    })
     def put(self):
         """
         updates job postings
         """
+        job_id = request.args.get("job_id")
+        if job_id is None:
+            raise wz.NotAcceptable("Expected job_id")
+
+        company = request.args.get("company")
+        job_title = request.args.get("job_title")
+        job_description = request.args.get("job_description")
+        job_type = request.args.get("job_type")
+        location = request.args.get("location")
+        date = request.args.get("date")
+        date_obj = None
+        if date is not None:
+            try:
+                date_obj = datetime.strptime(date, '%Y-%m-%d')
+            except Exception as e:
+                raise wz.NotAcceptable(str(e))
+
+        try:
+            job_id = ObjectId(job_id)
+            print("error here?")
+            changes = {'company': company, 'job_title': job_title,
+                       'job_description': job_description,
+                       'job_type': job_type, 'location': location,
+                       'date': date_obj}
+            fields = list(changes.keys())
+            for field in fields:
+                if changes[field] is None:
+                    del changes[field]
+            print("got here 1")
+            db.update_job(job_id, changes)
+            print("got here 2")
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
 
         return {"status": "success", "message": "Job posting updated"}, 200
 

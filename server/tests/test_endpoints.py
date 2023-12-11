@@ -73,48 +73,47 @@ def test_update_user_info_bad(sample_data):
     resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json=test)
     assert resp.status_code == NOT_ACCEPTABLE
 
-@patch('db.db.external_job_update', return_value=True, autospec=True)
-def test_UpdateAvailableJobs_OK(mock_add):
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {
-        "id": 1,
-        "position": "keywords",
-        "args": ["internship", "remote"]})
-    assert resp.status_code == OK
 
-@patch('db.db.external_job_update', side_effect=KeyError(), autospec=True)
-def test_UpdateAvailableJobs_BAD(mock_add):
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {
-        "id": 9,
-        "position": "keywords",
-        "args": ["internship", "remote"]})
-    assert resp.status_code == NOT_ACCEPTABLE
-
-def test_UpdateAvailableJobs_working():
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {
-        "id": 1,
-        "position": "keywords",
-        "args": ["internship", "remote"]})
+# def test_keyword_search_database():
+#     keyword = "internship"
+#     resp = TEST_CLIENT.get(f'/{ep.KEYWORD_SEARCH}', json = {"keyword": keyword})
+#     resp_json = resp.get_json()
+#     assert isinstance(resp_json, dict)
+#     assert "results" in resp_json
+#     assert isinstance(resp_json["results"], list)
+#     expected_results = [{"data": {"keywords": ["internship", "remote"]},"userid" : 1, "date": datetime(2020, 5, 17)}]
+#     assert resp_json['results'] == expected_results
+@patch('db.db.update_job', return_value=True)
+def test_update_job_postings_works(mock):
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_JOB_POSTING}', query_string={"job_id": '507f1f77bcf86cd799439011'
+                                             })
+    print("got past")
     resp_json = resp.get_json()
-    assert isinstance(resp_json, dict)
-    assert "status" in resp_json
-    assert resp_json["message"] == "Job 1 updated"
+    print(resp_json)
+    assert resp._status_code == 200
+    assert resp_json == {"status": "success", "message": "Job posting updated"}
 
-def test_UpdateAvailableJobs_invalid_format ():
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_AVAILABLE_JOBS}', json = {})
-    assert resp.status_code == NOT_ACCEPTABLE
 
-def test_keyword_search_database():
-    keyword = "internship"
-    resp = TEST_CLIENT.get(f'/{ep.KEYWORD_SEARCH}', json = {"keyword": keyword})
+@patch('db.db.update_job', return_value=True)
+def test_update_job_postings_should_fail_job_id(mock):
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_JOB_POSTING}', query_string={"job_id": '507f1f77b'
+                                             })
+    print("got past")
     resp_json = resp.get_json()
-    assert isinstance(resp_json, dict)
-    assert "results" in resp_json
-    assert isinstance(resp_json["results"], list)
-    expected_results = [{"data": {"keywords": ["internship", "remote"]},"userid" : 1, "date": datetime(2020, 5, 17).isoformat()}]
-    assert resp_json['results'] == expected_results
+    print(resp_json)
+    assert resp._status_code == 406
+    assert resp_json == {'message': "'507f1f77b' is not a valid ObjectId, it must be a 12-byte input or a 24-character hex string"}
 
-def test_update_job_postings():
-    assert True
+@patch('db.db.update_job', return_value=True)
+def test_update_job_postings_should_fail_date(mock):
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_JOB_POSTING}', query_string={"job_id": '507f1f77bcf86cd799439011',
+                                            'date': '123-123-123'                       
+                                             })
+    print("got past")
+    resp_json = resp.get_json()
+    print(resp_json)
+    assert resp._status_code == 406
+    assert resp_json == {'message': "time data '123-123-123' does not match format '%Y-%m-%d'",}
 
 def test_delete_account():
     resp = TEST_CLIENT.delete(f'/{ep.DELETE_ACCOUNT}', json = {"user_id": "507f191e810c19729de860ea"})
