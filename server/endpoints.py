@@ -284,7 +284,7 @@ class get_job_based_on_preference(Resource):
                     },
     })
     def get(self):
-        user_id = request.json.get("user_id")
+        user_id = request.args.get("user_id")
         preference = db.check_preference(user_id)
         try:
             jobs = db.get_jobs_by_preference(preference)
@@ -439,8 +439,8 @@ class Login(Resource):
         """
         login to accounts
         """
-        user_id = request.json.get("user_id")
-        password = request.json.get("password")
+        user_id = request.args.get("user_id")
+        password = request.args.get("password")
         # username = request.json.get("username")
         # check if the password-email combination matches with a entry in db.
         # If yes, login and return login success
