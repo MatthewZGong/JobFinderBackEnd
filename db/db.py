@@ -186,8 +186,11 @@ def get_job_based_on_preference(preference):
     all = dbc.fetch_all("jobs")
     return_list = []
     for job in all:
-        if job["location"] == preference["location"] or job["job_type"] == preference["job_type"]:
+        if job["location"] == preference["location"]:
             return_list += [job]
+        if job not in return_list:
+            if job["job_type"] == preference["job_type"]:
+                return_list += [job]
     return return_list
 
 
