@@ -147,7 +147,6 @@ class UserReport(Resource):
             'default': "Test3"
         }
     })
-
     def post(self):
         user_id = request.json.get("user_id")
         if user_id is None:
