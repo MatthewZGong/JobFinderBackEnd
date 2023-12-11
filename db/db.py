@@ -179,7 +179,7 @@ def add_account(username, email, password):
             "preference": {"preferred location": None,
                            "preferred job type": None,
                            "sort by": None
-                            }
+                        }
         })
 
 
