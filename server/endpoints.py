@@ -128,25 +128,32 @@ class UserReport(Resource):
     """
     This class supports user to send in reports about job postings
     """
-    Jobs = set([1, 2, 3, 4])
-    Users = set([1, 2, 3, 4])
-
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={'user_id': {'description': 'User ID',
+                                'type': 'string','default': "Test1",
+                                 },
+                     'job_id': {'description': 'Job ID',
+                                   'type': 'string', 'default': "Test2"
+                                   },
+                     'report': {'description': 'report',
+                                    'type': 'string', 'default': "Test3"
+                                    },
+                     })
     def post(self):
         user_id = request.json.get("user_id")
+        if user_id is None:
+            raise wz.NotAcceptable("Expected json with user_ID")
         job_id = request.json.get("job_id")
+        if job_id is None:
+            raise wz.NotAcceptable("Expected json with job_ID")
         report = request.json.get("report")
-        if (user_id not in UserReport.Users):
-            return {"status": "failure", "message":
-                    "Invalid User ID"}, 400
-        if (job_id is not None and job_id not in UserReport.Jobs):
-            return {"status": "failure", "message":
-                    "Invalid Job Id"}, 400
-        if (report is None or report == ""):
-            return {"status": "failure", "message":
-                    "Invalid report"}, 400
-
-        return {"status": "success", "message":
+        try:
+            db.add_user_report(user_id, job_id, report)
+            return {"status": "success", "message":
                 "User report successfully submitted report"}, 200
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
 
 
 @api.route(f'/{GET_USER_REPORTS}')
