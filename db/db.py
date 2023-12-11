@@ -176,10 +176,11 @@ def add_account(username, email, password):
             "username": username,
             "email": email,
             "password": password,
-            "preference": {"preferred location": None,
-                           "preferred job type": None,
-                           "sort by": None
-                        }
+            "preference": {
+                            "preferred location": None,
+                            "preferred job type": None,
+                            "sort by": None
+            }
         })
 
 
