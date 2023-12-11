@@ -179,7 +179,7 @@ def add_account(username, email, password):
         })
 
 
-def get_job_based_on_preference(preference):
+def get_jobs_by_preference(preference):
     """
     function to get jobs based on user preference
     """
@@ -254,7 +254,12 @@ def check_preference(user_id):
     """
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
-    return True
+    else:
+        try:
+            user = dbc.find_by_id(user_id, "users")
+            return user["preference"]
+        except:
+            raise KeyError("No preference")
 
 
 def delete_user_report(report_id):

@@ -294,6 +294,28 @@ class read_most_recent_jobs(Resource):
             raise wz.NotAcceptable(str(e))
 
 
+@api.route(f'/{GET_JOBS_BASED_ON_PREFERENCE}')
+class get_job_based_on_preference(Resource):
+    """
+    This endpoint allows getting jobs by user preference
+    """
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={
+        'user_id': {'description': 'User ID is not publicly facing',
+                    'type': 'string', 'default': "Test1"
+                    },
+    })
+    def get(self):
+        user_id = request.json.get("user_id")
+        preference = db.check_preference(user_id)
+        try:
+            jobs = db.get_jobs_by_preference(preference)
+            return {"Jobs": jobs}, 200
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
+
+
 @api.route(f'/{ADMIN_DELETE_JOBS}')
 class admin_delete_jobs(Resource):
     """
