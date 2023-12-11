@@ -330,6 +330,11 @@ class admin_delete_past_date(Resource):
     """
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={'admin_id': {'description': 'Admin ID',
+                                  'type': 'string', 'default': "Test1"},
+                     'invalid_past_date': {'description': 'Invalid Past Date',
+                                'type': 'datetime', 'default': "Test2"},
+                     })
     def delete(self):
         admin_id = request.json.get("admin_id")
         if admin_id is None:
