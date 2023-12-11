@@ -128,8 +128,7 @@ def delete_job_past_date(admin_id, past_date):
     # connect to mongodb to find the jobs corresponding to date
     # before past_date and delete it
     # change the type of past_date from string to datetime
-    
-    # I will change the following "users" to "admins" when have admins table 
+    # I will change the following "users" to "admins" when have admins table
     if not dbc.exists_by_id(admin_id, "users"):
         raise KeyError(f"No admin {admin_id}")
     for job in dbc.fetch_all("jobs"):
