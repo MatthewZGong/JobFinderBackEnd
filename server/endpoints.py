@@ -131,14 +131,14 @@ class UserReport(Resource):
     @api.response(HTTPStatus.OK, 'Success')
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     @api.doc(params={'user_id': {'description': 'User ID',
-                                'type': 'string','default': "Test1"
-                                 },
+                                 'type': 'string','default': "Test1"
+                                  },
                      'job_id': {'description': 'Job ID',
-                                   'type': 'string', 'default': "Test2"
-                                   },
+                                'type': 'string', 'default': "Test2"
+                                 },
                      'report': {'description': 'report',
-                                    'type': 'string', 'default': "Test3"
-                                    },
+                                'type': 'string', 'default': "Test3"
+                                 },
                     })
     def post(self):
         user_id = request.json.get("user_id")
