@@ -9,6 +9,7 @@ user_id = ObjectId("507f1f77bcf86cd799439011")
 job_id = ObjectId("507f191e810c19729de860ea")
 job_id_1 = ObjectId()
 job_id_2 = ObjectId()
+job_id_3 = ObjectId("607f191e810c19729de860ea")
 admin_id = ObjectId()
 dbc.client.drop_database(TEST_DB)
 
@@ -107,3 +108,14 @@ def test_add_account_bad():
         identification = db.add_account("FakeAcc", "Fakemail.com", "FakePassword").inserted_id
         db.add_account("FakeAcc", "Fakemail.com", "FakePassword").inserted_id
     assert dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
+
+@pytest.fixture(scope='function')
+def test_update_job(): 
+    dbc.client[TEST_DB]["jobs"].insert_one({"_id": job_id_3, "description": "Janitor",
+                                            "date": datetime.datetime(2020, 5, 17)})
+    db.update_job(job_id_3, {'description': 'HELLOOO'})
+    res = dbc.fetch_one("jobs", {"_id": job_id_3})
+    assert res['description'] == 'HELLOOO'
+    yield
+    dbc.client[TEST_DB]["jobs"].delete_one({"_id": job_id_3})
+
