@@ -119,3 +119,11 @@ def test_update_job():
     yield
     dbc.client[TEST_DB]["jobs"].delete_one({"_id": job_id_3})
 
+@pytest.fixture(scope='function')
+def test_add_job():
+    res = db.add_job_posting("HELLO WORLD", "test", "test", "test", "test", "test")
+    search = dbc.fetch_one("jobs", {"_id": res['_id']})
+    assert search['company'] == 'HELLO WORLD'
+    yield
+    dbc.client[TEST_DB]["jobs"].delete_one({"_id": res['_id']})
+
