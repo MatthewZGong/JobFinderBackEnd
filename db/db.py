@@ -179,6 +179,18 @@ def add_account(username, email, password):
         })
 
 
+def get_job_based_on_preference(preference):
+    """
+    function to get jobs based on user preference
+    """
+    all = dbc.fetch_all("jobs")
+    return_list = []
+    for job in all:
+        if job["location"] == preference["location"] or job["job_type"] == preference["job_type"]:
+            return_list += [job]
+    return return_list
+
+
 def update_preference(user_id, preferred_location, preferred_type, sort_by):
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
