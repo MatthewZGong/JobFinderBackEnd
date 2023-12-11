@@ -78,9 +78,11 @@ def temp_jobs_1():
     dbc.client[TEST_DB]["jobs"].delete_one({"_id": job_id_1})
     dbc.client[TEST_DB]["jobs"].delete_one({"_id": job_id_2})
 
-def test_delete_job_past_date(temp_jobs_1, temp_admin):
+# I will change temp_user to temp_admin when we have admin table
+def test_delete_job_past_date(temp_jobs_1, temp_user):
     res = dbc.fetch_all("jobs")
-    db.delete_job_past_date(admin_id, datetime.datetime(2022, 5, 17))
+    # I will change user_id to admin_id when we have admin table
+    db.delete_job_past_date(user_id, datetime.datetime(2022, 5, 17))
     res = dbc.fetch_all("jobs")
     # for test this function, I create two jobs, job_id_1 is before (2022, 5, 17), the other is after
     # it should delete job_id_1

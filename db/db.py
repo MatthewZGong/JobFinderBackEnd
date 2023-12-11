@@ -112,7 +112,7 @@ def update_job(job_id, changes):
     function to update the parameters of a job
     """
     if not dbc.exists_by_id(job_id, "jobs"):
-        raise KeyError(f"No User {job_id}")
+        raise KeyError(f"No job {job_id}")
     return dbc.update_doc("jobs", {"_id": job_id}, changes)
 
 
@@ -128,7 +128,9 @@ def delete_job_past_date(admin_id, past_date):
     # connect to mongodb to find the jobs corresponding to date
     # before past_date and delete it
     # change the type of past_date from string to datetime
-    if not dbc.exists_by_id(admin_id, "admins"):
+    
+    # I will change the following "users" to "admins" when have admins table 
+    if not dbc.exists_by_id(admin_id, "users"):
         raise KeyError(f"No admin {admin_id}")
     for job in dbc.fetch_all("jobs"):
         if job["date"] < past_date:
