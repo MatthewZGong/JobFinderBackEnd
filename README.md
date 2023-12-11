@@ -167,4 +167,16 @@ This Flask application defines a set of RESTful API endpoints for managing user 
 
 - `report_id` (string): ID of the user report to be deleted.
 
+### /get_job_based_on_preference
+
+#### `GET`
+
+- Allows user to get jobs based on their user preferences
+
+#### Parameters
+
+- `user_id` (string): ID of the user of whom getting the jobs.
+
+
+
 
