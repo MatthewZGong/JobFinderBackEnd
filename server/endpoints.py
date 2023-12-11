@@ -70,24 +70,27 @@ class UpdateUserInfo(Resource):
             'type': 'string',
             'default': "Test1",
         },
-        'changes': {
-            'email': {
-                'description': 'Email',
-                'type': 'string',
-                'default': "Test2",
-                'required': False
-            },
-            'username': {
-                'description': 'Username',
-                'type': 'string',
-                'default': "Test3",
-                'required': False
-            },
-        }
+        'email': {
+            'description': 'Email',
+            'type': 'string',
+            'default': "Test2",
+            'required': False
+        },
+        'username': {
+            'description': 'Username',
+            'type': 'string',
+            'default': "Test3",
+            'required': False
+        },
     })
     def put(self):
-        user_id = request.json.get("_id")
-        changes = request.json.get("changes")
+        user_id = request.args.get("_id")
+        email = request.args.get("email")
+        username = request.args.get("username")
+        changes = {
+            "email": email,
+            "username": username
+        }
         try:
             db.update_account(user_id, changes)
         except Exception as e:
@@ -436,10 +439,10 @@ class Update_preferences(Resource):
         """
         updates account preferences
         """
-        user_id = request.json.get("user_id")
-        location = request.json.get("preferred_location")
-        job_type = request.json.get("preferred_job_type")
-        sort_by = request.json.get("sort_by")
+        user_id = request.args.get("user_id")
+        location = request.args.get("preferred_location")
+        job_type = request.args.get("preferred_job_type")
+        sort_by = request.args.get("sort_by")
         try:
             db.update_preference(user_id, location, job_type, sort_by)
             return {"status": "success",

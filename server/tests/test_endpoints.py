@@ -48,7 +48,7 @@ def temp_user():
     dbc.client[TEST_DB]["users"].delete_one({"_id": user_id})
 
 def test_update_user_info_bad():
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json={"_id": '65594839ee7a3c7d7d46eead',
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', query_string={"_id": '65594839ee7a3c7d7d46eead',
                                                             "changes": {}})
     resp_json = resp.get_json()
     
@@ -56,11 +56,10 @@ def test_update_user_info_bad():
     assert resp_json == {'message': "'No User 65594839ee7a3c7d7d46eead'"}
 
 def test_update_user_info(temp_user):
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json={"_id": '507f1f77bcf86cd799439011',
-                                                            "changes": {
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', query_string={"_id": '507f1f77bcf86cd799439011',
                                                                 "username": "fortnite_player",
                                                                 "email": "fortnite@epic.com"
-                                                            }})
+                                                                })
     resp_json = resp.get_json()
     
     assert resp._status_code == 200
@@ -70,7 +69,7 @@ def test_update_user_info(temp_user):
 def test_update_user_info_bad(sample_data):
     test = sample_data
 
-    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', json=test)
+    resp = TEST_CLIENT.put(f'/{ep.UPDATE_USER_INFO}', query_string=test)
     assert resp.status_code == NOT_ACCEPTABLE
 
 
