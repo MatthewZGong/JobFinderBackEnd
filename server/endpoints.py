@@ -394,17 +394,15 @@ class Update_preferences(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     @api.doc(params={
         'user_id': {'description': 'User ID',
-                    'type': 'string', 'default': "Test1"
+                    'type': 'string'
                     },
         'location': {'description': 'Location',
-                     'type': 'string', 'default': "Test2"
+                     'type': 'string', 'default': "any"
                      },
         'job_type': {'description': 'Job Type',
-                     'type': 'string', 'default': "Test3"
+                     'type': 'string', 'default': "any"
                      },
-        'sort_by': {'description': 'Sort By (Latest/Trending)',
-                    'type': 'string', 'default': "Test4"
-                    }
+
     })
     def put(self):
         """
@@ -413,10 +411,9 @@ class Update_preferences(Resource):
         user_id = request.args.get("user_id")
         location = request.args.get("location")
         job_type = request.args.get("job_type")
-        sort_by = request.args.get("sort_by")
         try:
             db.update_preference(ObjectId(user_id),
-                                 location, job_type, sort_by)
+                                 location, job_type)
             return {"status": "success",
                     "message": "Account preference successfully updated"}, 200
         except Exception as e:

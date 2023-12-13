@@ -126,30 +126,25 @@ def test_add_account_bad():
         db.add_account("FakeAcc", "Fakemail.com", "FakePassword").inserted_id
     assert dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
 
-@pytest.fixture(scope='function')
 def test_update_job_works(): 
     dbc.client[TEST_DB]["jobs"].insert_one({"_id": job_id_3, "description": "Janitor",
                                             "date": datetime.datetime(2020, 5, 17)})
     db.update_job(job_id_3, {'description': 'HELLOOO'})
     res = dbc.fetch_one("jobs", {"_id": job_id_3})
     assert res['description'] == 'HELLOOO'
-    yield
     dbc.client[TEST_DB]["jobs"].delete_one({"_id": job_id_3})
 
-@pytest.fixture(scope='function')
 def test_update_job_fails(): 
     try: 
         db.update_job(invalid_id, {'description': 'HELLOOO'})
     except Exception as e:
         assert True
 
-@pytest.fixture(scope='function')
 def test_add_job_works():
-    res = db.add_job_posting("HELLO WORLD", "test", "test", "test", "test", "test")
-    search = dbc.fetch_one("jobs", {"_id": res['_id']})
+    res = db.add_job_posting("HELLO WORLD", "test", "test", "test", "test", "test").inserted_id
+    search = dbc.fetch_one("jobs", {"_id": res})
     assert search['company'] == 'HELLO WORLD'
-    yield
-    dbc.client[TEST_DB]["jobs"].delete_one({"_id": res['_id']})
+    dbc.client[TEST_DB]["jobs"].delete_one({"_id": res})
 
 
 def test_add_job_fails():
@@ -185,23 +180,20 @@ def test_update_account_fails():
         assert True
 
 
-@pytest.fixture(scope='function')
 def test_update_account_works():
-    identification = db.add_account("testAcc", "Fakemail.com", "FakePassword").inserted_id
+    identification = db.add_account("FakeFaketestAcc", "FakeFaketestAccFakemail.com", "FakePassword").inserted_id
     db.update_account(identification, {'email': 'notFakemail.com'})
     res = dbc.fetch_one("users", {"_id": identification})
     assert res['email'] == 'notFakemail.com'
-    yield
     dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
 
-@pytest.fixture(scope='function')
 def test_get_jobs_by_preference_works():
-    identification = db.add_account("testAccForPreference", "Fakemail.com", "FakePassword").inserted_id
-    db.update_preference(identification, "wash123123", None, None)
-    job_inserted_id = db.add_job_posting("HELLO WORLD", "test", "test", "test", "wash123123", "test").inserted_id
-    res = db.get_jobs_by_preference(identification)
+    identification = db.add_account("testAccForPreference", "Fakemail123123.com", "FakePassword").inserted_id
+    db.update_preference(identification, "wash123123", "any")
+    job_inserted_id = db.add_job_posting("HELLO WORLD", "test", "test", "wash123123", "wash123123", "test").inserted_id
+    print(dbc.fetch_one("users", {"_id": identification})['preference'])
+    res = db.get_jobs_by_preference(dbc.fetch_one("users", {"_id": identification})['preference'])
     assert len(res) == 1
-    yield
     dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
     dbc.client[TEST_DB]["jobs"].delete_one({"_id": job_inserted_id})
 
@@ -209,24 +201,22 @@ def test_get_jobs_by_preference_works():
 
 def test_get_jobs_by_preference_fails():
     try: 
-        res = db.get_jobs_by_preference(invalid_id)
-    except KeyError:
+        res = db.get_jobs_by_preference({})
+    except TypeError:
         assert True
 
 
 
 def test_update_preference_fails():
     try: 
-        res = db.update_preference(invalid_id, None, None, None)
+        res = db.update_preference(invalid_id, None, None)
     except KeyError:
         assert True
 
 
-@pytest.fixture(scope='function')
 def test_update_preference_works():
-    identification = db.add_account("testAccForUpPreference", "Fakemail.com", "FakePassword").inserted_id
-    assert db.update_preference(identification, "wash123123", None, None)
-    yield
+    identification = db.add_account("testAccForUpPreference", "Fakemail123123123.com", "FakePassword").inserted_id
+    assert db.update_preference(identification, "wash123123", None)
     dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
 
 

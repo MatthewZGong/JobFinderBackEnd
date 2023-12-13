@@ -78,9 +78,9 @@ user_reports = {
 user_preference = {
     1: {
         "user_id": 1,
-        "preferred location": "string",
-        "preferred job type": "string",
-        "sort by": ["string"]
+        "location": "string",
+        "job_type": "string",
+        "sort_by": ["string"]
     }
 }
 
@@ -165,9 +165,8 @@ def add_account(username, email, password):
             "email": email,
             "password": password,
             "preference": {
-                "preferred location": None,
-                "preferred job type": None,
-                "sort by": None
+                "location": 'any',
+                "job_type": 'any',
             }
         })
 
@@ -176,29 +175,37 @@ def get_jobs_by_preference(preference):
     """
     function to get jobs based on user preference
     """
+    if (not isinstance(preference, dict) or
+            'location' not in preference or
+            'job_type' not in preference):
+        raise TypeError("preference must be a dictionary with\
+                        'location' and 'job_type' keys")
     all = dbc.fetch_all("jobs")
     return_list = []
+    print(all)
+    print(preference)
     for job in all:
         job_copy = deepcopy(job)
         job_copy['_id'] = str(job_copy['_id'])
         job_copy['date'] = str(job_copy['date'])
 
         if job_copy not in return_list:
-            if job_copy["location"] == preference["location"]:
-                return_list.append(job_copy)
-            elif job_copy["job_type"] == preference["job_type"]:
+            if ((preference['location'] == 'any'
+                    or job_copy["location"] == preference["location"])
+                    and
+                    (preference['job_type'] == 'any'
+                     or job_copy["job_type"] == preference["job_type"])):
                 return_list.append(job_copy)
     return return_list
 
 
-def update_preference(user_id, preferred_location, preferred_type, sort_by):
+def update_preference(user_id, preferred_location, preferred_type):
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
     return dbc.update_doc("users", {"_id": user_id},
                           {
         "location": preferred_location,
         "job_type": preferred_type,
-        "sort by": sort_by
     })
 
 
