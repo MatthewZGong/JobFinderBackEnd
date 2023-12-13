@@ -92,7 +92,7 @@ class UpdateUserInfo(Resource):
             "username": username
         }
         try:
-            db.update_account(user_id, changes)
+            db.update_account(ObjectId(user_id), changes)
         except Exception as e:
             raise wz.NotAcceptable(str(e))
 
@@ -285,7 +285,7 @@ class get_job_based_on_preference(Resource):
     })
     def get(self):
         user_id = request.args.get("user_id")
-        preference = db.check_preference(user_id)
+        preference = db.check_preference(ObjectId(user_id))
         try:
             jobs = db.get_jobs_by_preference(preference)
             return {"Jobs": jobs}, 200
@@ -315,9 +315,9 @@ class admin_delete_jobs(Resource):
             raise wz.NotAcceptable("Expected json with job_ID")
 
         try:
-            db.delete_job(admin_id, job_id)
-            return {"status": "success", "message": f"Job {job_id} deleted"},
-            200
+            db.delete_job(admin_id, ObjectId(job_id))
+            return {"status": "success",
+                    "message": f"Job {job_id} deleted"}, 200
         except Exception as e:
             raise wz.NotAcceptable(str(e))
 
@@ -413,44 +413,16 @@ class Update_preferences(Resource):
         updates account preferences
         """
         user_id = request.args.get("user_id")
-        location = request.args.get("preferred_location")
-        job_type = request.args.get("preferred_job_type")
+        location = request.args.get("location")
+        job_type = request.args.get("job_type")
         sort_by = request.args.get("sort_by")
         try:
-            db.update_preference(user_id, location, job_type, sort_by)
+            db.update_preference(ObjectId(user_id),
+                                 location, job_type, sort_by)
             return {"status": "success",
                     "message": "Account preference successfully updated"}, 200
         except Exception as e:
             raise wz.NotAcceptable(str(e))
-
-
-@api.route(f'/{LOGIN_TO_ACCOUNT}')
-class Login(Resource):
-    """
-    This class allows users to login to account
-    """
-    # @api.expect(api.model('LoginRequest', {
-    #     "user_id": fields.String(required=True, description='user_id'),
-    #     "password": fields.String(required=True, description='data')
-    # }))
-    @api.response(HTTPStatus.OK, 'Success')
-    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
-    def put(self):
-        """
-        login to accounts
-        """
-        user_id = request.args.get("user_id")
-        password = request.args.get("password")
-        # username = request.json.get("username")
-        # check if the password-email combination matches with a entry in db.
-        # If yes, login and return login success
-        if (user_id not in db.user_data):
-            return {"message": f"Invalid User ID: {user_id}"}, 400
-        else:
-            if db.user_data[user_id]["data"]["password"] == password:
-                return {"status": "success", "message": "Login Success"}, 200
-            else:
-                return {"message": "Invalid password"}, 400
 
 
 @api.route(f'/{ADD_NEW_JOBS}')
@@ -491,16 +463,24 @@ class AddNewJobPosting(Resource):
         # date =
         db.add_job_posting(company, job_title,
                            job_description, job_type, location, date_obj)
-        # print(company, job_title, job_description, job_type, location)
-
-        # return 200
         return {"status": "success", "message":
                 "job posting successfully submit"}, 200
 
 
 @api.route(f'/{DELETE_USER_REPORT}')
 class DeleteUserReport(Resource):
-    def post():
+    @api.response(HTTPStatus.OK, 'Success')
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
+    @api.doc(params={
+        'report_id': {
+            'description': 'User Report ID',
+            'type': 'string', 'default': "Test1"
+            }
+    })
+    def post(self):
         report_id = request.args.get("report_id")
-        db.delete_user_report(report_id)
+        try:
+            db.delete_user_report(ObjectId(report_id))
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
         return "Successfully deleted", 400

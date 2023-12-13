@@ -1,5 +1,6 @@
 import db.db_connect as dbc
 import datetime
+from copy import deepcopy
 """
 This file will manage interactions with our data store.
 At first, it will just contain stubs that return fake data.
@@ -117,20 +118,14 @@ def update_job(job_id, changes):
 
 
 def delete_job(admin_id, job_id):
-    # connect to mongodb to find the jobs corresponding to this
-    # job name and delete it, return 1 if suffcessfull deleted, 0 if fail
+    '''finds job by _id and deletes it if possible'''
     if not dbc.exists_by_id(job_id, "jobs"):
         raise KeyError(f"No Job {job_id}")
     return dbc.del_one("jobs", {"_id": job_id})
 
 
 def delete_job_past_date(admin_id, past_date):
-    # connect to mongodb to find the jobs corresponding to date
-    # before past_date and delete it
-    # change the type of past_date from string to datetime
-    # I will change the following "users" to "admins" when have admins table
-    if not dbc.exists_by_id(admin_id, "users"):
-        raise KeyError(f"No admin {admin_id}")
+    '''flushes all entries past a date'''
     for job in dbc.fetch_all("jobs"):
         if job["date"] < past_date:
             dbc.del_one("jobs", {"_id": job["_id"]})
@@ -149,19 +144,6 @@ def get_most_recent_job(numbers):
     for entry in res:
         entry['date'] = str(entry['date'].date())
     return res
-
-
-def check_account(user_id, username, password):
-    """
-    Check whether password/username pair matches an entry in db.
-    """
-    if not dbc.exists_by_id(user_id, "users"):
-        raise KeyError(f"No User {user_id}")
-    else:
-        user = dbc.find_by_id(user_id, "users")
-        if user["username"] == username and user["password"] == password:
-            return True
-        raise KeyError("Invalid password or username")
 
 
 def add_account(username, email, password):
@@ -192,11 +174,15 @@ def get_jobs_by_preference(preference):
     all = dbc.fetch_all("jobs")
     return_list = []
     for job in all:
-        if job["location"] == preference["location"]:
-            return_list += [job]
-        if job not in return_list:
-            if job["job_type"] == preference["job_type"]:
-                return_list += [job]
+        job_copy = deepcopy(job)
+        job_copy['_id'] = str(job_copy['_id'])
+        job_copy['date'] = str(job_copy['date'])
+
+        if job_copy not in return_list:
+            if job_copy["location"] == preference["location"]:
+                return_list.append(job_copy)
+            elif job_copy["job_type"] == preference["job_type"]:
+                return_list.append(job_copy)
     return return_list
 
 
@@ -205,8 +191,8 @@ def update_preference(user_id, preferred_location, preferred_type, sort_by):
         raise KeyError(f"No User {user_id}")
     return dbc.update_doc("users", {"_id": user_id},
                           {
-        "preferred location": preferred_location,
-        "preferred job type": preferred_type,
+        "location": preferred_location,
+        "job_type": preferred_type,
         "sort by": sort_by
     })
 
@@ -261,8 +247,8 @@ def check_preference(user_id):
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
     else:
-        user = dbc.find_by_id(user_id, "users")
-        return user["preference"]
+        user = dbc.fetch_one("users", {"_id": user_id})
+        return user
 
 
 def delete_user_report(report_id):
