@@ -206,7 +206,6 @@ class UpdateJobPosting(Resource):
 
         try:
             job_id = ObjectId(job_id)
-            print("error here?")
             changes = {'company': company, 'job_title': job_title,
                        'job_description': job_description,
                        'job_type': job_type, 'location': location,
@@ -215,9 +214,7 @@ class UpdateJobPosting(Resource):
             for field in fields:
                 if changes[field] is None:
                     del changes[field]
-            print("got here 1")
             db.update_job(job_id, changes)
-            print("got here 2")
         except Exception as e:
             raise wz.NotAcceptable(str(e))
 
@@ -284,9 +281,6 @@ class get_job_based_on_preference(Resource):
         user_id = request.args.get("user_id")
         try:
             preference = db.check_preference(ObjectId(user_id))
-            print("hi")
-            print(preference)
-            print(type(preference))
             jobs = db.get_jobs_by_preference(preference)
             return {"Jobs": jobs}, 200
         except Exception as e:

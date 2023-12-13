@@ -182,8 +182,6 @@ def get_jobs_by_preference(preference):
                         'location' and 'job_type' keys")
     all = dbc.fetch_all("jobs")
     return_list = []
-    print(all)
-    print(preference)
     for job in all:
         job_copy = deepcopy(job)
         job_copy['_id'] = str(job_copy['_id'])
@@ -262,7 +260,6 @@ def check_preference(user_id):
         raise KeyError(f"No User {user_id}")
     else:
         user = dbc.fetch_one("users", {"_id": user_id})
-        print(user)
         return user['preference']
 
 

@@ -154,13 +154,11 @@ def test_add_job_fails():
         assert True
 
 
-@pytest.fixture(scope='function')
+
 def test_check_preference_works():
     identification = db.add_account("testAccACC", "Fakemail.com", "FakePassword").inserted_id
     res = db.check_preference(identification)
-    #this should work
     assert True
-    yield
     dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
 
 
@@ -191,7 +189,6 @@ def test_get_jobs_by_preference_works():
     identification = db.add_account("testAccForPreference", "Fakemail123123.com", "FakePassword").inserted_id
     db.update_preference(identification, "wash123123", "any")
     job_inserted_id = db.add_job_posting("HELLO WORLD", "test", "test", "wash123123", "wash123123", "test").inserted_id
-    print(dbc.fetch_one("users", {"_id": identification})['preference'])
     res = db.get_jobs_by_preference(dbc.fetch_one("users", {"_id": identification})['preference'])
     assert len(res) == 1
     dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
