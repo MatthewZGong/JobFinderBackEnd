@@ -203,10 +203,12 @@ def update_preference(user_id, preferred_location, preferred_type):
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
     return dbc.update_doc("users", {"_id": user_id},
-                          {
-        "location": preferred_location,
-        "job_type": preferred_type,
-    })
+                          {"preference": {
+                              "location": preferred_location,
+                              "job_type": preferred_type,
+                          }
+    }
+    )
 
 
 def update_account(user_id, changes):
@@ -260,7 +262,8 @@ def check_preference(user_id):
         raise KeyError(f"No User {user_id}")
     else:
         user = dbc.fetch_one("users", {"_id": user_id})
-        return user
+        print(user)
+        return user['preference']
 
 
 def delete_user_report(report_id):

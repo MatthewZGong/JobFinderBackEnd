@@ -284,6 +284,9 @@ class get_job_based_on_preference(Resource):
         user_id = request.args.get("user_id")
         try:
             preference = db.check_preference(ObjectId(user_id))
+            print("hi")
+            print(preference)
+            print(type(preference))
             jobs = db.get_jobs_by_preference(preference)
             return {"Jobs": jobs}, 200
         except Exception as e:
