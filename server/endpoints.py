@@ -25,14 +25,11 @@ ENDPOINTS
 """
 UPDATE_USER_INFO = 'UpdateUserInfo'
 ADD_NEW_JOBS = "add-new-job"
-UPDATE_AVAILABLE_JOBS = 'UpdateAvailableJobs'
-# KEYWORD_SEARCH = 'Keyword_Search'
 USER_REPORT = "add-user-report"
 GET_USER_REPORTS = "get-user-reports"
 DELETE_ACCOUNT = "delete-account"
 UPDATE_JOB_POSTING = "update-job-posting"
 CREATE_USER_ACCOUNT = "create-account"
-# LOGIN_TO_ACCOUNT = "login-to-account"
 UPDATE_PREFERENCES = "update-preferences"
 READ_MOST_RECENT_JOBS = "read_most_recent_jobs"
 ADMIN_DELETE_JOBS = "admin_delete_jobs"
@@ -285,8 +282,8 @@ class get_job_based_on_preference(Resource):
     })
     def get(self):
         user_id = request.args.get("user_id")
-        preference = db.check_preference(ObjectId(user_id))
         try:
+            preference = db.check_preference(ObjectId(user_id))
             jobs = db.get_jobs_by_preference(preference)
             return {"Jobs": jobs}, 200
         except Exception as e:
@@ -477,10 +474,10 @@ class DeleteUserReport(Resource):
             'type': 'string', 'default': "Test1"
             }
     })
-    def post(self):
+    def delete(self):
         report_id = request.args.get("report_id")
         try:
             db.delete_user_report(ObjectId(report_id))
         except Exception as e:
             raise wz.NotAcceptable(str(e))
-        return "Successfully deleted", 400
+        return "Successfully deleted", 200
