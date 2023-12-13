@@ -345,9 +345,10 @@ class admin_delete_past_date(Resource):
         admin_id = request.args.get("admin_id")
         if admin_id is None:
             raise wz.NotAcceptable("Expected json with admin_ID")
-        invalid_past_date_s = request.args.get("invalid_past_date")
-        invalid_past_date = datetime.strptime(invalid_past_date_s, '%Y-%m-%d')
         try:
+            invalid_past_date_s = request.args.get("invalid_past_date")
+            invalid_past_date = datetime.strptime(invalid_past_date_s,
+                                                  '%Y-%m-%d')
             db.delete_job_past_date(admin_id, invalid_past_date)
             return {"status": "success", "message": "Jobs deleted"}, 200
         except Exception as e:
