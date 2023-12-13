@@ -26,13 +26,13 @@ ENDPOINTS
 UPDATE_USER_INFO = 'UpdateUserInfo'
 ADD_NEW_JOBS = "add-new-job"
 UPDATE_AVAILABLE_JOBS = 'UpdateAvailableJobs'
-KEYWORD_SEARCH = 'Keyword_Search'
+# KEYWORD_SEARCH = 'Keyword_Search'
 USER_REPORT = "add-user-report"
 GET_USER_REPORTS = "get-user-reports"
 DELETE_ACCOUNT = "delete-account"
 UPDATE_JOB_POSTING = "update-job-posting"
 CREATE_USER_ACCOUNT = "create-account"
-LOGIN_TO_ACCOUNT = "login-to-account"
+# LOGIN_TO_ACCOUNT = "login-to-account"
 UPDATE_PREFERENCES = "update-preferences"
 READ_MOST_RECENT_JOBS = "read_most_recent_jobs"
 ADMIN_DELETE_JOBS = "admin_delete_jobs"
@@ -460,7 +460,6 @@ class AddNewJobPosting(Resource):
             date_obj = datetime.strptime(date, '%Y-%m-%d')
         except Exception as e:
             raise wz.NotAcceptable(str(e))
-
         # date =
         db.add_job_posting(company, job_title,
                            job_description, job_type, location, date_obj)

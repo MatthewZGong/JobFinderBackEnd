@@ -265,3 +265,32 @@ def test_admin_delete_past_date_bad(mock_add):
         "admin_id": 9,
         "invalid_past_date": formatted_date})
     assert resp.status_code ==  NOT_ACCEPTABLE
+
+@patch('db.db.add_job_posting', return_value=True, autospec=True)
+def test_add_new_job_works(mock_add): 
+    test = {
+        'company': 'TESTING', 
+        'job_title': 'TESTING', 
+        'job_description': 'TESTING', 
+        'job_type': 'TESTING', 
+        'location': 'TESTING',
+        'date': '2022-12-12'
+    }
+    resp = TEST_CLIENT.post(f'/{ep.ADD_NEW_JOBS}', query_string=test)
+    assert resp._status_code == 200
+
+@patch('db.db.add_job_posting', return_value=True, autospec=True)
+def test_add_new_job_fails(mock_add): 
+    test = {
+        'company': 'TESTING', 
+        'job_title': 'TESTING', 
+        'job_description': 'TESTING', 
+        'job_type': 'TESTING', 
+        'location': 'TESTING',
+        'date': '2022-12-121212'
+    }
+    resp = TEST_CLIENT.post(f'/{ep.ADD_NEW_JOBS}', query_string=test)
+    assert resp._status_code == 406
+
+
+
