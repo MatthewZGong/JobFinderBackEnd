@@ -87,6 +87,9 @@ user_preference = {
 
 def add_job_posting(company, job_title,
                     job_description, job_type, location, date):
+    if (company is None or job_title is None or job_description
+            is None or job_type is None or location is None or date is None):
+        raise ValueError("None value found")
     return dbc.insert_one("jobs", {
         "company": company,
         "job_title": job_title,
@@ -97,15 +100,15 @@ def add_job_posting(company, job_title,
     })
 
 
-def external_job_update(id, position, arg):
-    if id in job_data:
-        try:
-            job_data[id]["data"][position] = arg
-            return True
-        except Exception as e:
-            raise e
-    else:
-        raise KeyError("id not found")
+# def external_job_update(id, position, arg):
+#     if id in job_data:
+#         try:
+#             job_data[id]["data"][position] = arg
+#             return True
+#         except Exception as e:
+#             raise e
+#     else:
+#         raise KeyError("id not found")
 
 
 def update_job(job_id, changes):
@@ -126,6 +129,8 @@ def delete_job(admin_id, job_id):
 
 def delete_job_past_date(admin_id, past_date):
     '''flushes all entries past a date'''
+    if (not isinstance(past_date, datetime.datetime)):
+        raise TypeError("past_date must be datetime")
     for job in dbc.fetch_all("jobs"):
         if job["date"] < past_date:
             dbc.del_one("jobs", {"_id": job["_id"]})
@@ -160,9 +165,9 @@ def add_account(username, email, password):
             "email": email,
             "password": password,
             "preference": {
-                            "preferred location": None,
-                            "preferred job type": None,
-                            "sort by": None
+                "preferred location": None,
+                "preferred job type": None,
+                "sort by": None
             }
         })
 

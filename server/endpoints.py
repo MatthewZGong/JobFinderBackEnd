@@ -328,7 +328,7 @@ class admin_delete_past_date(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, 'Not Acceptable')
     @api.doc(params={
         'admin_id': {
-            'description': 'Admin ID',
+            'description': 'User ID',
             'type': 'string',
             'default': "Test1"
         },

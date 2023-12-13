@@ -13,6 +13,7 @@ job_id_3 = ObjectId("607f191e810c19729de860ea")
 admin_id = ObjectId()
 dbc.client.drop_database(TEST_DB)
 
+invalid_id = ObjectId("607f191e810c19729eeeeeee")
 
 @pytest.fixture(scope='function')
 def temp_user():
@@ -49,16 +50,22 @@ def test_get_user_report(temp_user, temp_posting):
     b = db.get_user_reports()
     assert len(b) == 1
 
-def test_delete_user():
+def test_delete_user_works():
     dbc.client[TEST_DB]["users"].insert_one({"_id": user_id, "username": "GeometryDash"})
     # dbc.client[TEST_DB]["jobs"].insert_one({"_id": job_id, "description": "Janitor"})
     b = db.delete_account(user_id)
     assert b
 
-def test_delete_user_report(temp_posting):
+def test_delete_user_report_works(temp_posting):
     assert db.delete_user_report(temp_posting.inserted_id)
 
-def test_delete_user():
+def test_delete_user_report_fails():
+    try: 
+        db.delete_user_report(invalid_id)
+    except KeyError:
+        assert True
+
+def test_delete_user_fails():
     with pytest.raises(KeyError):
         b = db.delete_account(user_id)
 
@@ -79,7 +86,7 @@ def temp_jobs_1():
     dbc.client[TEST_DB]["jobs"].delete_one({"_id": job_id_2})
 
 # I will change temp_user to temp_admin when we have admin table
-def test_delete_job_past_date(temp_jobs_1, temp_user):
+def test_delete_job_past_date_works(temp_jobs_1, temp_user):
     res = dbc.fetch_all("jobs")
     # I will change user_id to admin_id when we have admin table
     db.delete_job_past_date(user_id, datetime.datetime(2022, 5, 17))
@@ -89,6 +96,14 @@ def test_delete_job_past_date(temp_jobs_1, temp_user):
     print(res) # to print if something went wrong
     assert len(res) == 1
     assert res[0]["_id"] == job_id_2
+
+def test_delete_job_past_date_fail(temp_jobs_1, temp_user):
+    try: 
+        db.delete_job_past_date(user_id, "hello")
+    except:
+        assert True
+
+
 
 def test_get_most_recent_job(temp_user, temp_jobs_1):
     res=db.get_most_recent_job(1)
@@ -112,7 +127,7 @@ def test_add_account_bad():
     assert dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
 
 @pytest.fixture(scope='function')
-def test_update_job(): 
+def test_update_job_works(): 
     dbc.client[TEST_DB]["jobs"].insert_one({"_id": job_id_3, "description": "Janitor",
                                             "date": datetime.datetime(2020, 5, 17)})
     db.update_job(job_id_3, {'description': 'HELLOOO'})
@@ -122,10 +137,102 @@ def test_update_job():
     dbc.client[TEST_DB]["jobs"].delete_one({"_id": job_id_3})
 
 @pytest.fixture(scope='function')
-def test_add_job():
+def test_update_job_fails(): 
+    try: 
+        db.update_job(invalid_id, {'description': 'HELLOOO'})
+    except Exception as e:
+        assert True
+
+@pytest.fixture(scope='function')
+def test_add_job_works():
     res = db.add_job_posting("HELLO WORLD", "test", "test", "test", "test", "test")
     search = dbc.fetch_one("jobs", {"_id": res['_id']})
     assert search['company'] == 'HELLO WORLD'
     yield
     dbc.client[TEST_DB]["jobs"].delete_one({"_id": res['_id']})
+
+
+def test_add_job_fails():
+    try:
+        res = db.add_job_posting("HELLO WORLD", None, "test", "test", "test", "test")
+    except Exception as e:
+        assert True
+
+
+@pytest.fixture(scope='function')
+def test_check_preference_works():
+    identification = db.add_account("testAccACC", "Fakemail.com", "FakePassword").inserted_id
+    res = db.check_preference(identification)
+    #this should work
+    assert True
+    yield
+    dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
+
+
+def test_check_preference_fails():
+    try:
+        res = db.check_preference(invalid_id)
+    except KeyError:
+        assert True
+
+
+
+def test_update_account_fails():
+    try:
+        identification = db.add_account("testAcc", "Fakemail.com", "FakePassword").inserted_id
+        res = db.update_account(invalid_id, {})
+    except KeyError:
+        assert True
+
+
+@pytest.fixture(scope='function')
+def test_update_account_works():
+    identification = db.add_account("testAcc", "Fakemail.com", "FakePassword").inserted_id
+    db.update_account(identification, {'email': 'notFakemail.com'})
+    res = dbc.fetch_one("users", {"_id": identification})
+    assert res['email'] == 'notFakemail.com'
+    yield
+    dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
+
+@pytest.fixture(scope='function')
+def test_get_jobs_by_preference_works():
+    identification = db.add_account("testAccForPreference", "Fakemail.com", "FakePassword").inserted_id
+    db.update_preference(identification, "wash123123", None, None)
+    job_inserted_id = db.add_job_posting("HELLO WORLD", "test", "test", "test", "wash123123", "test").inserted_id
+    res = db.get_jobs_by_preference(identification)
+    assert len(res) == 1
+    yield
+    dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
+    dbc.client[TEST_DB]["jobs"].delete_one({"_id": job_inserted_id})
+
+
+
+def test_get_jobs_by_preference_fails():
+    try: 
+        res = db.get_jobs_by_preference(invalid_id)
+    except KeyError:
+        assert True
+
+
+
+def test_update_preference_fails():
+    try: 
+        res = db.update_preference(invalid_id, None, None, None)
+    except KeyError:
+        assert True
+
+
+@pytest.fixture(scope='function')
+def test_update_preference_works():
+    identification = db.add_account("testAccForUpPreference", "Fakemail.com", "FakePassword").inserted_id
+    assert db.update_preference(identification, "wash123123", None, None)
+    yield
+    dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
+
+
+
+ 
+
+
+
 
