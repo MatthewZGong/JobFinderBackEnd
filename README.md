@@ -1,4 +1,9 @@
 # Job Finder
+
+Team members: Tanzir Hasan, Matthew Gong, Shao Jin, Michelle Lin
+
+A job finder for adding/deleting and finding jobs of individual preferences. Serves as a personalized job finder where personal information and preferences are used. 
+
 An example flask rest API server.
 
 To build production, type `make prod`.
@@ -23,7 +28,7 @@ This Flask application defines a set of RESTful API endpoints for managing user 
 
 #### `PUT`
 
-- Allows updating a user's information.
+- Allows updating a user's information. 
 
 #### Parameters
 
@@ -78,7 +83,7 @@ This Flask application defines a set of RESTful API endpoints for managing user 
 
 #### `GET`
 
-- Returns a specified number of most recent job postings or return all jobs if there is less than the specified number
+- Returns a specified number of most recent job postings or return all jobs if there is less than the specified number.
 
 #### Parameters
 
@@ -110,7 +115,7 @@ This Flask application defines a set of RESTful API endpoints for managing user 
 
 #### `PUT`
 
-- Allows users to create a new account.
+- Allows users to create a new account. Takes username, email, and password. Fails if username or email matches one already in database.
 
 #### Parameters
 
@@ -122,7 +127,7 @@ This Flask application defines a set of RESTful API endpoints for managing user 
 
 #### `PUT`
 
-- Allows users to update their account preferences.
+- Allows users to update their account preferences. Account preferences include preferred location, preferred job type, and a sorting preference when conducting job searches.
 
 #### Parameters
 
@@ -135,7 +140,7 @@ This Flask application defines a set of RESTful API endpoints for managing user 
 
 #### `PUT`
 
-- Allows users to log in to their accounts.
+- Allows users to log in to their accounts. 
 
 #### Parameters
 
@@ -146,7 +151,7 @@ This Flask application defines a set of RESTful API endpoints for managing user 
 
 #### `POST`
 
-- Allows users to submit new job postings.
+- Allows users to submit new job postings. 
 
 #### Parameters
 
@@ -171,11 +176,11 @@ This Flask application defines a set of RESTful API endpoints for managing user 
 
 #### `GET`
 
-- Allows user to get jobs based on their user preferences
+- Allows user to get jobs based on their user preferences. Returns jobs that matches their preferred location or preffered job type.
 
 #### Parameters
 
-- `user_id` (string): ID of the user of whom getting the jobs.
+- `user_id` (string): ID of the user.
 
 
 
