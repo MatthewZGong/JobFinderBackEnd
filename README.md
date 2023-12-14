@@ -13,10 +13,11 @@ To create the env for a new developer, run `make dev_env`.
 
 The following endpoints are present:
 
+## What is this
+
+This project defines a set of RESTful API endpoints for managing user accounts, job postings, and user reports related to job postings.
+
 ## EndPoints
-
-This Flask application defines a set of RESTful API endpoints for managing user accounts, job postings, and user reports related to job postings.
-
 
 ### /endpoints
 
