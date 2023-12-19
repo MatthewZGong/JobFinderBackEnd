@@ -36,7 +36,22 @@ ADMIN_DELETE_JOBS = "admin_delete_jobs"
 ADMIN_DELETE_PAST_DATE = "admin_delete_past_date"
 DELETE_USER_REPORT = "delete_user_report"
 GET_JOBS_BASED_ON_PREFERENCE = "get_jobs_by_preferences"
+HELLO_EP = '/hello'
+HELLO_RESP = 'hello'
 
+
+@api.route(HELLO_EP)
+class HelloWorld(Resource):
+    """
+    The purpose of the HelloWorld class is to have a simple test to see if the
+    app is working at all.
+    """
+    def get(self):
+        """
+        A trivial endpoint to see if the server is running.
+        It just answers with "hello world."
+        """
+        return {HELLO_RESP: 'world'}
 
 @api.route('/endpoints')
 class Endpoints(Resource):
@@ -210,12 +225,11 @@ class UpdateJobPosting(Resource):
                        'job_description': job_description,
                        'job_type': job_type, 'location': location,
                        'date': date_obj}
-            fields = list(changes.keys())
-            for field in fields:
-                if changes[field] is None:
-                    del changes[field]
+            changes = filter(lambda x: changes[x] is not None, changes)
+
             db.update_job(job_id, changes)
         except Exception as e:
+            print(e)
             raise wz.NotAcceptable(str(e))
 
         return {"status": "success", "message": "Job posting updated"}, 200
