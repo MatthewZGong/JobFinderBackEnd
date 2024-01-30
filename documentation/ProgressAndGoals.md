@@ -17,4 +17,6 @@
 ## Allow for CI/CD with pythonanywhere or heroku
 1. Follow tutorial for deploy.sh
 ## Have a Frontend (REACT)
+1. Have a frontend that has buttons and inputs for people to enter data for the public api calls
 ## Make API calls through UI
+1. Allow API calls to be made through the click of a button on the UI
