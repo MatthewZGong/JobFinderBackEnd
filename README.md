@@ -10,6 +10,7 @@ To build production, type `make prod`.
 
 To create the env for a new developer, run `make dev_env`.
 
+## [Progress and Goals](https://github.com/MatthewZGong/404ErrorRepoNotFound/blob/master/documentation/ProgressAndGoals.md)
 
 The following endpoints are present:
 
