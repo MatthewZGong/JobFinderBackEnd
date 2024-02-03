@@ -54,7 +54,7 @@ class HelloWorld(Resource):
         A trivial endpoint to see if the server is running.
         It just answers with "hello world."
         """
-        return {HELLO_RESP: "world"}
+        return {HELLO_RESP: "HELLO THIS IS WORKING"}
 
 
 @api.route("/endpoints")
