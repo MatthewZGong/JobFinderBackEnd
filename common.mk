@@ -1,5 +1,6 @@
-export LINTER = flake8
+export LINTER = flake8 --max-line-length 100
 export PYLINTFLAGS = --exclude=__main__.py
+
 
 PYTHONFILES = $(shell ls *.py)
 PYTESTFLAGS = -vv --verbose --cov-branch --cov-report term-missing --tb=short -W ignore::FutureWarning

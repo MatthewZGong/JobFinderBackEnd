@@ -140,7 +140,7 @@ def add_account(username, email, password):
                 "username": username,
                 "email": email,
                 "password": password,
-                "preference": {"location": "any", "job_type": "any",},
+                "preference": {"location": "any", "job_type": "any"},
             },
         )
 
@@ -183,7 +183,7 @@ def update_preference(user_id, preferred_location, preferred_type):
     return dbc.update_doc(
         "users",
         {"_id": user_id},
-        {"preference": {"location": preferred_location, "job_type": preferred_type,}},
+        {"preference": {"location": preferred_location, "job_type": preferred_type}},
     )
 
 

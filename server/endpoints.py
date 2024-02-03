@@ -82,7 +82,7 @@ class UpdateUserInfo(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
     @api.doc(
         params={
-            "_id": {"description": "User ID", "type": "string", "default": "Test1",},
+            "_id": {"description": "User ID", "type": "string", "default": "Test1", },
             "email": {
                 "description": "Email",
                 "type": "string",
@@ -261,7 +261,7 @@ class read_most_recent_jobs(Resource):
     @api.response(HTTPStatus.OK, "Success")
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
     @api.doc(
-        params={"numbers": {"description": "amount", "type": "int", "default": 5},}
+        params={"numbers": {"description": "amount", "type": "int", "default": 5}, }
     )
     def get(self):
         # user_id = request.json.get("user_id")
