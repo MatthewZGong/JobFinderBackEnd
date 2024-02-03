@@ -39,7 +39,7 @@ ADMIN_DELETE_PAST_DATE = "admin_delete_past_date"
 DELETE_USER_REPORT = "delete_user_report"
 GET_JOBS_BASED_ON_PREFERENCE = "get_jobs_by_preferences"
 HELLO_EP = "/hello-world"
-HELLO_RESP = "hello"
+HELLO_RESP = "HELLO WORLD"
 
 
 @api.route(HELLO_EP)
