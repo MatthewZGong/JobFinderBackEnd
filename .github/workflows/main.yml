@@ -54,3 +54,4 @@ jobs:
         run: ./deploy.sh
         env:
           DEMO_PA_PWD: ${{secrets.DEMO_PA_PWD}}
+          PA_API_TOKEN: ${{secrets.PA_API_TOKEN}}
