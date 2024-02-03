@@ -6,11 +6,11 @@ from bson.objectid import ObjectId
 LOCAL = "0"
 CLOUD = "1"
 
-DB_NAME = 'SWE_DESIGN_PROJECT'
+DB_NAME = "SWE_DESIGN_PROJECT"
 
 client = None
 
-MONGO_ID = '_id'
+MONGO_ID = "_id"
 
 
 def connect_db():
@@ -28,13 +28,20 @@ def connect_db():
             password = os.environ.get("MONGO_PASSWORD")
             username = os.environ.get("MONGO_USERNAME")
             if not password:
-                raise ValueError('You must set your password '
-                                 + 'to use Mongo in the cloud.')
+                raise ValueError(
+                    "You must set your password " + "to use Mongo in the cloud."
+                )
             url = f"mongodb+srv://{username}:{password}@cluster0.\
 mpx0yi5.mongodb.net/?retryWrites=true&w=majority&ssl=true"
             print(url)
             print("Connecting to Mongo in the cloud.")
-            client = pm.MongoClient(url.format(password, username))
+            client = pm.MongoClient(
+                url.format(password, username),
+                connectTimeoutMS=30000,
+                socketTimeoutMS=None,
+                connect=False,
+                maxPoolsize=1,
+            )
         else:
             print("Connecting to Mongo locally.")
             client = pm.MongoClient()
@@ -44,7 +51,7 @@ def insert_one(collection, doc, db=DB_NAME):
     """
     Insert a single doc into collection.
     """
-    print(f'{db=}')
+    print(f"{db=}")
     return client[db][collection].insert_one(doc)
 
 
@@ -82,15 +89,16 @@ def fetch_all_as_dict(key, collection, db=DB_NAME):
 
 
 def find_by_id(id, collection, db=DB_NAME):
-    return client[db][collection].find({'_id': ObjectId(id)})
+    return client[db][collection].find({"_id": ObjectId(id)})
 
 
 def exists_by_id(id, collection, db=DB_NAME):
-    return client[db][collection].count_documents({'_id': ObjectId(id)}) != 0
+    return client[db][collection].count_documents({"_id": ObjectId(id)}) != 0
 
 
 def update_doc(collection, filters, update_dict, db=DB_NAME):
-    return client[db][collection].update_one(filters, {'$set': update_dict})
+    return client[db][collection].update_one(filters, {"$set": update_dict})
+
 
 # if __name__ == "__main__":
 #     test = connect_db()

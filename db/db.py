@@ -1,6 +1,7 @@
 import db.db_connect as dbc
 import datetime
 from copy import deepcopy
+
 """
 This file will manage interactions with our data store.
 At first, it will just contain stubs that return fake data.
@@ -12,19 +13,15 @@ dbc.connect_db()
 
 job_data = {
     1: {
-        "data": {
-            "keywords": ["internship"]
-        },
+        "data": {"keywords": ["internship"]},
         "userid": 1,
-        "date": datetime.datetime(2020, 5, 17)
+        "date": datetime.datetime(2020, 5, 17),
     },
     2: {
-        "data": {
-            "keywords": ["Remote"]
-        },
+        "data": {"keywords": ["Remote"]},
         "userid": 2,
-        "date": datetime.datetime(2020, 5, 18)
-    }
+        "date": datetime.datetime(2020, 5, 18),
+    },
 }
 
 user_data = {
@@ -33,71 +30,48 @@ user_data = {
         "data": {
             "username": "new_username",
             "email": "new_email@example.com",
-            "password": "new_password"
-        }
+            "password": "new_password",
+        },
     }
 }
 
 admin_data = {
-    1: {
-        "admin_id": 1,
-        "data": {
-            "username": "new_username",
-            "password": "new_password"
-        }
-    }
+    1: {"admin_id": 1, "data": {"username": "new_username", "password": "new_password"}}
 }
 
 
 user_reports = {
-    1: {
-        "user_id": 1,
-        "job_id": 1,
-        "data": {
-            "report": "invalid link"
-        }
-    },
-    2: {
-        "user_id": 2,
-        "job_id": 2,
-        "data": {
-            "report": "job is closed"
-        }
-    },
-    3: {
-        "user_id": 3,
-        "job_id": 3,
-        "data": {
-            "report": "page not found"
-        }
-    }
-
-
+    1: {"user_id": 1, "job_id": 1, "data": {"report": "invalid link"}},
+    2: {"user_id": 2, "job_id": 2, "data": {"report": "job is closed"}},
+    3: {"user_id": 3, "job_id": 3, "data": {"report": "page not found"}},
 }
 
 user_preference = {
-    1: {
-        "user_id": 1,
-        "location": "string",
-        "job_type": "string",
-        "sort_by": ["string"]
-    }
+    1: {"user_id": 1, "location": "string", "job_type": "string", "sort_by": ["string"]}
 }
 
 
-def add_job_posting(company, job_title,
-                    job_description, job_type, location, date):
-    if (company is None or job_title is None or job_description
-            is None or job_type is None or location is None or date is None):
+def add_job_posting(company, job_title, job_description, job_type, location, date):
+    if (
+        company is None
+        or job_title is None
+        or job_description is None
+        or job_type is None
+        or location is None
+        or date is None
+    ):
         raise ValueError("None value found")
-    return dbc.insert_one("jobs", {
-        "company": company,
-        "job_title": job_title,
-        "job_description": job_description,
-        "job_type": job_type,
-        "location": location,
-        'date': date
-    })
+    return dbc.insert_one(
+        "jobs",
+        {
+            "company": company,
+            "job_title": job_title,
+            "job_description": job_description,
+            "job_type": job_type,
+            "location": location,
+            "date": date,
+        },
+    )
 
 
 # def external_job_update(id, position, arg):
@@ -121,15 +95,15 @@ def update_job(job_id, changes):
 
 
 def delete_job(admin_id, job_id):
-    '''finds job by _id and deletes it if possible'''
+    """finds job by _id and deletes it if possible"""
     if not dbc.exists_by_id(job_id, "jobs"):
         raise KeyError(f"No Job {job_id}")
     return dbc.del_one("jobs", {"_id": job_id})
 
 
 def delete_job_past_date(admin_id, past_date):
-    '''flushes all entries past a date'''
-    if (not isinstance(past_date, datetime.datetime)):
+    """flushes all entries past a date"""
+    if not isinstance(past_date, datetime.datetime):
         raise TypeError("past_date must be datetime")
     for job in dbc.fetch_all("jobs"):
         if job["date"] < past_date:
@@ -147,7 +121,7 @@ def get_most_recent_job(numbers):
     last_keys = sorted_key[-numbers:]
     res = [jobs[key] for key in last_keys]
     for entry in res:
-        entry['date'] = str(entry['date'].date())
+        entry["date"] = str(entry["date"].date())
     return res
 
 
@@ -160,39 +134,45 @@ def add_account(username, email, password):
     if exist:
         raise KeyError("User with Username or email already exists")
     else:
-        return dbc.insert_one('users', {
-            "username": username,
-            "email": email,
-            "password": password,
-            "preference": {
-                "location": 'any',
-                "job_type": 'any',
-            }
-        })
+        return dbc.insert_one(
+            "users",
+            {
+                "username": username,
+                "email": email,
+                "password": password,
+                "preference": {"location": "any", "job_type": "any",},
+            },
+        )
 
 
 def get_jobs_by_preference(preference):
     """
     function to get jobs based on user preference
     """
-    if (not isinstance(preference, dict) or
-            'location' not in preference or
-            'job_type' not in preference):
-        raise TypeError("preference must be a dictionary with\
-                        'location' and 'job_type' keys")
+    if (
+        not isinstance(preference, dict)
+        or "location" not in preference
+        or "job_type" not in preference
+    ):
+        raise TypeError(
+            "preference must be a dictionary with\
+                        'location' and 'job_type' keys"
+        )
     all = dbc.fetch_all("jobs")
     return_list = []
     for job in all:
         job_copy = deepcopy(job)
-        job_copy['_id'] = str(job_copy['_id'])
-        job_copy['date'] = str(job_copy['date'])
+        job_copy["_id"] = str(job_copy["_id"])
+        job_copy["date"] = str(job_copy["date"])
 
         if job_copy not in return_list:
-            if ((preference['location'] == 'any'
-                    or job_copy["location"] == preference["location"])
-                    and
-                    (preference['job_type'] == 'any'
-                     or job_copy["job_type"] == preference["job_type"])):
+            if (
+                preference["location"] == "any"
+                or job_copy["location"] == preference["location"]
+            ) and (
+                preference["job_type"] == "any"
+                or job_copy["job_type"] == preference["job_type"]
+            ):
                 return_list.append(job_copy)
     return return_list
 
@@ -200,12 +180,10 @@ def get_jobs_by_preference(preference):
 def update_preference(user_id, preferred_location, preferred_type):
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
-    return dbc.update_doc("users", {"_id": user_id},
-                          {"preference": {
-                              "location": preferred_location,
-                              "job_type": preferred_type,
-                          }
-    }
+    return dbc.update_doc(
+        "users",
+        {"_id": user_id},
+        {"preference": {"location": preferred_location, "job_type": preferred_type,}},
     )
 
 
@@ -231,7 +209,7 @@ def get_user_reports():
     """
     function to fetch all user reports
     """
-    return dbc.fetch_all('user_reports')
+    return dbc.fetch_all("user_reports")
 
 
 def add_user_report(user_id, job_id, report):
@@ -243,13 +221,10 @@ def add_user_report(user_id, job_id, report):
     if not dbc.exists_by_id(job_id, "jobs"):
         raise KeyError(f"No Job {job_id}")
 
-    return dbc.insert_one('user_reports', {
-        "user_id": user_id,
-        "job_id": job_id,
-        "data": {
-            "report": report
-        }
-    })
+    return dbc.insert_one(
+        "user_reports",
+        {"user_id": user_id, "job_id": job_id, "data": {"report": report}},
+    )
 
 
 def check_preference(user_id):
@@ -260,7 +235,7 @@ def check_preference(user_id):
         raise KeyError(f"No User {user_id}")
     else:
         user = dbc.fetch_one("users", {"_id": user_id})
-        return user['preference']
+        return user["preference"]
 
 
 def delete_user_report(report_id):
@@ -270,6 +245,7 @@ def delete_user_report(report_id):
     if not dbc.exists_by_id(report_id, "user_reports"):
         raise KeyError(f"No Report_ID {report_id}")
     return dbc.del_one("user_reports", {"_id": report_id})
+
 
 # if __name__ == "__main__":
 #     add_account("test", "test@gmail.com", "test")
