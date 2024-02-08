@@ -101,9 +101,17 @@ class UpdateUserInfo(Resource):
     )
     def put(self):
         user_id = request.args.get("_id")
+        if user_id is None:
+            raise wz.NotAcceptable("Expected json with user_ID")
         email = request.args.get("email")
+        if email is None:
+            raise wz.NotAcceptable("Expected json with email")
         username = request.args.get("username")
-        changes = {"email": email, "username": username}
+        if username is None:
+            raise wz.NotAcceptable("Expected json with username")
+        new_email = request.args.get("new_email")
+        new_username = request.args.get("new_username")
+        changes = {"email": new_email, "username": new_username}
         try:
             db.update_account(ObjectId(user_id), changes)
         except Exception as e:
