@@ -7,6 +7,7 @@ from http import HTTPStatus
 from bson.objectid import ObjectId
 from flask import Flask, request
 from flask_restx import Resource, Api
+from flask_cors import CORS
 
 # from flask_restx import Resource, Api, fields
 
@@ -16,6 +17,7 @@ import db.db as db
 from datetime import datetime, date
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 MAIN_MENU = "MainMenu"
@@ -54,7 +56,7 @@ class HelloWorld(Resource):
         A trivial endpoint to see if the server is running.
         It just answers with "hello world."
         """
-        return {HELLO_RESP: "HELLO THIS IS WORKING"}
+        return {HELLO_RESP: "HELLO But with CORS"}
 
 
 @api.route("/endpoints")
