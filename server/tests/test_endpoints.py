@@ -263,6 +263,15 @@ def test_update_preferences():
     assert True
 
 
+@patch("db.db.update_preference", return_value=True, autospec=True)
+def test_update_preferences_OK(mock_add):
+    resp = TEST_CLIENT.get(
+        f"/{ep.READ_MOST_RECENT_JOBS}", query_string={"user_id": 1, "email": "TESTING", 
+                                                      "job_type": "type", "location": "place"}
+    )
+    assert resp.status_code == OK
+
+
 @patch("db.db.get_most_recent_job", return_value=True, autospec=True)
 def test_read_most_recent_jobs_OK(mock_add):
     resp = TEST_CLIENT.get(
