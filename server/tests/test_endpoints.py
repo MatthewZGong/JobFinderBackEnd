@@ -265,11 +265,11 @@ def test_update_preferences():
 
 @patch("db.db.update_preference", return_value=True, autospec=True)
 def test_update_preferences_OK(mock_add):
-    resp = TEST_CLIENT.get(
-        f"/{ep.READ_MOST_RECENT_JOBS}", query_string={"user_id": 1, "email": "TESTING", 
+    resp = TEST_CLIENT.put(
+        f"/{ep.UPDATE_PREFERENCES}", query_string={"user_id": '507f191e810c19729de860ea', "email": "TESTING", 
                                                       "job_type": "type", "location": "place"}
     )
-    assert resp.status_code == NOT_ACCEPTABLE
+    assert resp.status_code == OK
 
 
 @patch("db.db.get_most_recent_job", return_value=True, autospec=True)
