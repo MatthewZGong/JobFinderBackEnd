@@ -280,6 +280,14 @@ def test_get_jobs_based_on_preference_OK(mock_add):
     assert resp.status_code == NOT_ACCEPTABLE
 
 
+@patch("db.db.get_jobs_by_preference", return_value=True, autospec=True)
+def test_get_jobs_based_on_preference_OK(mock_add):
+    resp = TEST_CLIENT.get(
+        f"/{ep.GET_JOBS_BASED_ON_PREFERENCE}", query_string={"user_id": 1}
+    )
+    assert resp.status_code == NOT_ACCEPTABLE
+
+
 @patch("db.db.get_most_recent_job", return_value=True, autospec=True)
 def test_read_most_recent_jobs_OK(mock_add):
     resp = TEST_CLIENT.get(
