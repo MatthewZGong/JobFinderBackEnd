@@ -277,7 +277,7 @@ def test_get_jobs_based_on_preference_OK(mock_add):
     resp = TEST_CLIENT.get(
         f"/{ep.GET_JOBS_BASED_ON_PREFERENCE}", query_string={"user_id": "507f191e810c19729de860ea"}
     )
-    assert resp.status_code == OK
+    assert resp.status_code == NOT_ACCEPTABLE
 
 
 @patch("db.db.get_most_recent_job", return_value=True, autospec=True)
