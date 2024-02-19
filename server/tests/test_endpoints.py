@@ -252,7 +252,7 @@ def test_update_preferences_OK(mock_add):
         f"/{ep.UPDATE_PREFERENCES}", query_string={"user_id": '507f191e810c19729de860ea', "email": "TESTING", 
                                                       "job_type": "type", "location": "place"}
     )
-    assert resp.status_code == NOT_ACCEPTABLE
+    assert resp.status_code == OK
 
 
 @patch("db.db.update_preference", return_value=True, autospec=True)
