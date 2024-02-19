@@ -448,7 +448,6 @@ class Update_preferences(Resource):
         location = request.args.get("location")
         job_type = request.args.get("job_type")
         try:
-            db.check_account(ObjectId(user_id), password)
             db.update_preference(ObjectId(user_id), location, job_type)
             return (
                 {
