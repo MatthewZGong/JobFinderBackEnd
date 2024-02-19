@@ -444,7 +444,6 @@ class Update_preferences(Resource):
         updates account preferences
         """
         user_id = request.args.get("user_id")
-        password = request.args.get("password")
         location = request.args.get("location")
         job_type = request.args.get("job_type")
         try:
