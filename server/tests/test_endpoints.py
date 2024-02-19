@@ -246,23 +246,6 @@ def test_create_account_bad(mock):
     assert text == expected
 
 
-@pytest.mark.skip("Useless Test")
-def test_login_to_account():  # @skip
-    # go to db and check if username/email matches password
-    # waiting for db to be set
-    assert True
-
-
-def test_update_preferences():
-    test1 = {"user_id": 1, "email": "TESTING", "job_type": "type", "location": "place"}
-
-    expected_results = {
-        "status": "success",
-        "message": "User Preferences Successfully Updated",
-    }
-    assert True
-
-
 @patch("db.db.update_preference", return_value=True, autospec=True)
 def test_update_preferences_OK(mock_add):
     resp = TEST_CLIENT.put(
@@ -270,6 +253,31 @@ def test_update_preferences_OK(mock_add):
                                                       "job_type": "type", "location": "place"}
     )
     assert resp.status_code == OK
+
+
+@patch("db.db.update_preference", return_value=True, autospec=True)
+def test_update_preferences_BAD(mock_add):
+    resp = TEST_CLIENT.put(
+        f"/{ep.UPDATE_PREFERENCES}", query_string={"user_id": 1, "email": "TESTING", 
+                                                      "job_type": "type", "location": "place"}
+    )
+    assert resp.status_code == NOT_ACCEPTABLE
+
+
+@patch("db.db.get_jobs_by_preference", return_value=True, autospec=True)
+def test_get_jobs_based_on_preference_BAD(mock_add):
+    resp = TEST_CLIENT.get(
+        f"/{ep.GET_JOBS_BASED_ON_PREFERENCE}", query_string={"user_id": "507f191e810c19729de860ea"}
+    )
+    assert resp.status_code == NOT_ACCEPTABLE
+
+
+@patch("db.db.get_jobs_by_preference", return_value=True, autospec=True)
+def test_get_jobs_based_on_preference_BAD_2(mock_add):
+    resp = TEST_CLIENT.get(
+        f"/{ep.GET_JOBS_BASED_ON_PREFERENCE}", query_string={"user_id": 1}
+    )
+    assert resp.status_code == NOT_ACCEPTABLE
 
 
 @patch("db.db.get_most_recent_job", return_value=True, autospec=True)
