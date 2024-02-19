@@ -507,12 +507,12 @@ class AddNewJobPosting(Resource):
         job_description = request.args.get("job_description")
         job_type = request.args.get("job_type")
         location = request.args.get("location")
-        date = request.args.get("date")
-        if date is None:
-            date = str(date.today().isoformat())
+        date_arg = request.args.get("date")
+        if date_arg is None:
+            date_arg = str(date.today().isoformat())
         date_obj = None
         try:
-            date_obj = datetime.strptime(date, "%Y-%m-%d")
+            date_obj = datetime.strptime(date_arg, "%Y-%m-%d")
         except Exception as e:
             raise wz.NotAcceptable(str(e))
         # date =
