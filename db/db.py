@@ -94,6 +94,11 @@ def update_job(job_id, changes):
     return dbc.update_doc("jobs", {"_id": job_id}, changes)
 
 
+def check_account(user_id, password):
+    if not dbc.exists_by_id(user_id, "users"):
+        raise KeyError(f"No User {user_id}")
+
+
 def delete_job(admin_id, job_id):
     """finds job by _id and deletes it if possible"""
     if not dbc.exists_by_id(job_id, "jobs"):

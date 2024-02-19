@@ -444,8 +444,13 @@ class Update_preferences(Resource):
         updates account preferences
         """
         user_id = request.args.get("user_id")
+        password = request.args.get("password")
         location = request.args.get("location")
         job_type = request.args.get("job_type")
+        try:
+            db.check_account(user_id, password)
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
         try:
             db.update_preference(ObjectId(user_id), location, job_type)
             return (

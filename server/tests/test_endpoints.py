@@ -246,23 +246,6 @@ def test_create_account_bad(mock):
     assert text == expected
 
 
-@pytest.mark.skip("Useless Test")
-def test_login_to_account():  # @skip
-    # go to db and check if username/email matches password
-    # waiting for db to be set
-    assert True
-
-
-def test_update_preferences():
-    test1 = {"user_id": 1, "email": "TESTING", "job_type": "type", "location": "place"}
-
-    expected_results = {
-        "status": "success",
-        "message": "User Preferences Successfully Updated",
-    }
-    assert True
-
-
 @patch("db.db.update_preference", return_value=True, autospec=True)
 def test_update_preferences_OK(mock_add):
     resp = TEST_CLIENT.put(
