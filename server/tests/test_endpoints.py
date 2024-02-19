@@ -264,6 +264,13 @@ def test_update_preferences_BAD(mock_add):
     assert resp.status_code == NOT_ACCEPTABLE
 
 
+@patch("db.db.update_preference", return_value=True, autospec=True)
+def test_update_preferences_BAD2(mock_add):
+    resp = TEST_CLIENT.put(
+        f"/{ep.UPDATE_PREFERENCES}", query_string={"user_id": 1, "email": "TESTING"})
+    assert resp.status_code == NOT_ACCEPTABLE
+
+
 @patch("db.db.get_jobs_by_preference", return_value=True, autospec=True)
 def test_get_jobs_based_on_preference_BAD(mock_add):
     resp = TEST_CLIENT.get(
