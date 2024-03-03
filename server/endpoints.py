@@ -40,6 +40,7 @@ ADMIN_DELETE_JOBS = "admin_delete_jobs"
 ADMIN_DELETE_PAST_DATE = "admin_delete_past_date"
 DELETE_USER_REPORT = "delete_user_report"
 GET_JOBS_BASED_ON_PREFERENCE = "get_job_based_on_preference"
+LOGIN = "login"
 HELLO_EP = "/hello-world"
 HELLO_RESP = "HELLO WORLD"
 
@@ -270,9 +271,7 @@ class read_most_recent_jobs(Resource):
 
     @api.response(HTTPStatus.OK, "Success")
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
-    @api.doc(
-        params={"numbers": {"description": "amount", "type": "int", "default": 5}, }
-    )
+    @api.doc(params={"numbers": {"description": "amount", "type": "int", "default": 5}})
     def get(self):
         # user_id = request.json.get("user_id")
         # if user_id is None:
@@ -422,6 +421,38 @@ class CreateAccount(Resource):
             )
         except Exception as e:
             raise wz.NotAcceptable(str(e))
+
+
+@api.route(f"/{LOGIN}")
+class Login(Resource):
+    """
+    This class allows users to login to an account
+    """
+
+    @api.response(HTTPStatus.OK, "Success")
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
+    @api.doc(
+        params={
+            "username": {"description": "Username", "type": "string", "default": "", },
+            "password": {"description": "Password", "type": "string", "default": "", },
+        }
+    )
+    def get(self):
+        """
+        create new account
+        """
+        username = request.args.get("username")
+        password = request.args.get("password")
+        try:
+            res = db.get_user_id(username, password)
+            if not res:
+                raise wz.NotAcceptable(str("Wrong username or password"))
+            return (
+                {"status": "success", "message": f"{res}", },
+                200,
+            )
+        except Exception:
+            raise wz.NotAcceptable(str("Wrong username or password"))
 
 
 @api.route(f"/{UPDATE_PREFERENCES}")

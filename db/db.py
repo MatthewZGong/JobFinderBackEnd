@@ -252,5 +252,17 @@ def delete_user_report(report_id):
     return dbc.del_one("user_reports", {"_id": report_id})
 
 
+def get_user_id(username, password):
+    user = dbc.fetch_one("users", {"username": username})
+    print(user)
+    if user:
+        if user["password"] == password:
+            return user["_id"]
+        else:
+            return False
+    else:
+        return False
+
+
 # if __name__ == "__main__":
 #     add_account("test", "test@gmail.com", "test")
