@@ -416,3 +416,25 @@ def test_get_jobs_based_on_preference_fails(mock_get, mock_check):
     }
     resp = TEST_CLIENT.get(f"/{ep.GET_JOBS_BASED_ON_PREFERENCE}", query_string=test)
     assert resp._status_code == 406
+
+
+@patch("db.db.get_user_id", return_value="FAKE_ID", autospec=True)
+def test_login_works(mock_get):
+    test = {
+        "user_id": "FAKE_USERNAME_123945y43210123",
+        "password": "FAKE_PASSWORD_5721394120123123",
+    }
+    resp = TEST_CLIENT.get(f"/{ep.LOGIN}", query_string=test)
+    assert resp._status_code == 200 
+    assert resp.get_json()["message"]== "FAKE_ID"
+
+@patch("db.db.get_user_id", return_value=False, autospec=True)
+def test_login_fails(mock_get):
+    test = {
+        "user_id": "FAKE_USERNAME_123945y43210123",
+        "password": "FAKE_PASSWORD_5721394120123123",
+    }
+    resp = TEST_CLIENT.get(f"/{ep.LOGIN}", query_string=test)
+    assert resp._status_code == 406
+
+

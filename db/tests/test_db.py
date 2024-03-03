@@ -279,3 +279,20 @@ def test_update_preference_works():
     ).inserted_id
     assert db.update_preference(identification, "wash123123", None)
     dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
+
+def test_get_user_id_works(): 
+    fuser = "testAccForGetUser"
+    femail = "Fakemail123123123.com"
+    fpassword = "FakePassword"
+    identification = db.add_account(
+       fuser , femail, fpassword
+    ).inserted_id
+    assert db.get_user_id(fuser, fpassword)
+    dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
+
+def test_get_user_id_fails(): 
+    fuser = "testAccForGetUser"
+    femail = "Fakemail123123123.com"
+    fpassword = "FakePassword"
+    assert db.get_user_id(fuser, fpassword) == False
+
