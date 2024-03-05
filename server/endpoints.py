@@ -268,7 +268,7 @@ class read_most_recent_jobs(Resource):
     This endpoint allows getting most recent jobs.
     """
 
-    @api.response(HTTPStatus.OK, "Success")
+    @api.response(HTTPStatus.OK,     "Success")
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
     @api.doc(
         params={"numbers": {"description": "amount", "type": "int", "default": 5}, }
@@ -424,7 +424,7 @@ class CreateAccount(Resource):
             raise wz.NotAcceptable(str(e))
 
 
-@api.route(f"/{UPDATE_PREFERENCES}")
+@api.route(f"/{UPDATE_PREFERENCES}", methods=['PUT'])
 class Update_preferences(Resource):
     """
     This class allows users to update their account preferences
