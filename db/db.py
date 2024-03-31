@@ -122,14 +122,17 @@ def get_most_recent_job(numbers):
     # connect to mongodb to get the numbers of jobs based
     # on their date and store it into job list
     # jobs is a dictionary, key is date
-    jobs = dbc.fetch_all_as_dict("date", "jobs")
-    sorted_key = sorted(jobs)
+    # jobs = dbc.fetch_all_as_dict("date", "jobs")
+    # print(jobs[0][])
+    jobs = dbc.fetch_elements_ordered_by("jobs", "date", limit=numbers)
     # find the most recent numbers of jobs based on key
-    last_keys = sorted_key[-numbers:]
-    res = [jobs[key] for key in last_keys]
+    # last_keys = sorted_key[-numbers:]
+    res = [job for job in jobs]
     for entry in res:
         entry["date"] = str(entry["date"].date())
-    return res
+        del entry["_id"]
+    # print(res)
+    return res[::-1]
 
 
 def add_account(username, email, password):
