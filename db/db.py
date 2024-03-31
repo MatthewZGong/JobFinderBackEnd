@@ -51,7 +51,7 @@ user_preference = {
 }
 
 
-def add_job_posting(company, job_title, job_description, job_type, location, date):
+def add_job_posting(company, job_title, job_description, job_type, location, date, link):
     if (
         company is None
         or job_title is None
@@ -59,6 +59,7 @@ def add_job_posting(company, job_title, job_description, job_type, location, dat
         or job_type is None
         or location is None
         or date is None
+        or link is None
     ):
         raise ValueError("None value found")
     return dbc.insert_one(
@@ -70,6 +71,7 @@ def add_job_posting(company, job_title, job_description, job_type, location, dat
             "job_type": job_type,
             "location": location,
             "date": date,
+            "link": link
         },
     )
 
