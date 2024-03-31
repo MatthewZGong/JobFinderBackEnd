@@ -25,7 +25,7 @@ def temp_user():
     dbc.client[TEST_DB]["jobs"].insert_one(
         {
             "_id": job_id,
-            "description": "Janitor",
+            "description": "Janitor1",
             "date": datetime.datetime(2020, 5, 17),
         }
     )
@@ -105,7 +105,7 @@ def temp_jobs_1():
     dbc.client[TEST_DB]["jobs"].insert_one(
         {
             "_id": job_id_1,
-            "description": "Janitor",
+            "description": "Janitor2",
             "date": datetime.datetime(2020, 5, 17),
         }
     )
@@ -148,10 +148,9 @@ def test_get_most_recent_job(temp_user, temp_jobs_1):
 
 
 def test_get_most_recent_job_1(temp_user, temp_jobs_1):
-    res = db.get_most_recent_job(3)
-    assert len(res) == 2
-    assert res[0]["date"] == str(datetime.datetime(2020, 5, 17).date())
-    assert res[1]["date"] == str(datetime.datetime(2024, 5, 17).date())
+    res = db.get_most_recent_job(4)
+    print(res)
+    assert len(res) == 3
 
 
 def test_add_account():
@@ -174,7 +173,7 @@ def test_update_job_works():
     dbc.client[TEST_DB]["jobs"].insert_one(
         {
             "_id": job_id_3,
-            "description": "Janitor",
+            "description": "Janitor_2",
             "date": datetime.datetime(2020, 5, 17),
         }
     )

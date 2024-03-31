@@ -71,14 +71,16 @@ def del_one(collection, filt, db=DB_NAME):
     Find with a filter and return on the first doc found.
     """
     return client[db][collection].delete_one(filt)
-def fetch_elements_ordered_by(collection, order, limit = None, db=DB_NAME):
+
+
+def fetch_elements_ordered_by(collection, order, limit=None, db=DB_NAME):
     """
     Find with a filter and return on the first doc found.
     """
+    # size = client[db][collection].count_documents({})
     if limit is None:
         return client[db][collection].find({}).sort({order: -1})
     return client[db][collection].find({}).sort({order: -1}).limit(limit)
-
 
 
 def fetch_all(collection, db=DB_NAME):

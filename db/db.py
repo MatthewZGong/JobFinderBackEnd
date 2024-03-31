@@ -128,6 +128,7 @@ def get_most_recent_job(numbers):
     # find the most recent numbers of jobs based on key
     # last_keys = sorted_key[-numbers:]
     res = [job for job in jobs]
+    print(res)
     for entry in res:
         entry["date"] = str(entry["date"].date())
         del entry["_id"]
