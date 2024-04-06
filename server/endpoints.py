@@ -267,6 +267,7 @@ class DeleteAccount(Resource):
 class read_most_recent_jobs(Resource):
     """
     This endpoint allows getting most recent jobs.
+    also returns job_id
     """
 
     @api.response(HTTPStatus.OK, "Success")

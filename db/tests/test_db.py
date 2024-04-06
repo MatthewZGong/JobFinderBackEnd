@@ -145,6 +145,8 @@ def test_get_most_recent_job(temp_user, temp_jobs_1):
     res = db.get_most_recent_job(1)
     assert len(res) == 1
     assert res[0]["date"] == str(datetime.datetime(2024, 5, 17).date())
+    assert "job_id" in res[0]
+    assert res[0]["job_id"] == str(job_id_2)
 
 
 def test_get_most_recent_job_1(temp_user, temp_jobs_1):
