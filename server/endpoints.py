@@ -267,6 +267,7 @@ class DeleteAccount(Resource):
 class read_most_recent_jobs(Resource):
     """
     This endpoint allows getting most recent jobs.
+    also returns job_id
     """
 
     @api.response(HTTPStatus.OK,     "Success")
@@ -530,6 +531,11 @@ class AddNewJobPosting(Resource):
                 "type": str,
                 "default": str(date.today().isoformat()),
             },
+            "link": {
+                "description": "Link",
+                "type": "string",
+                "default": "https://www.google.com/about/careers/applications/"
+            }
         }
     )
     def post(self):
@@ -539,6 +545,7 @@ class AddNewJobPosting(Resource):
         job_type = request.args.get("job_type")
         location = request.args.get("location")
         date_arg = request.args.get("date")
+        link = request.args.get("link")
         if date_arg is None:
             date_arg = str(date.today().isoformat())
         date_obj = None
@@ -548,7 +555,7 @@ class AddNewJobPosting(Resource):
             raise wz.NotAcceptable(str(e))
         # date =
         db.add_job_posting(
-            company, job_title, job_description, job_type, location, date_obj
+            company, job_title, job_description, job_type, location, date_obj, link
         )
         return {"status": "success", "message": "job posting successfully submit"}, 200
 

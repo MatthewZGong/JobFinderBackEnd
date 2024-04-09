@@ -361,6 +361,7 @@ def test_add_new_job_works(mock_add):
         "job_type": "TESTING",
         "location": "TESTING",
         "date": "2022-12-12",
+        "link": "https://www.google.com/about/careers/applications/"
     }
     resp = TEST_CLIENT.post(f"/{ep.ADD_NEW_JOBS}", query_string=test)
     assert resp._status_code == 200
@@ -375,6 +376,7 @@ def test_add_new_job_fails(mock_add):
         "job_type": "TESTING",
         "location": "TESTING",
         "date": "2022-12-121212",
+        "link": "https://www.google.com/about/careers/applications/"
     }
     resp = TEST_CLIENT.post(f"/{ep.ADD_NEW_JOBS}", query_string=test)
     assert resp._status_code == 406
