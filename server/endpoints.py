@@ -14,6 +14,7 @@ from flask_cors import CORS
 import werkzeug.exceptions as wz
 
 import db.db as db
+import HATEOAS.form as form
 from datetime import datetime, date
 
 app = Flask(__name__)
@@ -42,6 +43,7 @@ DELETE_USER_REPORT = "delete_user_report"
 GET_JOBS_BASED_ON_PREFERENCE = "get_job_based_on_preference"
 LOGIN = "login"
 HELLO_EP = "/hello-world"
+FORM_EP = "/form"
 HELLO_RESP = "HELLO WORLD"
 
 
@@ -58,6 +60,21 @@ class HelloWorld(Resource):
         It just answers with "hello world."
         """
         return {HELLO_RESP: "HELLO But with CORS"}
+
+
+@api.route(FORM_EP)
+class Form(Resource):
+    def get(self):
+        form_descr = form.get_form_descr()
+        fld_names = form.get_fld_names()
+        return {
+            'form_description': form_descr,
+            'field_names': fld_names,
+            'links': [
+                {'rel': 'self', 'href': request.url},
+                {'rel': 'submit', 'href': request.url, 'method': 'POST'}
+            ]
+        }
 
 
 @api.route("/endpoints")
