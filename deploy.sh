@@ -1,7 +1,7 @@
 #!/bin/bash
 # This shell script deploys a new version to a server.
 
-PROJ_DIR=404ErrorRepoNotFound
+PROJ_DIR=JobFinderBackEnd
 VENV=runthis
 PA_DOMAIN="TanzHasan.pythonanywhere.com"
 PA_USER='TanzHasan'

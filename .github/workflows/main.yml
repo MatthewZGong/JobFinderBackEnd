@@ -13,8 +13,8 @@ on:
   workflow_dispatch:
 
 env:
-  DEMO_HOME: /home/runner/work/404ErrorRepoNotFound/404ErrorRepoNotFound
-  PYTHONPATH: /home/runner/work/404ErrorRepoNotFound/404ErrorRepoNotFound
+  DEMO_HOME: /home/runner/work/JobFinderBackEnd/JobFinderBackEnd
+  PYTHONPATH: /home/runner/work/JobFinderBackEnd/JobFinderBackEnd
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

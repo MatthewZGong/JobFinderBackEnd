@@ -7,7 +7,7 @@ USER=GroupConnect
 CONNECT_STR="mongodb+srv://cluster0.mpx0yi5.mongodb.net/"
 if [ -z $DATA_DIR ]
 then
-    DATA_DIR=~/404ErrorRepoNotFound/db
+    DATA_DIR=~/JobFinderBackEnd/db
 fi
 BKUP_DIR=$DATA_DIR/bkup
 
