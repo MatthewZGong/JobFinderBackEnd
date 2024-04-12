@@ -31,7 +31,7 @@ ENDPOINTS
 UPDATE_USER_INFO = "UpdateUserInfo"
 ADD_NEW_JOBS = "add-new-job"
 USER_REPORT = "add-user-report"
-GET_USER_REPORTS = "get-user-reports"
+GET_USER_REPORTS = "get_user_reports"
 DELETE_ACCOUNT = "delete-account"
 UPDATE_JOB_POSTING = "update-job-posting"
 CREATE_USER_ACCOUNT = "create-account"
@@ -189,9 +189,11 @@ class GetUserReports(Resource):
         response = db.get_user_reports()
 
         for res in response:
-            res["_id"] = str(res["_id"])
+            res["id"] = str(res["_id"])
             res["user_id"] = str(res["user_id"])
-        return {"User Reports": response}, 200
+            res["job_id"] = str(res["job_id"])
+            del[res["_id"]]
+        return response, 200
 
 
 @api.route(f"/{UPDATE_JOB_POSTING}")
@@ -349,13 +351,15 @@ class admin_delete_jobs(Resource):
         }
     )
     def delete(self):
+        # print("Admin delete job")
         admin_id = request.args.get("admin_id")
-        if admin_id is None:
-            raise wz.NotAcceptable("Expected json with admin_ID")
         job_id = request.args.get("job_id")
+        print(f"Admin ID: {admin_id}, Job ID: {job_id}")
         if job_id is None:
             raise wz.NotAcceptable("Expected json with job_ID")
-
+        if admin_id is None:
+            raise wz.NotAcceptable("Expected json with admin_ID")
+        # print(f"Admin ID: {admin_id}, Job ID: {job_id}")
         try:
             db.delete_job(admin_id, ObjectId(job_id))
             return {"status": "success", "message": f"Job {job_id} deleted"}, 200
