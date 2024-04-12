@@ -171,16 +171,16 @@ def test_get_user_reports_mock(mock_get):
     resp = TEST_CLIENT.get(f"/{ep.GET_USER_REPORTS}")
     assert resp._status_code == 200
     resp = json.loads(resp.data.decode("utf-8"))
-    expected_results = {
-        "User Reports": [
+    print(resp)
+    expected_results = [
             {
-                "_id": "65594839ee7a3c7d7d46eead",
+                "id": "65594839ee7a3c7d7d46eead",
                 "data": {"report": "page not found"},
                 "job_id": "507f191e810c19729de860ea",
                 "user_id": "507f1f77bcf86cd799439011",
             }
         ]
-    }
+    
     assert resp == expected_results
 
 
@@ -188,7 +188,7 @@ def test_get_user_reports_empty():
     resp = TEST_CLIENT.get(f"/{ep.GET_USER_REPORTS}")
     assert resp._status_code == 200
     resp = json.loads(resp.data.decode("utf-8"))
-    expected_results = {"User Reports": []}
+    expected_results = []
     assert resp == expected_results
 
 

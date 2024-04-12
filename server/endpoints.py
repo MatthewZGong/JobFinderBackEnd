@@ -192,7 +192,7 @@ class GetUserReports(Resource):
             res["id"] = str(res["_id"])
             res["user_id"] = str(res["user_id"])
             res["job_id"] = str(res["job_id"])
-            del[res["_id"]]
+            del [res["_id"]]
         return response, 200
 
 
