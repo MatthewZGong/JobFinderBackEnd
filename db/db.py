@@ -205,12 +205,12 @@ def update_account(user_id, changes):
     """
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
-    user = dbc.fetch_one("users", {"_id": user_id})
-    exist = False
-    if changes["username"] is not user["username"]:
-        exist = dbc.fetch_one("users", {"username": changes["username"]})
-    if changes["email"] is not user["email"]:
-        exist = dbc.fetch_one("users", {"email": changes["email"]})
+    # user = dbc.fetch_one("users", {"_id": user_id})
+    # exist = False
+    # if changes["username"] is not user["username"]:
+    #     exist = dbc.fetch_one("users", {"username": changes["username"]})
+    # if changes["email"] is not user["email"]:
+    #     exist = dbc.fetch_one("users", {"email": changes["email"]})
     # if (exist) and (exist["password"] is not user["password"]):
     #     raise KeyError("User with Username or email already exists")
     return dbc.update_doc("users", {"_id": user_id}, changes)
