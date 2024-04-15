@@ -238,7 +238,7 @@ def test_update_account_works():
     identification = db.add_account(
         "FakeFaketestAcc", "FakeFaketestAccFakemail.com", "FakePassword"
     ).inserted_id
-    db.update_account(identification, {"email": "notFakemail.com"})
+    db.update_account(identification, {"email": "notFakemail.com", "username": "notFakeusername"})
     res = dbc.fetch_one("users", {"_id": identification})
     assert res["email"] == "notFakemail.com"
     dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
