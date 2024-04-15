@@ -246,6 +246,22 @@ def test_create_account_bad(mock):
     assert text == expected
 
 
+@patch("db.db.check_preference", return_value=True, autospec=True)
+def test_get_preferences_BAD(mock_add):
+    resp = TEST_CLIENT.get(
+        f"/{ep.GET_PREFERENCES}", query_string={"user_id": 5}
+    )
+    assert resp.status_code == NOT_ACCEPTABLE
+
+
+@patch("db.db.check_preference", return_value=True, autospec=True)
+def test_get_preferences_OK(mock_add):
+    resp = TEST_CLIENT.get(
+        f"/{ep.GET_PREFERENCES}", query_string={"user_id": '507f191e810c19729de860ea'}
+    )
+    assert resp.status_code == OK
+
+
 @patch("db.db.update_preference", return_value=True, autospec=True)
 def test_update_preferences_OK(mock_add):
     resp = TEST_CLIENT.put(

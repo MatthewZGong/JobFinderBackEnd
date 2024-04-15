@@ -36,6 +36,7 @@ DELETE_ACCOUNT = "delete_account"
 UPDATE_JOB_POSTING = "update_job_posting"
 CREATE_USER_ACCOUNT = "create_account"
 UPDATE_PREFERENCES = "update_preferences"
+GET_PREFERENCES = "get_preferences"
 READ_MOST_RECENT_JOBS = "read_most_recent_jobs"
 ADMIN_DELETE_JOBS = "admin_delete_jobs"
 ADMIN_DELETE_PAST_DATE = "admin_delete_past_date"
@@ -511,6 +512,30 @@ class Update_preferences(Resource):
         except Exception as e:
             raise wz.NotAcceptable(str(e))
 
+
+@api.route(f"/{GET_PREFERENCES}")
+class Get_preferences(Resource):
+    """
+    This class allows users to get their account preferences
+    """
+    @api.response(HTTPStatus.OK, "Success")
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
+    @api.doc(
+        params={
+            "user_id": {"description": "User ID", "type": "string"},
+        }
+    )
+    def get(self):
+        """
+        get account preferences
+        """
+        user_id = request.args.get("user_id")
+        try:
+            preference = db.check_preference(ObjectId(user_id))
+            return {"preference": preference},200
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
+        
 
 @api.route(f"/{ADD_NEW_JOBS}")
 class AddNewJobPosting(Resource):
