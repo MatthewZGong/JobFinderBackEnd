@@ -532,10 +532,10 @@ class Get_preferences(Resource):
         user_id = request.args.get("user_id")
         try:
             preference = db.check_preference(ObjectId(user_id))
-            return {"preference": preference},200
+            return {"preference": preference}, 200
         except Exception as e:
             raise wz.NotAcceptable(str(e))
-        
+
 
 @api.route(f"/{ADD_NEW_JOBS}")
 class AddNewJobPosting(Resource):
