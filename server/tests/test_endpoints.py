@@ -372,7 +372,6 @@ def test_admin_delete_past_date_bad(mock_add):
 def test_add_new_job_works(mock_add):
     test = {
         "company": "TESTING",
-        "job_title": "TESTING",
         "job_description": "TESTING",
         "job_type": "TESTING",
         "location": "TESTING",
@@ -387,7 +386,6 @@ def test_add_new_job_works(mock_add):
 def test_add_new_job_fails(mock_add):
     test = {
         "company": "TESTING",
-        "job_title": "TESTING",
         "job_description": "TESTING",
         "job_type": "TESTING",
         "location": "TESTING",

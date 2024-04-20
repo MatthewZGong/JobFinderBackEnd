@@ -51,11 +51,9 @@ user_preference = {
 }
 
 
-def add_job_posting(company, job_title, job_description, job_type, location, date, link):
+def add_job_posting(company, job_description, job_type, location, date, link):
     if (
         company is None
-        or job_title is None
-        or job_description is None
         or job_type is None
         or location is None
         or date is None
@@ -66,7 +64,6 @@ def add_job_posting(company, job_title, job_description, job_type, location, dat
         "jobs",
         {
             "company": company,
-            "job_title": job_title,
             "job_description": job_description,
             "job_type": job_type,
             "location": location,

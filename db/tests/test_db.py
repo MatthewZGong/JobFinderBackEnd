@@ -194,7 +194,7 @@ def test_update_job_fails():
 
 def test_add_job_works():
     res = db.add_job_posting(
-        "HELLO WORLD", "test", "test", "test", "test", "test", "test"
+        "HELLO WORLD", "test", "test", "test", "test", "test"
     ).inserted_id
     search = dbc.fetch_one("jobs", {"_id": res})
     assert search["company"] == "HELLO WORLD"
@@ -250,7 +250,7 @@ def test_get_jobs_by_preference_works():
     ).inserted_id
     db.update_preference(identification, "wash123123", "any")
     job_inserted_id = db.add_job_posting(
-        "HELLO WORLD", "test", "test", "wash123123", "wash123123", "test", "test"
+        "HELLO WORLD", "test", "wash123123", "wash123123", "test", "test"
     ).inserted_id
     res = db.get_jobs_by_preference(
         dbc.fetch_one("users", {"_id": identification})["preference"]

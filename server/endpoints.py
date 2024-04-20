@@ -209,7 +209,6 @@ class UpdateJobPosting(Resource):
         params={
             "job_id": {"description": "Job ID", "type": "string"},
             "company": {"description": "Company Name", "type": "string"},
-            "job_title": {"description": "Job Title", "type": "string"},
             "job_description": {"description": "Job Description", "type": "string"},
             "job_type": {"description": "Job Type", "type": "string"},
             "location": {"description": "Location", "type": "string"},
@@ -225,7 +224,6 @@ class UpdateJobPosting(Resource):
             raise wz.NotAcceptable("Expected job_id")
 
         company = request.args.get("company")
-        job_title = request.args.get("job_title")
         job_description = request.args.get("job_description")
         job_type = request.args.get("job_type")
         location = request.args.get("location")
@@ -241,7 +239,6 @@ class UpdateJobPosting(Resource):
             job_id = ObjectId(job_id)
             changes = {
                 "company": company,
-                "job_title": job_title,
                 "job_description": job_description,
                 "job_type": job_type,
                 "location": location,
@@ -433,6 +430,7 @@ class CreateAccount(Resource):
         username = request.args.get("username")
         email = request.args.get("email")
         password = request.args.get("password")
+        print(f"Username: {username}, Email: {email}, Password: {password}")
         try:
             db.add_account(username, email, password)
             return (
@@ -552,11 +550,6 @@ class AddNewJobPosting(Resource):
                 "type": "string",
                 "default": "Test1",
             },
-            "job_title": {
-                "description": "Job Title",
-                "type": "string",
-                "default": "Test2",
-            },
             "job_description": {
                 "description": "Job Description",
                 "type": "string",
@@ -586,7 +579,6 @@ class AddNewJobPosting(Resource):
     )
     def post(self):
         company = request.args.get("company")
-        job_title = request.args.get("job_title")
         job_description = request.args.get("job_description")
         job_type = request.args.get("job_type")
         location = request.args.get("location")
@@ -601,7 +593,7 @@ class AddNewJobPosting(Resource):
             raise wz.NotAcceptable(str(e))
         # date =
         db.add_job_posting(
-            company, job_title, job_description, job_type, location, date_obj, link
+            company, job_description, job_type, location, date_obj, link
         )
         return {"status": "success", "message": "job posting successfully submit"}, 200
 

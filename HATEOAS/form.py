@@ -22,6 +22,12 @@ LOGIN_FORM_FLDS = [
         ff.PARAM_TYPE: ff.QUERY_STR,
         ff.OPT: False,
     },
+    # {
+    #     FLD_NM: EMAIL,
+    #     ff.QSTN: 'Email',
+    #     ff.PARAM_TYPE: ff.QUERY_STR,
+    #     ff.OPT: False,
+    # },
     {
         FLD_NM: PASSWORD,
         ff.QSTN: 'Password',
