@@ -315,3 +315,20 @@ def test_get_username_by_id_fails():
     except KeyError:
         assert True
 
+def test_get_job_by_id_works():
+    identification = db.add_job_posting(
+        "HELLO WORLD", "test", "wash123123", "wash123123", "12-12-2023", "test"
+    ).inserted_id
+    job = db.get_job_by_id(identification)
+    assert job["company"] == "HELLO WORLD"
+    assert job["job_description"] == "test"
+    assert job["job_type"] == "wash123123"
+    assert job["location"] == "wash123123"
+    assert job["date"] == "12-12-2023"
+    dbc.client[TEST_DB]["jobs"].delete_one({"_id": identification})
+
+def test_get_job_by_id_fails():
+    try:
+        db.get_job_by_id(invalid_id)
+    except KeyError:
+        assert True

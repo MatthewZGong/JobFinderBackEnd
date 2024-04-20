@@ -47,6 +47,7 @@ HELLO_EP = "/hello_world"
 FORM_EP = "/form"
 HELLO_RESP = "HELLO WORLD"
 GET_USERNAME = "get_username_by_id"
+GET_JOB_BY_ID = "get_job_by_id"
 
 
 @api.route(HELLO_EP)
@@ -641,3 +642,25 @@ class GetUsername(Resource):
         except Exception:
             return {"message": "Invalid User"}, 400
         return {'username': username}, 200
+
+
+@api.route(f"/{GET_JOB_BY_ID}")
+class GetJobByID(Resource):
+    @api.response(HTTPStatus.OK, "Success")
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
+    @api.doc(
+        params={
+            "job_id": {
+                "description": "Job ID",
+                "type": "string",
+                "default": "Test1",
+            }
+        }
+    )
+    def get(self):
+        job_id = request.args.get("job_id")
+        try:
+            job = db.get_job_by_id(ObjectId(job_id))
+        except Exception:
+            return {"message": "Invalid Job"}, 400
+        return job, 200

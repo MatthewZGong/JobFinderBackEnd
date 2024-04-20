@@ -285,5 +285,15 @@ def get_username_by_id(user_id):
     else:
         return False
 
+
+def get_job_by_id(job_id):
+    job = dbc.fetch_one("jobs", {"_id": job_id})
+    if job:
+        job['_id'] = str(job['_id'])
+        job['date'] = str(job['date'])
+        return job
+    else:
+        return False
+
 # if __name__ == "__main__":
 #     add_account("test", "test@gmail.com", "test")

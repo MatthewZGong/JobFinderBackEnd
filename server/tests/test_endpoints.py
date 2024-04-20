@@ -471,4 +471,32 @@ def test_get_username_fails(mock_get):
     resp = TEST_CLIENT.get(f"/{ep.GET_USERNAME}", query_string=test)
     assert resp._status_code == 400
 
+@patch("db.db.get_job_by_id", return_value={"_id": "507f191e810c19729de860ea",
+                                            "company": "Apple", 
+                                            "job_description": "Test3", 
+                                            "job_type": "Intern", 
+                                            "location": "SF",
+                                            "date": "2023-12-09"}, autospec=True)
+def test_get_job_by_id_works(mock_get):
+    test = {
+        "job_id": "662430e9ab497b02d0c59db0",
+    }
+    resp = TEST_CLIENT.get(f"/{ep.GET_JOB_BY_ID}", query_string=test)
+    assert resp._status_code == 200 
+    assert resp.get_json()["_id"]== "507f191e810c19729de860ea"
+    assert resp.get_json()["date"]== "2023-12-09"
+    assert resp.get_json()["company"]== "Apple"
+    assert resp.get_json()["job_description"]== "Test3"
+    assert resp.get_json()["job_type"]== "Intern"
+    assert resp.get_json()["location"]== "SF"
+
+@patch("db.db.get_job_by_id", return_value=False, autospec=True)
+def test_get_job_by_id_fails(mock_get):
+    test = {
+        "job_id": "507f191e810c19729de860eamak",
+    }
+    resp = TEST_CLIENT.get(f"/{ep.GET_JOB_BY_ID}", query_string=test)
+    assert resp._status_code == 400
+
+
 
