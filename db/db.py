@@ -278,5 +278,12 @@ def get_user_id(username, password):
         return False
 
 
+def get_username_by_id(user_id):
+    user = dbc.fetch_one("users", {"_id": user_id})
+    if user:
+        return user["username"]
+    else:
+        return False
+
 # if __name__ == "__main__":
 #     add_account("test", "test@gmail.com", "test")

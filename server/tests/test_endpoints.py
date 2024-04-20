@@ -454,3 +454,21 @@ def test_login_fails(mock_get):
     assert resp._status_code == 406
 
 
+@patch("db.db.get_username_by_id", return_value="FAKE_USERNAME_123945y43210123", autospec=True)
+def test_get_username_works(mock_get):
+    test = {
+        "user_id": "662430e9ab497b02d0c59db0",
+    }
+    resp = TEST_CLIENT.get(f"/{ep.GET_USERNAME}", query_string=test)
+    assert resp._status_code == 200 
+    assert resp.get_json()["username"]== "FAKE_USERNAME_123945y43210123"
+
+@patch("db.db.get_username_by_id", return_value=False, autospec=True)
+def test_get_username_fails(mock_get):
+    test = {
+        "user_id": "FAKE_USERNAME_123945y43210123",
+    }
+    resp = TEST_CLIENT.get(f"/{ep.GET_USERNAME}", query_string=test)
+    assert resp._status_code == 400
+
+

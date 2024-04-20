@@ -297,3 +297,21 @@ def test_get_user_id_fails():
     fpassword = "FakePassword"
     assert db.get_user_id(fuser, fpassword) == False
 
+
+def test_get_username_by_id_works():
+    fuser = "testAccForGetUser"
+    femail = "Fakemail123123123.com"
+    fpassword = "FakePassword"
+    identification = db.add_account(
+       fuser , femail, fpassword
+    ).inserted_id
+    assert db.get_username_by_id(identification) == fuser
+    dbc.client[TEST_DB]["users"].delete_one({"_id": identification})
+
+
+def test_get_username_by_id_fails():
+    try:
+        db.get_username_by_id(invalid_id)
+    except KeyError:
+        assert True
+

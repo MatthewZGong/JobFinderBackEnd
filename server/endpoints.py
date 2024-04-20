@@ -46,6 +46,7 @@ LOGIN = "login"
 HELLO_EP = "/hello_world"
 FORM_EP = "/form"
 HELLO_RESP = "HELLO WORLD"
+GET_USERNAME = "get_username_by_id"
 
 
 @api.route(HELLO_EP)
@@ -618,3 +619,25 @@ class DeleteUserReport(Resource):
         except Exception as e:
             raise wz.NotAcceptable(str(e))
         return "Successfully deleted", 200
+
+
+@api.route(f"/{GET_USERNAME}")
+class GetUsername(Resource):
+    @api.response(HTTPStatus.OK, "Success")
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
+    @api.doc(
+        params={
+            "user_id": {
+                "description": "User ID",
+                "type": "string",
+                "default": "Test1",
+            }
+        }
+    )
+    def get(self):
+        user_id = request.args.get("user_id")
+        try:
+            username = db.get_username_by_id(ObjectId(user_id))
+        except Exception:
+            return {"message": "Invalid User"}, 400
+        return {'username': username}, 200
