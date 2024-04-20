@@ -215,6 +215,7 @@ class UpdateJobPosting(Resource):
             "job_type": {"description": "Job Type", "type": "string"},
             "location": {"description": "Location", "type": "string"},
             "date": {"description": "Date", "type": str},
+            "link": {"description": "Link", "type": "string"},
         }
     )
     def put(self):
@@ -230,6 +231,7 @@ class UpdateJobPosting(Resource):
         job_type = request.args.get("job_type")
         location = request.args.get("location")
         date = request.args.get("date")
+        link = request.args.get("link")
         date_obj = None
         if date is not None:
             try:
@@ -245,9 +247,14 @@ class UpdateJobPosting(Resource):
                 "job_type": job_type,
                 "location": location,
                 "date": date_obj,
+                "link": link,
             }
-            changes = filter(lambda x: changes[x] is not None, changes)
-
+            filt = []
+            for key in changes:
+                if changes[key] is None:
+                    filt.append(key)
+            for key in filt:
+                del changes[key]
             db.update_job(job_id, changes)
         except Exception as e:
             print(e)
