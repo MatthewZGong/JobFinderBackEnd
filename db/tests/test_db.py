@@ -125,7 +125,7 @@ def temp_jobs_1():
 def test_delete_job_past_date_works(temp_jobs_1, temp_user):
     res = dbc.fetch_all("jobs")
     # I will change user_id to admin_id when we have admin table
-    db.delete_job_past_date(user_id, datetime.datetime(2022, 5, 17))
+    db.delete_job_past_date(datetime.datetime(2022, 5, 17))
     res = dbc.fetch_all("jobs")
     # for test this function, I create two jobs, job_id_1 is before (2022, 5, 17), the other is after
     # it should delete job_id_1

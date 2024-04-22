@@ -384,11 +384,6 @@ class dev_delete_past_date(Resource):
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
     @api.doc(
         params={
-            "admin_id": {
-                "description": "User ID",
-                "type": "string",
-                "default": "Test1",
-            },
             "invalid_past_date": {
                 "description": "Invalid Past Date",
                 "type": "datetime",
@@ -397,13 +392,10 @@ class dev_delete_past_date(Resource):
         }
     )
     def delete(self):
-        admin_id = request.args.get("admin_id")
-        if admin_id is None:
-            raise wz.NotAcceptable("Expected json with admin_ID")
         try:
             invalid_past_date_s = request.args.get("invalid_past_date")
             invalid_past_date = datetime.strptime(invalid_past_date_s, "%Y-%m-%d")
-            db.delete_job_past_date(admin_id, invalid_past_date)
+            db.delete_job_past_date(invalid_past_date)
             return {"status": "success", "message": "Jobs deleted"}, 200
         except Exception as e:
             raise wz.NotAcceptable(str(e))

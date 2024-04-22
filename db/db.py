@@ -105,7 +105,7 @@ def delete_job(admin_id, job_id):
     return dbc.del_one("jobs", {"_id": job_id})
 
 
-def delete_job_past_date(admin_id, past_date):
+def delete_job_past_date(past_date):
     """flushes all entries past a date"""
     if not isinstance(past_date, datetime.datetime):
         raise TypeError("past_date must be datetime")
