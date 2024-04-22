@@ -39,7 +39,7 @@ UPDATE_PREFERENCES = "update_preferences"
 GET_PREFERENCES = "get_preferences"
 READ_MOST_RECENT_JOBS = "read_most_recent_jobs"
 ADMIN_DELETE_JOBS = "admin_delete_jobs"
-ADMIN_DELETE_PAST_DATE = "admin_delete_past_date"
+DEV_DELETE_PAST_DATE = "dev_delete_past_date"
 DELETE_USER_REPORT = "delete_user_report"
 GET_JOBS_BASED_ON_PREFERENCE = "get_job_based_on_preference"
 LOGIN = "login"
@@ -374,10 +374,10 @@ class admin_delete_jobs(Resource):
             raise wz.NotAcceptable(str(e))
 
 
-@api.route(f"/{ADMIN_DELETE_PAST_DATE}")
-class admin_delete_past_date(Resource):
+@api.route(f"/{DEV_DELETE_PAST_DATE}")
+class dev_delete_past_date(Resource):
     """
-    This endpoint allows admin to delete all entries in the past certain date.
+    Developer only endpoint deletes all entries in the past certain date.
     """
 
     @api.response(HTTPStatus.OK, "Success")

@@ -345,24 +345,24 @@ def test_admin_delete_jobs_BAD_for_adminID(mock_add):
 
 
 @patch("db.db.delete_job_past_date", return_value=True, autospec=True)
-def test_admin_delete_past_date_OK(mock_add):
+def test_dev_delete_past_date_OK(mock_add):
     invalid_past_date = datetime(2022, 11, 30)
     # Convert the datetime object to a string with a specific format
     formatted_date = invalid_past_date.strftime("%Y-%m-%d")
     resp = TEST_CLIENT.delete(
-        f"/{ep.ADMIN_DELETE_PAST_DATE}",
+        f"/{ep.DEV_DELETE_PAST_DATE}",
         query_string={"admin_id": 1, "invalid_past_date": formatted_date},
     )
     assert resp.status_code == OK
 
 
 @patch("db.db.delete_job_past_date", side_effect=KeyError(), autospec=True)
-def test_admin_delete_past_date_bad(mock_add):
+def test_dev_delete_past_date_bad(mock_add):
     invalid_past_date = datetime(2022, 11, 30)
     # Convert the datetime object to a string with a specific format
     formatted_date = invalid_past_date.strftime("%Y-%m-%d")
     resp = TEST_CLIENT.delete(
-        f"/{ep.ADMIN_DELETE_PAST_DATE}",
+        f"/{ep.DEV_DELETE_PAST_DATE}",
         query_string={"admin_id": 9, "invalid_past_date": formatted_date},
     )
     assert resp.status_code == NOT_ACCEPTABLE
