@@ -194,7 +194,7 @@ def test_update_job_fails():
 
 def test_add_job_works():
     res = db.add_job_posting(
-        "HELLO WORLD", "test", "test", "test", "test", "test"
+        "HELLO WORLD", "test", "test", "test", datetime.datetime(2023, 12, 12), "test"
     ).inserted_id
     search = dbc.fetch_one("jobs", {"_id": res})
     assert search["company"] == "HELLO WORLD"
@@ -250,7 +250,7 @@ def test_get_jobs_by_preference_works():
     ).inserted_id
     db.update_preference(identification, "wash123123", "any")
     job_inserted_id = db.add_job_posting(
-        "HELLO WORLD", "test", "wash123123", "wash123123", "test", "test"
+        "HELLO WORLD", "test", "wash123123", "wash123123", datetime.datetime(2023, 12, 12), "test"
     ).inserted_id
     res = db.get_jobs_by_preference(
         dbc.fetch_one("users", {"_id": identification})["preference"]
@@ -317,14 +317,13 @@ def test_get_username_by_id_fails():
 
 def test_get_job_by_id_works():
     identification = db.add_job_posting(
-        "HELLO WORLD", "test", "wash123123", "wash123123", "12-12-2023", "test"
+        "HELLO WORLD", "test", "wash123123", "wash123123", datetime.datetime(2023, 12, 12), "test"
     ).inserted_id
     job = db.get_job_by_id(identification)
     assert job["company"] == "HELLO WORLD"
     assert job["job_description"] == "test"
     assert job["job_type"] == "wash123123"
     assert job["location"] == "wash123123"
-    assert job["date"] == "12-12-2023"
     dbc.client[TEST_DB]["jobs"].delete_one({"_id": identification})
 
 def test_get_job_by_id_fails():

@@ -110,6 +110,10 @@ def update_doc(collection, filters, update_dict, db=DB_NAME):
     return client[db][collection].update_one(filters, {"$set": update_dict})
 
 
+def aggregate_job(pipeline):
+    return client[DB_NAME]["jobs"].aggregate(pipeline)
+
+
 # if __name__ == "__main__":
 #     test = connect_db()
 #     user_id = ObjectId("656a18de7f688c9fa2fe1006")

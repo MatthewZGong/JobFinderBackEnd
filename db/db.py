@@ -1,6 +1,11 @@
 import db.db_connect as dbc
 import datetime
 from copy import deepcopy
+import openai
+import time
+import random
+import os
+
 
 """
 This file will manage interactions with our data store.
@@ -8,8 +13,13 @@ At first, it will just contain stubs that return fake data.
 Gradually, we will fill in actual calls to our datastore.
 """
 
+
+# import db_connect as dbc
 # print(__name__)
 dbc.connect_db()
+open_ai_client = None
+if os.environ.get("OPENAI_API_KEY") is None:
+    open_ai_client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 job_data = {
     1: {
@@ -60,6 +70,17 @@ def add_job_posting(company, job_description, job_type, location, date, link):
         or link is None
     ):
         raise ValueError("None value found")
+    vector = generate_vector(
+        company
+        + " "
+        + location
+        + " "
+        + job_type
+        + " "
+        + date.strftime("%Y-%m-%d")
+        + " "
+        + job_description
+    )
     return dbc.insert_one(
         "jobs",
         {
@@ -68,7 +89,8 @@ def add_job_posting(company, job_description, job_type, location, date, link):
             "job_type": job_type,
             "location": location,
             "date": date,
-            "link": link
+            "link": link,
+            "embedding_vector": vector,
         },
     )
 
@@ -289,11 +311,71 @@ def get_username_by_id(user_id):
 def get_job_by_id(job_id):
     job = dbc.fetch_one("jobs", {"_id": job_id})
     if job:
-        job['_id'] = str(job['_id'])
-        job['date'] = str(job['date'])
+        job["_id"] = str(job["_id"])
+        job["date"] = str(job["date"])
         return job
     else:
         return False
 
-# if __name__ == "__main__":
-#     add_account("test", "test@gmail.com", "test")
+
+def generate_vector(text):
+    # print(os.environ.get("OPENAI_API_KEY"))
+    if open_ai_client is None:
+        return [0]*1536
+    attempt = 0
+    while True:
+        try:
+            response = open_ai_client.embeddings.create(
+                input=text, model="text-embedding-ada-002"
+            )
+            return response.data[0].embedding
+        except openai.RateLimitError:
+            attempt += 1
+            wait_time = min(2 ** attempt + random.random(), 60)
+            if attempt == 10:
+                break
+            time.sleep(wait_time)
+        except Exception:
+            break
+    return None
+
+
+def search_jobs_by_vector(text,):
+    vector = generate_vector(text)
+    pipeline = [
+        {
+            "$vectorSearch": {
+                "index": "vector_index",
+                "path": "embedding_vector",
+                "queryVector": vector,
+                "numCandidates": 10,
+                "limit": 3,
+            }
+        }
+    ]
+    results = dbc.aggregate_job(pipeline)
+    return results
+
+
+def re_embed_all_jobs():
+    jobs = dbc.fetch_all("jobs")
+    for i, job in enumerate(jobs):
+        job["embedding_vector"] = generate_vector(
+            job["company"]
+            + " "
+            + job["location"]
+            + " "
+            + job["job_type"]
+            + " "
+            + job["date"].strftime("%Y-%m-%d")
+            + " "
+            + job["job_description"]
+        )
+        update_job(job["_id"], job)
+        if i % 10 == 0:
+            print(f"Re-embedding {i} jobs")
+
+
+if __name__ == "__main__":
+    re_embed_all_jobs()
+    # add_account("test", "test@gmail.com", "test")
