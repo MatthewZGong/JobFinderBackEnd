@@ -322,7 +322,7 @@ def get_job_by_id(job_id):
 def generate_vector(text):
     # print(os.environ.get("OPENAI_API_KEY"))
     if open_ai_client is None:
-        return [0.0]*1536
+        return [0.0] * 1536
     attempt = 0
     while True:
         try:
@@ -349,7 +349,7 @@ def search_jobs_by_vector(text, limit=10):
                 "index": "vector_index",
                 "path": "embedding_vector",
                 "queryVector": vector,
-                "numCandidates": limit*3,
+                "numCandidates": limit * 3,
                 "limit": limit,
             }
         }
@@ -357,13 +357,15 @@ def search_jobs_by_vector(text, limit=10):
     cursor = dbc.aggregate_job(pipeline)
     # print("HI I GOT HERE 3")
     results = [
-        {"job_id": str(result["_id"]), 
-         "company": result["company"], 
-         "job_description": result["job_description"], 
-         "job_type": result["job_type"], 
-         "location": result["location"], 
-         "date": str(result["date"].date()),
-         "link": result["link"]}
+        {
+            "job_id": str(result["_id"]),
+            "company": result["company"],
+            "job_description": result["job_description"],
+            "job_type": result["job_type"],
+            "location": result["location"],
+            "date": str(result["date"].date()),
+            "link": result["link"],
+        }
         for result in cursor
     ]
     return results

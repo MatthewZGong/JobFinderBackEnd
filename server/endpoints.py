@@ -50,7 +50,6 @@ GET_USERNAME = "get_username_by_id"
 GET_JOB_BY_ID = "get_job_by_id"
 
 
-
 @api.route(HELLO_EP)
 class HelloWorld(Resource):
     """

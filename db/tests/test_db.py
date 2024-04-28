@@ -27,6 +27,7 @@ def temp_user():
             "_id": job_id,
             "description": "Janitor1",
             "date": datetime.datetime(2020, 5, 17),
+            "embedding_vector": [0.0] * 1536,
         }
     )
     # yield to our test function
@@ -107,6 +108,7 @@ def temp_jobs_1():
             "_id": job_id_1,
             "description": "Janitor2",
             "date": datetime.datetime(2020, 5, 17),
+            "embedding_vector": [0.0] * 1536,
         }
     )
     dbc.client[TEST_DB]["jobs"].insert_one(
@@ -114,6 +116,7 @@ def temp_jobs_1():
             "_id": job_id_2,
             "description": "Janit",
             "date": datetime.datetime(2024, 5, 17),
+            "embedding_vector": [0.0] * 1536,
         }
     )
     yield
