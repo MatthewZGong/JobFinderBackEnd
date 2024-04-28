@@ -50,6 +50,7 @@ GET_USERNAME = "get_username_by_id"
 GET_JOB_BY_ID = "get_job_by_id"
 
 
+
 @api.route(HELLO_EP)
 class HelloWorld(Resource):
     """
@@ -663,3 +664,25 @@ class GetJobByID(Resource):
         except Exception:
             return {"message": "Invalid Job"}, 400
         return job, 200
+
+
+@api.route("/search_jobs_by_vector")
+class SearchJobsByVector(Resource):
+    @api.response(HTTPStatus.OK, "Success")
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
+    @api.doc(
+        params={
+            "text": {
+                "description": "text",
+                "type": "string",
+                "default": "Apple",
+            }
+        }
+    )
+    def get(self):
+        text = request.args.get("text")
+        try:
+            jobs = db.search_jobs_by_vector(text)
+        except Exception as e:
+            return {"message": str(e)}, 400
+        return jobs, 200
