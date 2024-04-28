@@ -338,7 +338,7 @@ def generate_vector(text):
             time.sleep(wait_time)
         except Exception:
             break
-    return None
+    return [0.0000001] * 1536
 
 
 def search_jobs_by_vector(text, limit=10):
