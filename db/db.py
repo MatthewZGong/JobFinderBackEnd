@@ -322,7 +322,7 @@ def get_job_by_id(job_id):
 def generate_vector(text):
     # print(os.environ.get("OPENAI_API_KEY"))
     if open_ai_client is None:
-        return [0.0] * 1536
+        return [0.0000001] * 1536
     attempt = 0
     while True:
         try:
