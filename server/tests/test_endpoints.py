@@ -66,8 +66,8 @@ def test_update_user_info(temp_user):
         f"/{ep.UPDATE_USER_INFO}",
         query_string={
             "_id": "507f1f77bcf86cd799439011",
-            "username": "fortnite_player",
-            "email": "fortnite@epic.com",
+            "new_username": "fortnite_player",
+            "new_email": "fortnite@epic.com",
         },
     )
     resp_json = resp.get_json()

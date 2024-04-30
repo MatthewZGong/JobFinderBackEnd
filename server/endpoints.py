@@ -124,14 +124,12 @@ class UpdateUserInfo(Resource):
         user_id = request.args.get("_id")
         if user_id is None:
             raise wz.NotAcceptable("Expected json with user_ID")
-        email = request.args.get("email")
-        if email is None:
-            raise wz.NotAcceptable("Expected json with email")
-        username = request.args.get("username")
-        if username is None:
-            raise wz.NotAcceptable("Expected json with username")
         new_email = request.args.get("new_email")
         new_username = request.args.get("new_username")
+        if new_email is None:
+            raise wz.NotAcceptable("Expected json with email")
+        if new_username is None:
+            raise wz.NotAcceptable("Expected json with username")
         changes = {"email": new_email, "username": new_username}
         try:
             db.update_account(ObjectId(user_id), changes)
