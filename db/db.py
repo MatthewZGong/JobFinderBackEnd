@@ -182,6 +182,9 @@ def add_account(username, email, password):
 def get_jobs_by_preference(preference):
     """
     function to get jobs based on user preference, any word in user preference will match the jobs
+    ex: user preference location is Queens, NY
+        jobs location is Brooklyn, NY 
+        it will still match
     """
     if (
         not isinstance(preference, dict)
@@ -202,11 +205,13 @@ def get_jobs_by_preference(preference):
         if job_copy not in return_list:
             job_location = job_copy["location"]
             preference_location = preference["location"]
-            
+
             if preference_location == "any":
                 location_matched = True
             else:
-                location_matched = any(word.lower() in job_location.lower().split(', ') for word in preference_location.split(', '))
+                preference_location_words = preference_location.lower().split(', ')
+                job_location_words = job_location.lower().split(', ')
+                location_matched = any(word in job_location_words for word in preference_location_words)
 
             job_type = job_copy["job_type"]
             preference_job_type = preference["job_type"]
@@ -214,7 +219,9 @@ def get_jobs_by_preference(preference):
             if preference_job_type == "any":
                 job_type_matched = True
             else:
-                job_type_matched = any(word.lower() in job_type.lower().split() for word in preference_job_type.split())
+                preference_type_words = preference_job_type.lower().split()
+                job_type_words = job_type.lower().split()
+                job_type_matched = any(word in job_type_words for word in preference_type_words)
 
             if location_matched and job_type_matched:
                 return_list.append(job_copy)
