@@ -8,16 +8,19 @@ def scrap_job_table(url):
     res = requests.get(url)
     soup = BeautifulSoup(res.content, 'html.parser')
     div = soup.find('div', class_='Box-sc-g0xbh4-0 ehcSsh')
-
+    company = None
     jobs = div.find('table')
     for job in jobs.find_all('tr'):
         columns = job.find_all('td')
         if(len(columns) != 5): 
             continue
-        company = columns[0].text
+        if columns[0].text != '↳':
+            company = columns[0].text
         job_title = columns[1].text
         location = columns[2].text
         link = str(columns[3].find('a')['href']).removesuffix('&utm_source=Simplify&ref=Simplify')
+        link = link.removesuffix('&utm_source=Simplify')
+        link = link.removesuffix('&ref=Simplify')
         date = columns[4].text
         month, day = date.split()
         date = f"{month} {day}"
@@ -29,3 +32,5 @@ def scrap_job_table(url):
         # break
     pass 
 
+if __name__ == "__main__":
+    scrap_job_table("https://github.com/SimplifyJobs/Summer2024-Internships")

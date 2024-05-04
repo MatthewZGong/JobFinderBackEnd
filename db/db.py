@@ -154,7 +154,7 @@ def get_most_recent_job(numbers):
         del entry["_id"]
         del entry["embedding_vector"]
     # print(res)
-    return res[::-1]
+    return res
 
 
 def add_account(username, email, password):
