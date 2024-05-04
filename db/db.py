@@ -181,7 +181,7 @@ def add_account(username, email, password):
 
 def get_jobs_by_preference(preference):
     """
-    function to get jobs based on user preference
+    function to get jobs based on user preference, any word in user preference will match the jobs
     """
     if (
         not isinstance(preference, dict)
@@ -200,13 +200,23 @@ def get_jobs_by_preference(preference):
         job_copy["date"] = str(job_copy["date"])
 
         if job_copy not in return_list:
-            if (
-                preference["location"] == "any"
-                or job_copy["location"] == preference["location"]
-            ) and (
-                preference["job_type"] == "any"
-                or job_copy["job_type"] == preference["job_type"]
-            ):
+            job_location = job_copy["location"]
+            preference_location = preference["location"]
+            
+            if preference_location == "any":
+                location_matched = True
+            else:
+                location_matched = any(word.lower() in job_location.lower().split(', ') for word in preference_location.split())
+
+            job_type = job_copy["job_type"]
+            preference_job_type = preference["job_type"]
+
+            if preference_job_type == "any":
+                job_type_matched = True
+            else:
+                job_type_matched = any(word.lower() in job_type.lower().split() for word in preference_job_type.split())
+
+            if location_matched and job_type_matched:
                 return_list.append(job_copy)
     return return_list
 
