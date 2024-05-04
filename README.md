@@ -184,6 +184,33 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 
 - `user_id` (string): ID of the user.
 
+### /get_jobs_by_id 
+#### `GET`
+- Allows user to get jobs based on their job ID. Returns jobs that matches their job ID.
+#### Parameters
+- `job_id` (string): ID of the job.
+
+
+### get_username_by_id
+#### `GET`
+- Allows user to get username based on their user ID. Returns username that matches their user ID.
+#### Parameters
+- `user_id` (string): ID of the user.   
+
+### /get_jobs_by_vector
+
+#### `GET`
+
+- Allows user to get jobs based on a search query. The search query is a string that is used to generate a vector and then used to search for jobs that match the vector.
+- Returns jobs that matches the search query.
+- The vector is generated using the OpenAI text-embedding-ada-002 model.
+- The search query is passed to the OpenAI text-embedding-ada-002 model and the resulting vector is used to search for jobs that match the vector.
+
+#### Parameters
+
+- `query` (string): The search query.
+- `limit` (int): The number of jobs to return.
+
 
 
 
