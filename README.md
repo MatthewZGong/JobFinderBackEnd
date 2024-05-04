@@ -174,16 +174,6 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 
 - `report_id` (string): ID of the user report to be deleted.
 
-### /get_job_based_on_preference
-
-#### `GET`
-
-- Allows user to get jobs based on their user preferences. Returns jobs that matches their preferred location or preffered job type.
-
-#### Parameters
-
-- `user_id` (string): ID of the user.
-
 ### /get_jobs_by_id 
 #### `GET`
 - Allows user to get jobs based on their job ID. Returns jobs that matches their job ID.

@@ -1,6 +1,5 @@
 import db.db_connect as dbc
 import datetime
-from copy import deepcopy
 import openai
 import time
 import random
@@ -177,55 +176,6 @@ def add_account(username, email, password):
                 "preference": {"location": "any", "job_type": "any"},
             },
         )
-
-
-def get_jobs_by_preference(preference):
-    """
-    function to get jobs based on user preference, any word in user preference will match the jobs
-    ex: user preference location is Queens, NY
-        jobs location is Brooklyn, NY
-        it will still match
-    """
-    if (
-        not isinstance(preference, dict)
-        or "location" not in preference
-        or "job_type" not in preference
-    ):
-        raise TypeError(
-            "preference must be a dictionary with\
-                        'location' and 'job_type' keys"
-        )
-    all = dbc.fetch_all("jobs")
-    return_list = []
-    for job in all:
-        job_copy = deepcopy(job)
-        job_copy["_id"] = str(job_copy["_id"])
-        job_copy["date"] = str(job_copy["date"])
-
-        if job_copy not in return_list:
-            job_location = job_copy["location"]
-            preference_location = preference["location"]
-
-            if preference_location == "any":
-                location_matched = True
-            else:
-                preference_loc_words = preference_location.lower().split(', ')
-                job_loc_words = job_location.lower().split(', ')
-                location_matched = any(word in job_loc_words for word in preference_loc_words)
-
-            job_type = job_copy["job_type"]
-            preference_job_type = preference["job_type"]
-
-            if preference_job_type == "any":
-                job_type_matched = True
-            else:
-                preference_type_words = preference_job_type.lower().split()
-                job_type_words = job_type.lower().split()
-                job_type_matched = any(word in job_type_words for word in preference_type_words)
-
-            if location_matched and job_type_matched:
-                return_list.append(job_copy)
-    return return_list
 
 
 def update_preference(user_id, preferred_location, preferred_type):
