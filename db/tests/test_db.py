@@ -251,9 +251,9 @@ def test_get_jobs_by_preference_works():
     identification = db.add_account(
         "testAccForPreference", "Fakemail123123.com", "FakePassword"
     ).inserted_id
-    db.update_preference(identification, "wash123123", "any")
+    db.update_preference(identification, "Queens, NY", "software Developer")
     job_inserted_id = db.add_job_posting(
-        "HELLO WORLD", "test", "wash123123", "wash123123", datetime.datetime(2023, 12, 12), "test"
+        "HELLO WORLD", "test", "Software Engineer", "Brooklyn, NY", datetime.datetime(2023, 12, 12), "test"
     ).inserted_id
     res = db.get_jobs_by_preference(
         dbc.fetch_one("users", {"_id": identification})["preference"]
