@@ -206,7 +206,7 @@ def get_jobs_by_preference(preference):
             if preference_location == "any":
                 location_matched = True
             else:
-                location_matched = any(word.lower() in job_location.lower().split(', ') for word in preference_location.split())
+                location_matched = any(word.lower() in job_location.lower().split(', ') for word in preference_location.split(', '))
 
             job_type = job_copy["job_type"]
             preference_job_type = preference["job_type"]
