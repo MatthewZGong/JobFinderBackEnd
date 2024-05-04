@@ -183,7 +183,7 @@ def get_jobs_by_preference(preference):
     """
     function to get jobs based on user preference, any word in user preference will match the jobs
     ex: user preference location is Queens, NY
-        jobs location is Brooklyn, NY 
+        jobs location is Brooklyn, NY
         it will still match
     """
     if (
@@ -209,9 +209,9 @@ def get_jobs_by_preference(preference):
             if preference_location == "any":
                 location_matched = True
             else:
-                preference_location_words = preference_location.lower().split(', ')
-                job_location_words = job_location.lower().split(', ')
-                location_matched = any(word in job_location_words for word in preference_location_words)
+                preference_loc_words = preference_location.lower().split(', ')
+                job_loc_words = job_location.lower().split(', ')
+                location_matched = any(word in job_loc_words for word in preference_loc_words)
 
             job_type = job_copy["job_type"]
             preference_job_type = preference["job_type"]
