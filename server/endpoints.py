@@ -48,6 +48,7 @@ FORM_EP = "/form"
 HELLO_RESP = "HELLO WORLD"
 GET_USERNAME = "get_username_by_id"
 GET_JOB_BY_ID = "get_job_by_id"
+GET_JOBS_BY_VECTOR = "search_jobs_by_vector"
 
 
 @api.route(HELLO_EP)
@@ -663,23 +664,30 @@ class GetJobByID(Resource):
         return job, 200
 
 
-@api.route("/search_jobs_by_vector")
+@api.route(f'/{GET_JOBS_BY_VECTOR}')
 class SearchJobsByVector(Resource):
     @api.response(HTTPStatus.OK, "Success")
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
     @api.doc(
         params={
-            "text": {
+            "query": {
                 "description": "text",
                 "type": "string",
                 "default": "Apple",
+            },
+            "limit": {
+                "description": "limit",
+                "type": "int",
+                "default": 10,
             }
         }
     )
     def get(self):
-        text = request.args.get("text")
+        text = request.args.get("query")
+        limit = int(request.args.get("limit"))
         try:
-            jobs = db.search_jobs_by_vector(text)
+            jobs = db.search_jobs_by_vector(text, limit)
+
         except Exception as e:
             return {"message": str(e)}, 400
         return jobs, 200
