@@ -41,6 +41,7 @@ READ_MOST_RECENT_JOBS = "read_most_recent_jobs"
 ADMIN_DELETE_JOBS = "admin_delete_jobs"
 DEV_DELETE_PAST_DATE = "dev_delete_past_date"
 DELETE_USER_REPORT = "delete_user_report"
+GET_JOBS_BASED_ON_PREFERENCE = "get_job_based_on_preference"
 LOGIN = "login"
 HELLO_EP = "/hello_world"
 FORM_EP = "/form"
@@ -306,6 +307,33 @@ class read_most_recent_jobs(Resource):
             numbers = int(request.args.get("numbers"))
             res = db.get_most_recent_job(numbers)
             return res, 200
+        except Exception as e:
+            raise wz.NotAcceptable(str(e))
+
+
+@api.route(f"/{GET_JOBS_BASED_ON_PREFERENCE}")
+class get_job_based_on_preference(Resource):
+    """
+    This endpoint allows getting jobs by user preference
+    """
+
+    @api.response(HTTPStatus.OK, "Success")
+    @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
+    @api.doc(
+        params={
+            "user_id": {
+                "description": "User ID is not publicly facing",
+                "type": "string",
+                "default": "Test1",
+            },
+        }
+    )
+    def get(self):
+        user_id = request.args.get("user_id")
+        try:
+            preference = db.check_preference(ObjectId(user_id))
+            jobs = db.get_jobs_by_preference(preference)
+            return {"Jobs": jobs}, 200
         except Exception as e:
             raise wz.NotAcceptable(str(e))
 
@@ -628,9 +656,6 @@ class GetJobByID(Resource):
         }
     )
     def get(self):
-        """
-        Retrieves a job from the database based on the provided job ID.
-        """
         job_id = request.args.get("job_id")
         try:
             job = db.get_job_by_id(ObjectId(job_id))
@@ -658,10 +683,6 @@ class SearchJobsByVector(Resource):
         }
     )
     def get(self):
-        """
-        Searches for jobs based on a given text query using a vector search
-        and returns a limited number of results.
-        """
         text = request.args.get("query")
         limit = int(request.args.get("limit"))
         try:

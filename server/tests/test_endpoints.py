@@ -280,6 +280,28 @@ def test_update_preferences_BAD(mock_add):
     assert resp.status_code == NOT_ACCEPTABLE
 
 
+@patch("db.db.update_preference", return_value=True, autospec=True)
+def test_update_preferences_BAD2(mock_add):
+    resp = TEST_CLIENT.put(
+        f"/{ep.UPDATE_PREFERENCES}", query_string={"user_id": 1, "email": "TESTING"})
+    assert resp.status_code == NOT_ACCEPTABLE
+
+
+@patch("db.db.get_jobs_by_preference", return_value=True, autospec=True)
+def test_get_jobs_based_on_preference_BAD(mock_add):
+    resp = TEST_CLIENT.get(
+        f"/{ep.GET_JOBS_BASED_ON_PREFERENCE}", query_string={"user_id": "507f191e810c19729de860ea"}
+    )
+    assert resp.status_code == NOT_ACCEPTABLE
+
+
+@patch("db.db.get_jobs_by_preference", return_value=True, autospec=True)
+def test_get_jobs_based_on_preference_BAD_2(mock_add):
+    resp = TEST_CLIENT.get(
+        f"/{ep.GET_JOBS_BASED_ON_PREFERENCE}", query_string={"user_id": 1}
+    )
+    assert resp.status_code == NOT_ACCEPTABLE
+
 
 @patch("db.db.get_most_recent_job", return_value=True, autospec=True)
 def test_read_most_recent_jobs_OK(mock_add):
@@ -392,7 +414,24 @@ def test_delete_user_report_fails(mock_add):
     assert resp._status_code == 406
 
 
+@patch("db.db.get_jobs_by_preference", return_value=True, autospec=True)
+@patch("db.db.check_preference", return_value=True, autospec=True)
+def test_get_jobs_based_on_preference_works(mock_get, mock_check):
+    test = {
+        "user_id": "507f1f77bcf86cd799439011",
+    }
+    resp = TEST_CLIENT.get(f"/{ep.GET_JOBS_BASED_ON_PREFERENCE}", query_string=test)
+    assert resp._status_code == 200
 
+
+@patch("db.db.get_jobs_by_preference", return_value=True, autospec=True)
+@patch("db.db.check_preference", return_value=True, autospec=True)
+def test_get_jobs_based_on_preference_fails(mock_get, mock_check):
+    test = {
+        "user_id": "507f1f77bcf86cd79943901",
+    }
+    resp = TEST_CLIENT.get(f"/{ep.GET_JOBS_BASED_ON_PREFERENCE}", query_string=test)
+    assert resp._status_code == 406
 
 
 @patch("db.db.get_user_id", return_value="FAKE_ID", autospec=True)
@@ -458,4 +497,6 @@ def test_get_job_by_id_fails(mock_get):
     }
     resp = TEST_CLIENT.get(f"/{ep.GET_JOB_BY_ID}", query_string=test)
     assert resp._status_code == 400
+
+
 

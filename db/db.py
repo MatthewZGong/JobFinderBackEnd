@@ -1,5 +1,6 @@
 import db.db_connect as dbc
 import datetime
+from copy import deepcopy
 import openai
 import time
 import random
@@ -176,6 +177,38 @@ def add_account(username, email, password):
                 "preference": {"location": "any", "job_type": "any"},
             },
         )
+
+
+def get_jobs_by_preference(preference):
+    """
+    function to get jobs based on user preference
+    """
+    if (
+        not isinstance(preference, dict)
+        or "location" not in preference
+        or "job_type" not in preference
+    ):
+        raise TypeError(
+            "preference must be a dictionary with\
+                        'location' and 'job_type' keys"
+        )
+    all = dbc.fetch_all("jobs")
+    return_list = []
+    for job in all:
+        job_copy = deepcopy(job)
+        job_copy["_id"] = str(job_copy["_id"])
+        job_copy["date"] = str(job_copy["date"])
+
+        if job_copy not in return_list:
+            if (
+                preference["location"] == "any"
+                or job_copy["location"] == preference["location"]
+            ) and (
+                preference["job_type"] == "any"
+                or job_copy["job_type"] == preference["job_type"]
+            ):
+                return_list.append(job_copy)
+    return return_list
 
 
 def update_preference(user_id, preferred_location, preferred_type):
