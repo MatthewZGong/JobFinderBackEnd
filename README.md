@@ -4,15 +4,35 @@ Team members: Tanzir Hasan, Matthew Gong, Shao Jin, Michelle Lin
 
 A job finder for adding/deleting and finding jobs of individual preferences. Serves as a personalized job finder where personal information and preferences are used. 
 
-An example flask rest API server.
+## Setup 
 
-To build production, type `make prod`.
+### Installation
+The project is written in Python 3.9. To install the required packages, run the following command:
 
-To create the env for a new developer, run `make dev_env`.
+1. Clone the repository to your local machine.
+2. It is recomended to use a virtual environment to install the packages. 
+    - If you are using a virtual environment, activate it before running the following commands: `python -m venv venv; source venv/bin/activate`
+    - If you are not using a virtual environment, you can skip this step.
 
-## [Progress and Goals](https://github.com/MatthewZGong/JobFinderBackEnd/blob/master/documentation/ProgressAndGoals.md)
+3. run `make dev_env` to install the required packages, for dev enviroment.
+    - you can run `make prod` for production enviroment.
+4. run `./local.sh` to start the server locally.
 
-The following endpoints are present:
+
+### Environment variables
+```
+DB_NAME=
+MONGO_USERNAME=
+MONGO_PASSWORD=
+CLOUD_MONGO=
+OPENAI_API_KEY=
+```
+- DB_NAME: The name of the MongoDB database to connect to.
+- MONGO_USERNAME: The username for the MongoDB database.
+- MONGO_PASSWORD: The password for the MongoDB database.
+- CLOUD_MONGO: Set to 1 if the database is hosted on a cloud provider, 0 if it is hosted on a local server.
+- OPENAI_API_KEY: The API key for the OpenAI API.
+
 
 ## What is this
 
