@@ -572,6 +572,10 @@ class AddNewJobPosting(Resource):
 
 @api.route(f"/{DELETE_USER_REPORT}")
 class DeleteUserReport(Resource):
+    '''
+    This endpoint allows users to delete a user report based on its ID.
+    Returns a success message if the user report is deleted.
+    '''
     @api.response(HTTPStatus.OK, "Success")
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
     @api.doc(
@@ -594,6 +598,10 @@ class DeleteUserReport(Resource):
 
 @api.route(f"/{GET_USERNAME}")
 class GetUsername(Resource):
+    '''
+    This endpoint allows users to get the username of a user based on its ID.
+    Returns the username that matches the ID.
+    '''
     @api.response(HTTPStatus.OK, "Success")
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
     @api.doc(
@@ -616,6 +624,10 @@ class GetUsername(Resource):
 
 @api.route(f"/{GET_JOB_BY_ID}")
 class GetJobByID(Resource):
+    '''
+    This endpoint allows users to get a job based on its ID.
+    Returns the job that matches the ID.
+    '''
     @api.response(HTTPStatus.OK, "Success")
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
     @api.doc(
@@ -638,6 +650,14 @@ class GetJobByID(Resource):
 
 @api.route(f'/{GET_JOBS_BY_VECTOR}')
 class SearchJobsByVector(Resource):
+    ''' 
+    This endpoint allows users to search for jobs based on a vector of job descriptions.
+    The vector is generated using the OpenAI text-embedding-ada-002 model.
+    The search query is passed to the OpenAI text-embedding-ada-002 model and the resulting vector is used to search for jobs that match the vector.
+    Returns jobs that matches the search query.
+    The vector is generated using the OpenAI text-embedding-ada-002 model.
+    The search query is passed to the OpenAI text-embedding-ada-002 model and the resulting vector is used to search for jobs that match the vector.    
+    '''
     @api.response(HTTPStatus.OK, "Success")
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
     @api.doc(
