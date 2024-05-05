@@ -81,7 +81,7 @@ def temp_jobs():
         dbc.client[TEST_DB]["jobs"].delete_one({"_id": id})
 
 @pytest.fixture(scope="function")
-def vector_search_test():
+def vector_search_test(temp_jobs):
     def _mock_vector_search(query_string, limit):
         vector = [0.1]*1536
         for i, job in enumerate(jobs_type):
@@ -565,10 +565,9 @@ def test_integration_add_new_jobs_fails():
 '''
 There would be better tests for vector search, but its is only allowed to work on atlas cluster
 '''
-# @patch("db.db.generate_vector", return_value=fake_vectors, autospec=True)
-# def test_integration_searh_jobs_by_vector_works(temp_jobs, vector_search_test):
-#     resp = TEST_CLIENT.get(f"/{ep.GET_JOBS_BY_VECTOR}", query_string={"query": "machine learning", "limit": len(companies)*len(jobs_type)})
-#     assert resp._status_code == 200
-#     assert len(resp.get_json()) == len(companies)
-  
-#     # eprint(resp.get_json())
+@patch("db.db.generate_vector", return_value=fake_vectors, autospec=True)
+def test_integration_searh_jobs_by_vector_works(temp_jobs, vector_search_test):
+    resp = TEST_CLIENT.get(f"/{ep.GET_JOBS_BY_VECTOR}", query_string={"query": "machine learning", "limit": len(companies)*len(jobs_type)})
+    assert resp._status_code == 200
+    assert len(resp.get_json()) == len(companies)
+
