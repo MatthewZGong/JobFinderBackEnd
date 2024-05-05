@@ -18,6 +18,7 @@ TEST_DB = dbc.DB_NAME
 
 user_id = ObjectId("507f1f77bcf86cd799439011")
 job_id = ObjectId("507f191e810c19729de860ea")
+report_id = ObjectId("507f1f77bcf86cd799439012")
 job_id_1 = ObjectId()
 job_id_2 = ObjectId()
 admin_id = ObjectId()
@@ -56,6 +57,14 @@ def temp_user():
     # yield to our test function
     yield
     dbc.client[TEST_DB]["users"].delete_one({"_id": user_id})
+
+@pytest.fixture(scope="function")
+def temp_user_report(): 
+    dbc.client[TEST_DB]["user_reports"].insert_one(
+        {"_id": report_id, "user_id": user_id, "job_id": job_id, "data": {"report": "page not found"}}
+    )
+    yield
+    dbc.client[TEST_DB]["user_reports"].delete_one({"_id": report_id})
 
 
 @pytest.fixture(scope="function")
@@ -133,6 +142,8 @@ def test_update_user_info(temp_user):
         "status": "success",
         "message": "User 507f1f77bcf86cd799439011 info updated",
     }
+
+
 
 
 def test_update_user_info_bad(sample_data):
@@ -599,3 +610,13 @@ def test_integration_get_user(temp_user):
     print(resp.get_json())
     assert resp._status_code == 200
     assert resp.get_json()["username"] =="GeometryDash"
+
+def test_integration_delete_user_report_works(temp_user_report):
+    assert dbc.fetch_one("user_reports", {"_id": report_id}) is not None
+    resp = TEST_CLIENT.delete(f"/{ep.DELETE_USER_REPORT}", query_string={"report_id": report_id})
+    assert dbc.fetch_one("user_reports", {"_id": report_id}) is None
+    assert resp._status_code == 200
+
+def test_integration_delete_user_report_fails(temp_user_report):
+    resp = TEST_CLIENT.delete(f"/{ep.DELETE_USER_REPORT}", query_string={"report_id": 12345})
+    assert resp._status_code == 406
