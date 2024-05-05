@@ -655,8 +655,6 @@ class SearchJobsByVector(Resource):
     The vector is generated using the OpenAI text-embedding-ada-002 model.
     The search query is passed to the OpenAI text-embedding-ada-002 model and the resulting vector is used to search for jobs that match the vector.
     Returns jobs that matches the search query.
-    The vector is generated using the OpenAI text-embedding-ada-002 model.
-    The search query is passed to the OpenAI text-embedding-ada-002 model and the resulting vector is used to search for jobs that match the vector.    
     '''
     @api.response(HTTPStatus.OK, "Success")
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
