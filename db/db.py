@@ -61,6 +61,15 @@ user_preference = {
 
 
 def add_job_posting(company, job_description, job_type, location, date, link):
+    '''
+    company: the company name
+    job_description: the job description
+    job_type: the job type
+    location: the location
+    date: the date
+    link: the link
+    This function adds a new job posting to the database.
+    '''
     if (
         company is None
         or job_type is None
@@ -94,17 +103,6 @@ def add_job_posting(company, job_description, job_type, location, date, link):
     )
 
 
-# def external_job_update(id, position, arg):
-#     if id in job_data:
-#         try:
-#             job_data[id]["data"][position] = arg
-#             return True
-#         except Exception as e:
-#             raise e
-#     else:
-#         raise KeyError("id not found")
-
-
 def update_job(job_id, changes):
     """
     function to update the parameters of a job
@@ -115,6 +113,10 @@ def update_job(job_id, changes):
 
 
 def check_account(user_id, password):
+    '''
+    user_id: the user id to be checked
+    this function checks if a user exists in the database.
+    '''
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
 
@@ -137,16 +139,14 @@ def delete_job_past_date(past_date):
 
 
 def get_most_recent_job(numbers):
-    # connect to mongodb to get the numbers of jobs based
-    # on their date and store it into job list
-    # jobs is a dictionary, key is date
-    # jobs = dbc.fetch_all_as_dict("date", "jobs")
-    # print(jobs[0][])
+    '''
+    numbers: the number of jobs to return
+    This function fetches the most recent jobs based on the number of jobs provided.
+    The jobs are fetched from the database using the "jobs" collection.
+    The jobs are fetched from the database using the "jobs" collection.
+    '''
     jobs = dbc.fetch_elements_ordered_by("jobs", "date", limit=numbers)
-    # find the most recent numbers of jobs based on key
-    # last_keys = sorted_key[-numbers:]
     res = [job for job in jobs]
-    # print(res)
     for entry in res:
         entry["date"] = str(entry["date"].date())
         entry["job_id"] = str(entry["_id"])
@@ -194,14 +194,6 @@ def update_account(user_id, changes):
     """
     if not dbc.exists_by_id(user_id, "users"):
         raise KeyError(f"No User {user_id}")
-    # user = dbc.fetch_one("users", {"_id": user_id})
-    # exist = False
-    # if changes["username"] is not user["username"]:
-    #     exist = dbc.fetch_one("users", {"username": changes["username"]})
-    # if changes["email"] is not user["email"]:
-    #     exist = dbc.fetch_one("users", {"email": changes["email"]})
-    # if (exist) and (exist["password"] is not user["password"]):
-    #     raise KeyError("User with Username or email already exists")
     return dbc.update_doc("users", {"_id": user_id}, changes)
 
 
@@ -257,6 +249,11 @@ def delete_user_report(report_id):
 
 
 def get_user_id(username, password):
+    '''
+    username: the username to be fetched
+    password: the password to be used to authenticate the user
+    This function fetches the user ID of a user based on its username and password.
+    '''
     user = dbc.fetch_one("users", {"username": username})
     print(user)
     if user:
@@ -269,6 +266,10 @@ def get_user_id(username, password):
 
 
 def get_username_by_id(user_id):
+    '''
+    user_id: the user id to be fetched
+    This function fetches the username of a user based on its ID.
+    '''
     user = dbc.fetch_one("users", {"_id": user_id})
     if user:
         return user["username"]
@@ -277,6 +278,10 @@ def get_username_by_id(user_id):
 
 
 def get_job_by_id(job_id):
+    '''
+    job_id: the job id to be fetched
+    This function fetches a job based on its ID.
+    '''
     job = dbc.fetch_one("jobs", {"_id": job_id})
     if job:
         job["_id"] = str(job["_id"])
@@ -287,6 +292,12 @@ def get_job_by_id(job_id):
 
 
 def generate_vector(text):
+    '''
+    text: the text to be embedded
+    This function generates a vector of job descriptions using the OpenAI text-embedding-ada-002 model.
+    The vector is generated using the OpenAI text-embedding-ada-002 model.
+    The vector is generated using the OpenAI text-embedding-ada-002 model.
+    '''
     # print(os.environ.get("OPENAI_API_KEY"))
     if open_ai_client is None:
         return [0.0000001] * 1536
@@ -309,6 +320,14 @@ def generate_vector(text):
 
 
 def search_jobs_by_vector(text, limit=10):
+    '''
+    text: the search query
+    limit: the number of jobs to return
+    This function searches for jobs based on a vector of job descriptions.
+    The vector is generated from the text provided.
+    then the vector is passed into mongodb to search for jobs that match the vector.
+    Returns jobs that matches the search query.
+    '''
     vector = generate_vector(text)
     pipeline = [
         {
@@ -339,6 +358,9 @@ def search_jobs_by_vector(text, limit=10):
 
 
 def re_embed_all_jobs():
+    '''
+    This function re-emebeds all jobs embeddings vectors in the database.
+    '''
     jobs = dbc.fetch_all("jobs")
     for i, job in enumerate(jobs):
         job["embedding_vector"] = generate_vector(
