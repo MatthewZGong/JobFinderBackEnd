@@ -21,9 +21,7 @@ def scrap_job_table(url):
             company = columns[0].text
         job_title = columns[1].text
         location = columns[2].text
-        link = str(columns[3].find('a')['href']).removesuffix('&utm_source=Simplify&ref=Simplify')
-        link = link.removesuffix('&utm_source=Simplify')
-        link = link.removesuffix('&ref=Simplify')
+        link = str(columns[3].find('a')['href'])
         date = columns[4].text
         month, day = date.split()
         date = f"{month} {day}"
