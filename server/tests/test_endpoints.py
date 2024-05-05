@@ -88,9 +88,9 @@ def vector_search_test(temp_jobs):
             if job == query_string: 
                 vector = fake_vectors[i]
         res = []
-        print("HI IS THIS WORKING")
+        # print("HI IS THIS WORKING")
         for job in dbc.client[TEST_DB]["jobs"].find({"embedding_vector": vector}):
-            print(job)
+            # print(job)
             job["id"] = str(job["_id"])
             job["date"] = str(job["date"].date())
             del job["_id"]
@@ -570,4 +570,8 @@ def test_integration_searh_jobs_by_vector_works(temp_jobs, vector_search_test):
     resp = TEST_CLIENT.get(f"/{ep.GET_JOBS_BY_VECTOR}", query_string={"query": "machine learning", "limit": len(companies)*len(jobs_type)})
     assert resp._status_code == 200
     assert len(resp.get_json()) == len(companies)
+    for job in resp.get_json():
+        assert job["job_type"] == "machine learning"
+    # eprint(resp.get_json())
+
 
