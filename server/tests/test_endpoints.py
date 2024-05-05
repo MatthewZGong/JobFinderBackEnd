@@ -52,7 +52,7 @@ def sample_get_users():
 @pytest.fixture(scope="function")
 def temp_user():
     dbc.client[TEST_DB]["users"].insert_one(
-        {"_id": user_id, "username": "GeometryDash"}
+        {"_id": user_id, "username": "GeometryDash", "password": "GeometryDash"}
     )
     # yield to our test function
     yield
@@ -619,4 +619,15 @@ def test_integration_delete_user_report_works(temp_user_report):
 
 def test_integration_delete_user_report_fails(temp_user_report):
     resp = TEST_CLIENT.delete(f"/{ep.DELETE_USER_REPORT}", query_string={"report_id": 12345})
+    assert resp._status_code == 406
+
+def test_integration_login_works(temp_user):
+    resp = TEST_CLIENT.get(f"/{ep.LOGIN}", query_string={"username": "GeometryDash", "password": "GeometryDash"})
+    # print(resp.get_json())
+    assert resp._status_code == 200
+    assert resp.get_json()["message"] == str(user_id)
+
+def test_integration_login_fails(temp_user):
+    resp = TEST_CLIENT.get(f"/{ep.LOGIN}", query_string={"username": "GeometryDash", "password": "GeometryDash123"})
+    # print(resp.get_json())
     assert resp._status_code == 406
