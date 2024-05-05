@@ -20,6 +20,8 @@ open_ai_client = None
 if os.environ.get("OPENAI_API_KEY") is not None:
     open_ai_client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
+DEFAULT_VECTOR = [0.0000001] * 1536
+
 job_data = {
     1: {
         "data": {"keywords": ["internship"]},
@@ -299,7 +301,7 @@ def generate_vector(text):
     '''
     # print(os.environ.get("OPENAI_API_KEY"))
     if open_ai_client is None:
-        return [0.0000001] * 1536
+        return DEFAULT_VECTOR
     attempt = 0
     while True:
         try:
@@ -315,7 +317,7 @@ def generate_vector(text):
             time.sleep(wait_time)
         except Exception:
             break
-    return [0.0000001] * 1536
+    return DEFAULT_VECTOR
 
 
 def search_jobs_by_vector(text, limit=10):

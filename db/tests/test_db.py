@@ -3,6 +3,7 @@ import db.db as db
 import pytest
 import db.db_connect as dbc
 import datetime
+import os 
 
 TEST_DB = dbc.DB_NAME
 
@@ -311,3 +312,27 @@ def test_get_job_by_id_fails():
         db.get_job_by_id(invalid_id)
     except KeyError:
         assert True
+
+def test_generate_vector_fails_properly(): 
+    '''
+    test to see if generate vectors fails silently 
+    There would be better tests for vector search, but its is only allowed to work on atlas cluster
+    '''
+    test = "embed test" 
+    if os.environ.get("OPENAI_API_KEY") is None:
+        res = db.generate_vector(test)
+        assert res == db.DEFAULT_VECTOR
+    else: 
+        return True
+    
+def test_search_jobs_by_vector_fails_properly():
+    '''
+    test to see if search jobs by vector fails silently 
+    There would be better tests for vector search, but its is only allowed to work on atlas cluster
+    '''
+    test = "embed test" 
+    if os.environ.get("OPENAI_API_KEY") is None:
+        res = db.search_jobs_by_vector(test, 1)
+        assert len(res) <= 1
+    else: 
+        return True
