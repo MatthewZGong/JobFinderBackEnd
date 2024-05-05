@@ -294,8 +294,7 @@ def get_job_by_id(job_id):
 def generate_vector(text):
     '''
     text: the text to be embedded
-    This function generates a vector of job descriptions using the OpenAI text-embedding-ada-002 model.
-    The vector is generated using the OpenAI text-embedding-ada-002 model.
+    This function generates a vector of job descriptions using the OpenAI.
     The vector is generated using the OpenAI text-embedding-ada-002 model.
     '''
     # print(os.environ.get("OPENAI_API_KEY"))

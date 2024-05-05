@@ -293,8 +293,7 @@ class read_most_recent_jobs(Resource):
     This endpoint allows getting most recent jobs.
     also returns job_id
     """
-
-    @api.response(HTTPStatus.OK,     "Success")
+    @api.response(HTTPStatus.OK,  "Success")
     @api.response(HTTPStatus.NOT_ACCEPTABLE, "Not Acceptable")
     @api.doc(params={"numbers": {"description": "amount", "type": "int", "default": 5}})
     def get(self):
@@ -650,10 +649,10 @@ class GetJobByID(Resource):
 
 @api.route(f'/{GET_JOBS_BY_VECTOR}')
 class SearchJobsByVector(Resource):
-    ''' 
+    '''
     This endpoint allows users to search for jobs based on a vector of job descriptions.
-    The vector is generated using the OpenAI text-embedding-ada-002 model.
-    The search query is passed to the OpenAI text-embedding-ada-002 model and the resulting vector is used to search for jobs that match the vector.
+    The search query is passed to the OpenAI text-embedding-ada-002 model
+    and the resulting vector is used to search for jobs that match the vector.
     Returns jobs that matches the search query.
     '''
     @api.response(HTTPStatus.OK, "Success")
