@@ -662,7 +662,7 @@ class SearchJobsByVector(Resource):
             "query": {
                 "description": "text",
                 "type": "string",
-                "default": "Apple",
+                "default": "Machine Learning",
             },
             "limit": {
                 "description": "limit",
