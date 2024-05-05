@@ -593,3 +593,9 @@ def test_integration_get_jobs_by_id_works(temp_jobs):
         assert resp.get_json()["job_description"] == jobs["job_description"]
         assert resp.get_json()["job_type"] == jobs["job_type"]
         assert resp.get_json()["location"] == jobs["location"]
+
+def test_integration_get_user(temp_user):
+    resp = TEST_CLIENT.get(f"/{ep.GET_USERNAME}", query_string={"user_id": user_id})
+    print(resp.get_json())
+    assert resp._status_code == 200
+    assert resp.get_json()["username"] =="GeometryDash"
