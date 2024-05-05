@@ -55,3 +55,4 @@ jobs:
         env:
           DEMO_PA_PWD: ${{secrets.DEMO_PA_PWD}}
           PA_API_TOKEN: ${{secrets.PA_API_TOKEN}}
+          PA_OPEN_AI_TOKEN: ${{secrets.PA_OPEN_AI_TOKEN}}
