@@ -631,3 +631,24 @@ def test_integration_login_fails(temp_user):
     resp = TEST_CLIENT.get(f"/{ep.LOGIN}", query_string={"username": "GeometryDash", "password": "GeometryDash123"})
     # print(resp.get_json())
     assert resp._status_code == 406
+
+def test_integration_update_preferences_works(temp_user):
+    resp = TEST_CLIENT.put(f"/{ep.UPDATE_PREFERENCES}", query_string={"user_id": user_id, "job_type": "type", "location": "place"})
+    assert resp._status_code == 200
+    assert resp.get_json()["status"] == "success"
+    assert dbc.fetch_one("users", {"_id": user_id})['preference']["job_type"] == "type"
+    assert dbc.fetch_one("users", {"_id": user_id})['preference']["location"] == "place"
+
+def test_integration_update_preferences_fails(temp_user):
+    resp = TEST_CLIENT.put(f"/{ep.UPDATE_PREFERENCES}", query_string={"user_id": "1234567890", "job_type": "type", "location": "place"})
+    assert resp._status_code == 406
+
+def test_integration_creaate_account_works(temp_user):
+    resp = TEST_CLIENT.put(f"/{ep.CREATE_USER_ACCOUNT}", query_string={"username": "new_user", "email": "new_email@example.com", "password": "new_password"})
+    assert resp._status_code == 200
+    assert resp.get_json()["status"] == "success"
+    dbc.client[TEST_DB]["users"].delete_one({"username": "new_user"})
+
+def test_integration_creaate_account_fails(temp_user):
+    resp = TEST_CLIENT.put(f"/{ep.CREATE_USER_ACCOUNT}", query_string={"username": "GeometryDash" , "email": "new_email@example.com", "password": "new_password"})
+    assert resp._status_code == 406
