@@ -37,7 +37,7 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 - `_id` (string): User ID
 - `changes` (object): Object containing changes to be made, including optional fields such as `email` and `username`.
 
-### /add-user-report
+### /add_user_report
 
 #### `POST`
 
@@ -49,13 +49,13 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 - `job_id` (string, optional): ID of the job being reported.
 - `report` (string): The user's report.
 
-### /get-user-reports
+### /get_user_reports
 
 #### `GET`
 
 - retrieve all user reports.
 
-### /update-job-posting
+### /update_job_posting
 
 #### `PUT`
 
@@ -71,7 +71,7 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 - `location` (string): the location of the job
 - `date` (string): the date of the posting
 
-### /delete-account
+### /delete_account
 
 #### `DELETE`
 
@@ -113,7 +113,7 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 - `admin_id` (string): ID of the admin performing the deletion.
 - `invalid_past_date` (string): Date before which jobs should be deleted.
 
-### /create-account
+### /create_account
 
 #### `PUT`
 
@@ -125,7 +125,7 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 - `email` (string): Email for the new account.
 - `password` (string): Password for the new account.
 
-### /update-preferences
+### /update_preferences
 
 #### `PUT`
 
@@ -138,7 +138,7 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 - `job_type` (string): Preferred job type for job searches.
 - `sort_by` (string): Sorting preference for job searches (e.g., Latest, Trending).
 
-### /login-to-account
+### /login_to_account
 
 #### `PUT`
 
@@ -149,7 +149,7 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 - `user_id` (string): ID of the user attempting to log in.
 - `password` (string): Password for the login attempt.
 
-### /add-new-job
+### /add_new_job
 
 #### `POST`
 
@@ -181,7 +181,7 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 - `job_id` (string): ID of the job.
 
 
-### get_username_by_id
+### /get_username_by_id
 #### `GET`
 - Allows user to get username based on their user ID. Returns username that matches their user ID.
 #### Parameters
