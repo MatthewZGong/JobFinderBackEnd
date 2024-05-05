@@ -80,21 +80,6 @@ def temp_jobs():
     for id in ids:
         dbc.client[TEST_DB]["jobs"].delete_one({"_id": id})
 
-
-@pytest.fixture(scope="function")
-def generate_vector(request):
-    def _mock_generate_vector(input_string):
-        mock_vector = [0.1]*1536
-        for i, job in enumerate(companies):
-            if job == query_string: 
-                mock_vector = fake_vectors[i]
-
-        with patch('db.db.generate_vector') as mock_generate_vector_func:
-            mock_generate_vector_func.side_effect = lambda x: mock_vector
-            yield mock_generate_vector_func
-
-    return _mock_generate_vector
-
 @pytest.fixture(scope="function")
 def vector_search_test():
     def _mock_vector_search(query_string, limit):
@@ -546,6 +531,36 @@ def test_integration_read_most_recent_jobs_jobs_num_over_limit(temp_jobs):
     resp = TEST_CLIENT.get(f"/{ep.READ_MOST_RECENT_JOBS}", query_string={"numbers": len(companies)*len(jobs_type)+1})
     assert resp._status_code == 200
     assert len(resp.get_json()) == len(companies)*len(jobs_type)
+
+
+def test_integration_add_new_jobs(): 
+    unique_job_description = "TEST IS A TEST COMING FORM YOU LIVE HAHAHAHAHA12391238473asdfbad9"
+    test = {
+        "company": companies[0],
+        "job_description": unique_job_description,
+        "job_type": "Machine Learning",
+        "location": "SF",
+        "date": "2023-12-09",
+        "link": "https://www.google.com/about/careers/applications/"
+    }
+    resp = TEST_CLIENT.post(f"/{ep.ADD_NEW_JOBS}", query_string=test)
+    assert resp._status_code == 200
+    job = dbc.fetch_one("jobs", {"job_description": unique_job_description})
+    assert job["job_description"] == unique_job_description
+    assert job["company"] == companies[0]
+    assert job["job_type"] == "Machine Learning"
+    assert job["location"] == "SF"
+    assert job["link"] == "https://www.google.com/about/careers/applications/"
+    dbc.client[TEST_DB]["jobs"].delete_one({"job_description": unique_job_description})
+
+def test_integration_add_new_jobs_fails(): 
+    unique_job_description = "TEST IS A TEST COMING FORM YOU LIVE HAHAHAHAHA12391238473asdfbad9"
+    test = {
+        "company": companies[0],
+        "job_description": unique_job_description,
+    }
+    resp = TEST_CLIENT.post(f"/{ep.ADD_NEW_JOBS}", query_string=test)
+    assert resp._status_code == 500
 
 '''
 There would be better tests for vector search, but its is only allowed to work on atlas cluster
