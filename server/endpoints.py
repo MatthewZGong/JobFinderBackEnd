@@ -673,8 +673,10 @@ class SearchJobsByVector(Resource):
     )
     def get(self):
         text = request.args.get("query")
-        limit = int(request.args.get("limit"))
         try:
+            limit = int(request.args.get("limit"))
+            if limit < 1:
+                raise ValueError("limit must be greater than 0")
             jobs = db.search_jobs_by_vector(text, limit)
 
         except Exception as e:

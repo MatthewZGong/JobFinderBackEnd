@@ -577,6 +577,9 @@ def test_integration_search_jobs_by_vector_with_no_results(temp_jobs, vector_sea
     assert resp._status_code == 200
     assert len(resp.get_json()) == 0
 
+def test_integration_search_jobs_by_vector_with_bad_limit(temp_jobs, vector_search_test):
+    resp = TEST_CLIENT.get(f"/{ep.GET_JOBS_BY_VECTOR}", query_string={"query": "machine learning", "limit": 0})
+    assert resp._status_code == 400 
 
     # eprint(resp.get_json())
 
