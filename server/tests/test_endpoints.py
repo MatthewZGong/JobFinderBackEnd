@@ -153,15 +153,6 @@ def test_update_user_info_bad(sample_data):
     assert resp.status_code == NOT_ACCEPTABLE
 
 
-# def test_keyword_search_database():
-#     keyword = "internship"
-#     resp = TEST_CLIENT.get(f'/{ep.KEYWORD_SEARCH}', json = {"keyword": keyword})
-#     resp_json = resp.get_json()
-#     assert isinstance(resp_json, dict)
-#     assert "results" in resp_json
-#     assert isinstance(resp_json["results"], list)
-#     expected_results = [{"data": {"keywords": ["internship", "remote"]},"userid" : 1, "date": datetime(2020, 5, 17)}]
-#     assert resp_json['results'] == expected_results
 @patch("db.db.update_job", return_value=True)
 def test_update_job_postings_works(mock):
     resp = TEST_CLIENT.put(
