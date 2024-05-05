@@ -319,7 +319,7 @@ def test_generate_vector_fails_properly():
     There would be better tests for vector search, but its is only allowed to work on atlas cluster
     '''
     test = "embed test" 
-    if os.environ.get("OPENAI_API_KEY") is None:
+    if os.environ.get("OPENAI_API_KEY") == "":
         res = db.generate_vector(test)
         assert res == db.DEFAULT_VECTOR
     else: 
@@ -331,7 +331,7 @@ def test_search_jobs_by_vector_fails_properly():
     There would be better tests for vector search, but its is only allowed to work on atlas cluster
     '''
     test = "embed test" 
-    if os.environ.get("OPENAI_API_KEY") is None:
+    if os.environ.get("OPENAI_API_KEY") == "":
         res = db.search_jobs_by_vector(test, 1)
         assert len(res) <= 1
     else: 
