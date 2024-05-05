@@ -9,6 +9,11 @@ from db import db_connect as dbc
 from unittest.mock import patch
 from http.client import NOT_ACCEPTABLE, OK
 
+import sys
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
 TEST_DB = dbc.DB_NAME
 
 user_id = ObjectId("507f1f77bcf86cd799439011")
@@ -20,6 +25,9 @@ admin_id = ObjectId()
 TEST_CLIENT = ep.app.test_client()
 dbc.connect_db()
 
+companies = ["Apple", "Microsoft", "Google"]
+jobs_type = ["machine learning", "data science", "software engineering"]
+fake_vectors = [[float(i+1)] * 1536 for i in range(len(companies))]
 
 @pytest.fixture
 def sample_data():
@@ -48,6 +56,69 @@ def temp_user():
     # yield to our test function
     yield
     dbc.client[TEST_DB]["users"].delete_one({"_id": user_id})
+
+
+@pytest.fixture(scope="function")
+def temp_jobs():
+    ids = []
+    for company in companies:
+        for i, job_type in enumerate(jobs_type):
+            obj = dbc.client[TEST_DB]["jobs"].insert_one(
+                {
+                    "company": company,
+                    "job_description": "",
+                    "job_type": job_type,
+                    "location": "SF",
+                    "date": datetime(2020, 5, 17),
+                    "link": f'fakelink/{company}/{job_type}',
+                    "embedding_vector": fake_vectors[i],
+                }
+            )
+            ids.append(obj.inserted_id)
+    yield
+
+    for id in ids:
+        dbc.client[TEST_DB]["jobs"].delete_one({"_id": id})
+
+
+@pytest.fixture(scope="function")
+def generate_vector(request):
+    def _mock_generate_vector(input_string):
+        mock_vector = [0.1]*1536
+        for i, job in enumerate(companies):
+            if job == query_string: 
+                mock_vector = fake_vectors[i]
+
+        with patch('db.db.generate_vector') as mock_generate_vector_func:
+            mock_generate_vector_func.side_effect = lambda x: mock_vector
+            yield mock_generate_vector_func
+
+    return _mock_generate_vector
+
+@pytest.fixture(scope="function")
+def vector_search_test():
+    def _mock_vector_search(query_string, limit):
+        vector = [0.1]*1536
+        for i, job in enumerate(jobs_type):
+            if job == query_string: 
+                vector = fake_vectors[i]
+        res = []
+        print("HI IS THIS WORKING")
+        for job in dbc.client[TEST_DB]["jobs"].find({"embedding_vector": vector}):
+            print(job)
+            job["id"] = str(job["_id"])
+            job["date"] = str(job["date"].date())
+            del job["_id"]
+            del job["embedding_vector"]
+            res.append(job)
+        return res
+            
+
+    with patch('db.db.search_jobs_by_vector') as mock_vector_search_func:
+        mock_vector_search_func.side_effect = lambda x, y: _mock_vector_search(x, y)
+        yield mock_vector_search_func
+
+
 
 
 def test_update_user_info_bad():
@@ -463,4 +534,26 @@ def test_get_job_by_id_fails(mock_get):
     assert resp._status_code == 400
 
 
+def test_integration_read_most_recent_jobs_works(temp_jobs):
+    resp = TEST_CLIENT.get(f"/{ep.READ_MOST_RECENT_JOBS}", query_string={"numbers": len(companies)*len(jobs_type)})
+    assert resp._status_code == 200
+    assert len(resp.get_json()) == len(companies)*len(jobs_type)
+    for job in resp.get_json():
+        assert job["company"] in companies
+        assert job["job_type"] in jobs_type
 
+def test_integration_read_most_recent_jobs_jobs_num_over_limit(temp_jobs):
+    resp = TEST_CLIENT.get(f"/{ep.READ_MOST_RECENT_JOBS}", query_string={"numbers": len(companies)*len(jobs_type)+1})
+    assert resp._status_code == 200
+    assert len(resp.get_json()) == len(companies)*len(jobs_type)
+
+'''
+There would be better tests for vector search, but its is only allowed to work on atlas cluster
+'''
+# @patch("db.db.generate_vector", return_value=fake_vectors, autospec=True)
+# def test_integration_searh_jobs_by_vector_works(temp_jobs, vector_search_test):
+#     resp = TEST_CLIENT.get(f"/{ep.GET_JOBS_BY_VECTOR}", query_string={"query": "machine learning", "limit": len(companies)*len(jobs_type)})
+#     assert resp._status_code == 200
+#     assert len(resp.get_json()) == len(companies)
+  
+#     # eprint(resp.get_json())
