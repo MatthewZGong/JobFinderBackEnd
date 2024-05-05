@@ -5,6 +5,9 @@ import json
 month_to_num = {"jan": '01', "feb": '02', "mar": '03', "apr": '04', "may": '05', "jun": '06', "jul": '07', "aug": '08', "sep": '09', "oct": '10', "nov": '11', "dec": '12'}
 add_job_url = 'http://localhost:8000/add_new_job?company={}&job_description={}&job_type={}&location={}&date={}&link={}'
 def scrap_job_table(url): 
+    """
+    Scrap job table from a given URL, extract job details, and post them to a specified endpoint.
+    """
     res = requests.get(url)
     soup = BeautifulSoup(res.content, 'html.parser')
     div = soup.find('div', class_='Box-sc-g0xbh4-0 ehcSsh')
