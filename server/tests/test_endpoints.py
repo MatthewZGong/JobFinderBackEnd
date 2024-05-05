@@ -581,6 +581,15 @@ def test_integration_search_jobs_by_vector_with_bad_limit(temp_jobs, vector_sear
     resp = TEST_CLIENT.get(f"/{ep.GET_JOBS_BY_VECTOR}", query_string={"query": "machine learning", "limit": 0})
     assert resp._status_code == 400 
 
-    # eprint(resp.get_json())
+    # eprint(resp.get_json()
 
-
+def test_integration_get_jobs_by_id_works(temp_jobs):
+    for jobs in dbc.fetch_all("jobs"):
+        resp = TEST_CLIENT.get(f"/{ep.GET_JOB_BY_ID}", query_string={"job_id": jobs["_id"]})
+        # print(resp.get_json())
+        assert resp._status_code == 200
+        assert ObjectId(resp.get_json()["_id"]) == jobs["_id"]
+        assert resp.get_json()["company"] == jobs["company"]
+        assert resp.get_json()["job_description"] == jobs["job_description"]
+        assert resp.get_json()["job_type"] == jobs["job_type"]
+        assert resp.get_json()["location"] == jobs["location"]
