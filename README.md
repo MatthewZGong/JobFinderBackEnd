@@ -17,7 +17,7 @@ The project is written in Python 3.9. To install the required packages, run the 
     - If you are not using a virtual environment, you can skip this step.
 
 3. run `make dev_env` to install the required packages, for dev enviroment.
-    - you can run `make prod` for production enviroment.
+
 4. run `./local.sh` to start the server locally.
 
 
