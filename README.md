@@ -2,6 +2,8 @@
 
 Team members: Tanzir Hasan, Matthew Gong, Shao Jin, Michelle Lin
 
+## Purpose
+
 A job finder for adding/deleting and finding jobs of individual preferences. Serves as a personalized job finder where personal information and preferences are used. 
 
 ## Setup 
@@ -33,6 +35,7 @@ OPENAI_API_KEY=
 - CLOUD_MONGO: Set to 1 if the database is hosted on a cloud provider, 0 if it is hosted on a local server.
 - OPENAI_API_KEY: The API key for the OpenAI API.
 
+It could be helpful to put these in a shell script and export them if there are problems with using a .env.
 
 ## What is this
 
