@@ -48,7 +48,7 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 
 - Returns a list of all available endpoints in the system.
 
-### /UpdateUserInfo
+### /update_user_info
 
 #### `PUT`
 
