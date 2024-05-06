@@ -41,8 +41,7 @@ It could be helpful to put these in a shell script and export them if there are 
 
 This project defines a set of RESTful API endpoints for managing user accounts, job postings, and user reports related to job postings.
 
-## EndPoints
-
+## Endpoints
 ### /endpoints
 
 #### `GET`
@@ -58,7 +57,8 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 #### Parameters
 
 - `_id` (string): User ID
-- `changes` (object): Object containing changes to be made, including optional fields such as `email` and `username`.
+- `new_email` (string): New email for the user
+- `new_username` (string): New username for the user
 
 ### /add_user_report
 
@@ -69,30 +69,30 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 #### Parameters
 
 - `user_id` (string): User ID submitting the report.
-- `job_id` (string, optional): ID of the job being reported.
+- `job_id` (string): ID of the job being reported.
 - `report` (string): The user's report.
 
 ### /get_user_reports
 
 #### `GET`
 
-- retrieve all user reports.
+- Retrieve all user reports.
 
 ### /update_job_posting
 
 #### `PUT`
 
-- used to update job postings description.
+- Used to update job postings description.
 
 #### Parameters
 
 - `job_id` (string): ID of the job to be updated.
 - `company` (string): The company that posted the job
-- `job_title` (string): The job title of the posting
-- `job_description` (string): description of the job
-- `job_type` (string): the type of job
-- `location` (string): the location of the job
-- `date` (string): the date of the posting
+- `job_description` (string): Description of the job
+- `job_type` (string): The type of job
+- `location` (string): The location of the job
+- `date` (string): The date of the posting
+- `link` (string): Link to the job posting
 
 ### /delete_account
 
@@ -108,11 +108,11 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 
 #### `GET`
 
-- Returns a specified number of most recent job postings or return all jobs if there is less than the specified number.
+- Returns a specified number of most recent job postings or returns all jobs if there are fewer than the specified number.
 
 #### Parameters
 
-- `numbers` (int): Number of recent jobs to retrieve.
+- `numbers` (string): Number of recent jobs to retrieve.
 
 ### /admin_delete_jobs
 
@@ -129,7 +129,7 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 
 #### `DELETE`
 
-- Allows a developer to delete all jobs past a certain date
+- Allows a developer to delete all jobs past a certain date.
 
 #### Parameters
 
@@ -139,7 +139,7 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 
 #### `PUT`
 
-- Allows users to create a new account. Takes username, email, and password. Fails if username or email matches one already in database.
+- Allows users to create a new account. 
 
 #### Parameters
 
@@ -147,48 +147,66 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 - `email` (string): Email for the new account.
 - `password` (string): Password for the new account.
 
+### /login
+
+#### `GET`
+
+- Allows users to log in to their accounts.
+
+#### Parameters
+
+- `username` (string): Username for the login attempt.
+- `password` (string): Password for the login attempt.
+
+#### Response
+
+- `status` (string): Success status.
+- `message` (string): User ID of the logged-in user.
+
 ### /update_preferences
 
 #### `PUT`
 
-- Allows users to update their account preferences. Account preferences include preferred location, preferred job type, and a sorting preference when conducting job searches.
+- Allows users to update their account preferences.
 
 #### Parameters
 
 - `user_id` (string): ID of the user account to be updated.
 - `location` (string): Preferred location for job searches.
 - `job_type` (string): Preferred job type for job searches.
-- `sort_by` (string): Sorting preference for job searches (e.g., Latest, Trending).
 
-### /login_to_account
+### /get_preferences
 
-#### `PUT`
+#### `GET`
 
-- Allows users to log in to their accounts. 
+- Retrieves the account preferences for a user.
 
 #### Parameters
 
-- `user_id` (string): ID of the user attempting to log in.
-- `password` (string): Password for the login attempt.
+- `user_id` (string): ID of the user account.
+
+#### Response
+
+- `preference` (object): User's account preferences.
 
 ### /add_new_job
 
 #### `POST`
 
-- Allows users to submit new job postings. 
+- Allows users to submit new job postings.
 
 #### Parameters
 
 - `company` (string): The company that posted the job
-- `job_title` (string): The job title of the posting
-- `job_description` (string): description of the job
-- `job_type` (string): the type of job
-- `location` (string): the location of the job
-- `date` (string): the date of the posting
+- `job_description` (string): Description of the job
+- `job_type` (string): The type of job
+- `location` (string): The location of the job
+- `date` (string): The date of the posting
+- `link` (string): Link to the job posting
 
 ### /delete_user_report
 
-#### `POST`
+#### `DELETE`
 
 - Allows deleting a user report based on its ID.
 
@@ -196,33 +214,33 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 
 - `report_id` (string): ID of the user report to be deleted.
 
-### /get_jobs_by_id 
+### /get_job_by_id 
+
 #### `GET`
-- Allows user to get jobs based on their job ID. Returns jobs that matches their job ID.
+
+- Allows users to get a job based on its ID. Returns the job that matches the ID.
+
 #### Parameters
+
 - `job_id` (string): ID of the job.
 
-
 ### /get_username_by_id
+
 #### `GET`
-- Allows user to get username based on their user ID. Returns username that matches their user ID.
+
+- Allows users to get a username based on the user ID. Returns the username that matches the user ID.
+
 #### Parameters
+
 - `user_id` (string): ID of the user.   
 
-### /get_jobs_by_vector
+### /search_jobs_by_vector
 
 #### `GET`
 
-- Allows user to get jobs based on a search query. The search query is a string that is used to generate a vector and then used to search for jobs that match the vector.
-- Returns jobs that matches the search query.
-- The vector is generated using the OpenAI text-embedding-ada-002 model.
-- The search query is passed to the OpenAI text-embedding-ada-002 model and the resulting vector is used to search for jobs that match the vector.
+- Allows users to search for jobs based on a search query. The search query is a string that is used to generate a vector using the OpenAI text-embedding-ada-002 model. The resulting vector is used to search for jobs that match the vector.
 
 #### Parameters
 
 - `query` (string): The search query.
 - `limit` (int): The number of jobs to return.
-
-
-
-
