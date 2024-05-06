@@ -125,15 +125,14 @@ This project defines a set of RESTful API endpoints for managing user accounts, 
 - `admin_id` (string): ID of the admin performing the deletion.
 - `job_id` (string): ID of the job to be deleted.
 
-### /admin_delete_past_date
+### /dev_delete_past_date
 
 #### `DELETE`
 
-- Allows admin accounts to delete all jobs posted before a certain date.
+- Allows a developer to delete all jobs past a certain date
 
 #### Parameters
 
-- `admin_id` (string): ID of the admin performing the deletion.
 - `invalid_past_date` (string): Date before which jobs should be deleted.
 
 ### /create_account
