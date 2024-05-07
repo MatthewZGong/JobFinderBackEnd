@@ -111,7 +111,25 @@ def update_job(job_id, changes):
     """
     if not dbc.exists_by_id(job_id, "jobs"):
         raise KeyError(f"No job {job_id}")
-    return dbc.update_doc("jobs", {"_id": job_id}, changes)
+    res = dbc.update_doc("jobs", {"_id": job_id}, changes)
+    if not res:
+        raise KeyError(f"No job {job_id}")
+    job = dbc.fetch_one("jobs", {"_id": job_id})
+    vector = generate_vector(
+        job.setdefault("company", "")
+        + " "
+        + job.setdefault("location", "")
+        + " "
+        + job.setdefault("job_type", "")
+        + " "
+        + job.setdefault("date", datetime.datetime.now()).strftime("%Y-%m-%d")
+        + " "
+        + job.setdefault("job_description", "")
+    )
+    del job["_id"]
+    job["embedding_vector"] = vector
+    dbc.update_doc("jobs", {"_id": job_id}, job)
+    return res
 
 
 def check_account(user_id, password):
